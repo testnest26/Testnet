@@ -1,45 +1,535 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TESTNEST Application</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        body { font-family: Arial, sans-serif; }
-        .primary { color: #FF6B35; }
-        .secondary { color: #004E89; }
-        .card { padding: 20px; margin: 10px; border-radius: 8px; }
-        .mobile-btn { width: 100%; padding: 15px; font-size: 1.2em; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TESTNEST</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:Arial,sans-serif;background:#f0f4f8;min-height:100vh;}
+.page{display:none;min-height:100vh;}
+.page.active{display:block;}
+
+/* LOGIN */
+.login-wrap{display:flex;justify-content:center;align-items:center;min-height:100vh;padding:20px;}
+.login-box{background:white;border-radius:20px;padding:30px 25px;width:100%;max-width:400px;box-shadow:0 10px 40px rgba(0,0,0,0.1);}
+.logo{text-align:center;font-size:42px;font-weight:900;color:#FF6B35;letter-spacing:3px;margin-bottom:25px;}
+.tabs{display:flex;background:#f0f0f0;border-radius:12px;padding:4px;margin-bottom:25px;}
+.tab{flex:1;padding:12px;border:none;background:none;border-radius:10px;font-size:16px;font-weight:600;cursor:pointer;color:#666;}
+.tab.on{background:white;color:#FF6B35;box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+label{display:block;font-weight:600;margin-bottom:8px;font-size:15px;}
+input[type=text],input[type=password]{width:100%;padding:15px;border:2px solid #e0e0e0;border-radius:12px;font-size:16px;margin-bottom:15px;outline:none;}
+input:focus{border-color:#FF6B35;}
+.btn{width:100%;padding:16px;border:none;border-radius:12px;font-size:16px;font-weight:700;cursor:pointer;margin-top:5px;}
+.btn-orange{background:#FF6B35;color:white;}
+.btn-blue{background:#004E89;color:white;}
+.btn-green{background:#06D6A0;color:white;}
+.btn-outline{background:white;color:#FF6B35;border:2px solid #FF6B35;margin-top:10px;}
+.hint{text-align:center;margin-top:15px;color:#999;font-size:13px;}
+
+/* HEADER */
+.header{background:white;padding:15px 20px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,0.08);position:sticky;top:0;z-index:100;}
+.header-logo{font-size:24px;font-weight:900;color:#FF6B35;}
+.btn-logout{padding:10px 20px;background:#f0f0f0;border:none;border-radius:10px;font-weight:600;cursor:pointer;font-size:14px;}
+
+/* DASHBOARD */
+.content{padding:20px;max-width:600px;margin:0 auto;}
+.welcome{font-size:18px;font-weight:600;margin-bottom:20px;color:#333;}
+.dash-card{background:white;border-radius:16px;padding:20px;margin-bottom:15px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 15px rgba(0,0,0,0.07);border-left:5px solid #FF6B35;}
+.dash-card:nth-child(3){border-left-color:#004E89;}
+.dash-card:nth-child(4){border-left-color:#06D6A0;}
+.dash-card h3{font-size:17px;color:#333;margin-bottom:4px;}
+.dash-card p{font-size:13px;color:#999;}
+.dash-btn{padding:12px 20px;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:14px;white-space:nowrap;}
+
+/* QUIZ */
+.quiz-wrap{padding:20px;max-width:600px;margin:0 auto;}
+.quiz-top{background:white;border-radius:16px;padding:15px 20px;margin-bottom:15px;display:flex;justify-content:space-between;align-items:center;box-shadow:0 4px 15px rgba(0,0,0,0.07);}
+.q-info{font-size:14px;color:#999;}
+.timer{font-size:28px;font-weight:900;color:#FF6B35;}
+.timer.red{color:#ef4444;}
+.progress{height:8px;background:#e0e0e0;border-radius:10px;margin-bottom:20px;overflow:hidden;}
+.progress-bar{height:100%;background:linear-gradient(90deg,#FF6B35,#FFD23F);border-radius:10px;transition:width 0.3s;}
+.question-box{background:white;border-radius:16px;padding:20px;box-shadow:0 4px 15px rgba(0,0,0,0.07);}
+.q-text{font-size:17px;font-weight:600;color:#333;margin-bottom:20px;line-height:1.5;}
+.option{background:#f8f8f8;border:2px solid transparent;border-radius:12px;padding:16px 18px;margin-bottom:12px;display:flex;align-items:center;gap:14px;cursor:pointer;font-size:15px;transition:all 0.15s;}
+.option:active,.option:hover{background:#fff5f1;border-color:#FF6B35;}
+.option.picked{background:#fff5f1;border-color:#FF6B35;}
+.opt-label{width:36px;height:36px;border-radius:50%;background:#FF6B35;color:white;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;flex-shrink:0;}
+.option.picked .opt-label{background:#004E89;}
+.nav-btns{display:flex;gap:12px;margin-top:20px;}
+.nav-btns .btn{margin-top:0;}
+.btn-prev{background:#e0e0e0;color:#333;border:none;border-radius:12px;padding:16px;font-size:15px;font-weight:700;cursor:pointer;flex:1;}
+.btn-next{background:#FF6B35;color:white;border:none;border-radius:12px;padding:16px;font-size:15px;font-weight:700;cursor:pointer;flex:2;}
+
+/* RESULTS */
+.result-wrap{padding:20px;max-width:500px;margin:0 auto;text-align:center;}
+.result-box{background:white;border-radius:20px;padding:35px 25px;box-shadow:0 10px 40px rgba(0,0,0,0.1);}
+.score-ring{width:160px;height:160px;border-radius:50%;background:linear-gradient(135deg,#FF6B35,#004E89);display:flex;align-items:center;justify-content:center;margin:20px auto;}
+.score-num{font-size:42px;font-weight:900;color:white;}
+.score-msg{font-size:18px;font-weight:700;margin:15px 0 5px;color:#333;}
+.score-sub{color:#999;margin-bottom:25px;}
+
+/* WORKSHEETS */
+.ws-card{background:white;border-radius:14px;padding:18px;margin-bottom:12px;box-shadow:0 4px 15px rgba(0,0,0,0.07);border-left:4px solid #004E89;}
+.ws-card h3{font-size:16px;color:#333;margin-bottom:5px;}
+.ws-card p{font-size:13px;color:#999;margin-bottom:12px;}
+
+/* MY RESULTS */
+.res-card{background:white;border-radius:14px;padding:18px;margin-bottom:12px;box-shadow:0 4px 15px rgba(0,0,0,0.07);}
+.res-score{font-size:28px;font-weight:900;}
+
+/* ADMIN */
+.admin-card{background:white;border-radius:16px;padding:20px;margin-bottom:15px;box-shadow:0 4px 15px rgba(0,0,0,0.07);}
+.admin-card h3{font-size:18px;font-weight:700;color:#004E89;margin-bottom:18px;}
+textarea{width:100%;padding:14px;border:2px solid #e0e0e0;border-radius:12px;font-size:15px;min-height:90px;resize:vertical;outline:none;font-family:Arial;}
+textarea:focus{border-color:#FF6B35;}
+.opt-row{display:flex;align-items:center;gap:10px;margin-bottom:10px;background:#f8f8f8;padding:10px;border-radius:10px;}
+.opt-row input[type=radio]{width:22px;height:22px;accent-color:#FF6B35;flex-shrink:0;}
+.opt-row input[type=text]{flex:1;padding:10px 12px;border:2px solid #e0e0e0;border-radius:8px;font-size:15px;outline:none;}
+.opt-row input[type=text]:focus{border-color:#FF6B35;}
+.hint-label{font-size:12px;color:#999;margin-bottom:15px;}
+.stat{font-size:15px;color:#333;margin-bottom:10px;}
+.stat span{font-size:22px;font-weight:900;color:#FF6B35;}
+
+/* BACK BTN */
+.back-btn{background:none;border:none;color:#FF6B35;font-size:16px;font-weight:700;padding:0 0 15px 0;cursor:pointer;display:flex;align-items:center;gap:5px;}
+
+/* TOAST */
+.toast{position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#333;color:white;padding:14px 24px;border-radius:12px;font-weight:600;z-index:9999;font-size:15px;display:none;}
+</style>
 </head>
 <body>
-    <div id="login-screen">
-        <h1>Login</h1>
-        <form id="login-form">
-            <input type="text" placeholder="Username" required>
-            <input type="password" placeholder="Password" required>
-            <button type="submit" class="mobile-btn">Login</button>
-        </form>
+
+<!-- LOGIN PAGE -->
+<div class="page active" id="pgLogin">
+<div class="login-wrap">
+<div class="login-box">
+  <div class="logo">TESTNEST</div>
+  <div class="tabs">
+    <button class="tab on" id="tabS" onclick="setTab('student')">Student</button>
+    <button class="tab" id="tabA" onclick="setTab('admin')">Admin</button>
+  </div>
+  <div id="loginS">
+    <label>Username</label>
+    <input type="text" id="sUser" placeholder="student" autocapitalize="none">
+    <label>Password</label>
+    <input type="password" id="sPass" placeholder="student123">
+    <button class="btn btn-orange" onclick="doLogin('student')">LOGIN AS STUDENT</button>
+  </div>
+  <div id="loginA" style="display:none">
+    <label>Username</label>
+    <input type="text" id="aUser" placeholder="admin" autocapitalize="none">
+    <label>Password</label>
+    <input type="password" id="aPass" placeholder="admin123">
+    <button class="btn btn-blue" onclick="doLogin('admin')">LOGIN AS ADMIN</button>
+  </div>
+  <div class="hint">student / student123 &nbsp;|&nbsp; admin / admin123</div>
+</div>
+</div>
+</div>
+
+<!-- STUDENT DASHBOARD -->
+<div class="page" id="pgStudent">
+<div class="header">
+  <div class="header-logo">TESTNEST</div>
+  <button class="btn-logout" onclick="doLogout()">Logout</button>
+</div>
+<div class="content">
+  <div class="welcome" id="welcomeMsg">👋 Welcome!</div>
+  <div class="dash-card">
+    <div><h3>📝 Take a Test</h3><p>MCQ Quiz with timer</p></div>
+    <button class="dash-btn btn-orange" style="color:white;background:#FF6B35;" onclick="startQuiz()">START</button>
+  </div>
+  <div class="dash-card">
+    <div><h3>📄 Worksheets</h3><p>Download PDF worksheets</p></div>
+    <button class="dash-btn btn-blue" style="color:white;background:#004E89;" onclick="goWS()">VIEW</button>
+  </div>
+  <div class="dash-card">
+    <div><h3>📊 My Results</h3><p>View your scores</p></div>
+    <button class="dash-btn btn-green" style="color:white;background:#06D6A0;" onclick="goMyResults()">VIEW</button>
+  </div>
+</div>
+</div>
+
+<!-- QUIZ PAGE -->
+<div class="page" id="pgQuiz">
+<div class="header">
+  <div class="header-logo">Quiz</div>
+  <button class="btn-logout" onclick="quitQuiz()">✕ Quit</button>
+</div>
+<div class="quiz-wrap">
+  <div class="quiz-top">
+    <div>
+      <div style="font-weight:700;color:#333;">Question</div>
+      <div class="q-info" id="qInfo">1 of 1</div>
     </div>
-    <div id="student-dashboard" style="display:none;">
-        <h1>Student Dashboard</h1>
-        <div class="card primary">Take a Test</div>
-        <div class="card secondary">Worksheets</div>
-        <div class="card primary">My Results</div>
-    </div>
-    <script>
-        document.getElementById('login-form').onsubmit = function(event) {
-            event.preventDefault();
-            const username = this[0].value;
-            const password = this[1].value;
-            if ((username === 'student' && password === 'student123') || (username === 'admin' && password === 'admin123')) {
-                document.getElementById('login-screen').style.display = 'none';
-                document.getElementById('student-dashboard').style.display = 'block';
-            } else {
-                alert('Invalid credentials!');
-            }
-        };
-    </script>
+    <div class="timer" id="timerEl">10:00</div>
+  </div>
+  <div class="progress"><div class="progress-bar" id="pBar" style="width:0%"></div></div>
+  <div class="question-box">
+    <div class="q-text" id="qText"></div>
+    <div id="qOpts"></div>
+  </div>
+  <div class="nav-btns">
+    <button class="btn-prev" id="btnPrev" onclick="prevQ()">← Prev</button>
+    <button class="btn-next" id="btnNext" onclick="nextQ()">Next →</button>
+  </div>
+</div>
+</div>
+
+<!-- RESULTS PAGE -->
+<div class="page" id="pgResult">
+<div class="header">
+  <div class="header-logo">Result</div>
+  <button class="btn-logout" onclick="goDash()">Home</button>
+</div>
+<div class="result-wrap">
+<div class="result-box">
+  <div style="font-size:40px">🎉</div>
+  <h2 style="margin:10px 0;color:#333;">Quiz Complete!</h2>
+  <div class="score-ring"><div class="score-num" id="resPct">0%</div></div>
+  <div class="score-msg" id="resMsg"></div>
+  <div class="score-sub" id="resSub"></div>
+  <button class="btn btn-orange" onclick="goDash()">Back to Home</button>
+  <button class="btn btn-outline" onclick="startQuiz()">Try Again</button>
+</div>
+</div>
+</div>
+
+<!-- WORKSHEETS PAGE -->
+<div class="page" id="pgWS">
+<div class="header">
+  <div class="header-logo">Worksheets</div>
+  <button class="btn-logout" onclick="goDash()">← Back</button>
+</div>
+<div class="content">
+  <div id="wsList"></div>
+</div>
+</div>
+
+<!-- MY RESULTS PAGE -->
+<div class="page" id="pgMyRes">
+<div class="header">
+  <div class="header-logo">My Results</div>
+  <button class="btn-logout" onclick="goDash()">← Back</button>
+</div>
+<div class="content">
+  <div id="myResList"></div>
+</div>
+</div>
+
+<!-- ADMIN PAGE -->
+<div class="page" id="pgAdmin">
+<div class="header">
+  <div class="header-logo" style="color:#004E89;">ADMIN</div>
+  <button class="btn-logout" onclick="doLogout()">Logout</button>
+</div>
+<div class="content">
+
+  <!-- Add Question -->
+  <div class="admin-card">
+    <h3>➕ Add Question</h3>
+    <textarea id="newQ" placeholder="Type your question here..."></textarea>
+    <div class="hint-label">Select radio button = correct answer</div>
+    <div class="opt-row"><input type="radio" name="cor" value="0" checked><input type="text" id="o1" placeholder="Option A"></div>
+    <div class="opt-row"><input type="radio" name="cor" value="1"><input type="text" id="o2" placeholder="Option B"></div>
+    <div class="opt-row"><input type="radio" name="cor" value="2"><input type="text" id="o3" placeholder="Option C"></div>
+    <div class="opt-row"><input type="radio" name="cor" value="3"><input type="text" id="o4" placeholder="Option D"></div>
+    <button class="btn btn-orange" style="margin-top:10px;" onclick="addQ()">ADD QUESTION</button>
+  </div>
+
+  <!-- Add Worksheet -->
+  <div class="admin-card">
+    <h3>📄 Add Worksheet</h3>
+    <label>Title</label>
+    <input type="text" id="wsT" placeholder="e.g. Math Chapter 1" style="margin-bottom:12px;">
+    <label>Description</label>
+    <input type="text" id="wsD" placeholder="Brief description" style="margin-bottom:12px;">
+    <label>PDF Link</label>
+    <input type="text" id="wsL" placeholder="https://drive.google.com/...">
+    <button class="btn btn-blue" style="margin-top:10px;" onclick="addWS()">ADD WORKSHEET</button>
+  </div>
+
+  <!-- Stats -->
+  <div class="admin-card">
+    <h3>📊 Stats</h3>
+    <div class="stat">Questions: <span id="qCount">0</span></div>
+    <div class="stat">Worksheets: <span id="wsCount">0</span></div>
+    <button class="btn btn-outline" style="margin-top:10px;width:auto;padding:12px 20px;" onclick="clearAll()">Clear All Questions</button>
+  </div>
+
+</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// DATA
+var questions = [
+  {q:"What is the capital of India?", opts:["Mumbai","New Delhi","Kolkata","Chennai"], ans:1},
+  {q:"Which planet is closest to the Sun?", opts:["Venus","Earth","Mercury","Mars"], ans:2},
+  {q:"What is 15 × 4?", opts:["45","60","55","70"], ans:1}
+];
+var worksheets = [
+  {t:"Mathematics - Chapter 1", d:"Basic algebra practice", l:"#"}
+];
+var myResults = [];
+var curQ = 0;
+var picked = [];
+var timerSec = 600;
+var timerTick = null;
+var currentTab = 'student';
+
+// SHOW/HIDE PAGES
+function go(id){
+  var pages = document.querySelectorAll('.page');
+  for(var i=0;i<pages.length;i++) pages[i].classList.remove('active');
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+// TABS
+function setTab(t){
+  currentTab = t;
+  document.getElementById('tabS').className = 'tab'+(t==='student'?' on':'');
+  document.getElementById('tabA').className = 'tab'+(t==='admin'?' on':'');
+  document.getElementById('loginS').style.display = t==='student'?'block':'none';
+  document.getElementById('loginA').style.display = t==='admin'?'block':'none';
+}
+
+// LOGIN
+function doLogin(type){
+  if(type==='student'){
+    var u = document.getElementById('sUser').value.trim();
+    var p = document.getElementById('sPass').value.trim();
+    if(u==='student' && p==='student123'){
+      document.getElementById('welcomeMsg').textContent = '👋 Welcome, '+u+'!';
+      go('pgStudent');
+      toast('Login successful! ✅');
+    } else {
+      alert('Wrong login!\nUsername: student\nPassword: student123');
+    }
+  } else {
+    var u = document.getElementById('aUser').value.trim();
+    var p = document.getElementById('aPass').value.trim();
+    if(u==='admin' && p==='admin123'){
+      go('pgAdmin');
+      updateStats();
+      toast('Admin logged in! ✅');
+    } else {
+      alert('Wrong login!\nUsername: admin\nPassword: admin123');
+    }
+  }
+}
+
+function doLogout(){
+  if(confirm('Logout?')){
+    clearInterval(timerTick);
+    go('pgLogin');
+  }
+}
+
+// DASHBOARD
+function goDash(){
+  clearInterval(timerTick);
+  go('pgStudent');
+}
+
+// QUIZ
+function startQuiz(){
+  if(questions.length===0){
+    alert('No questions yet! Ask admin to add questions.');
+    return;
+  }
+  curQ = 0;
+  picked = new Array(questions.length).fill(-1);
+  timerSec = questions.length * 90;
+  go('pgQuiz');
+  renderQ();
+  startTimer();
+}
+
+function renderQ(){
+  var q = questions[curQ];
+  var labels = ['A','B','C','D'];
+  document.getElementById('qInfo').textContent = 'Q '+(curQ+1)+' of '+questions.length;
+  document.getElementById('pBar').style.width = ((curQ+1)/questions.length*100)+'%';
+  document.getElementById('qText').textContent = (curQ+1)+'. '+q.q;
+  
+  var html = '';
+  for(var i=0;i<q.opts.length;i++){
+    var sel = picked[curQ]===i ? ' picked' : '';
+    html += '<div class="option'+sel+'" onclick="pick('+i+')">'+
+      '<div class="opt-label">'+labels[i]+'</div>'+
+      '<span>'+q.opts[i]+'</span></div>';
+  }
+  document.getElementById('qOpts').innerHTML = html;
+  document.getElementById('btnPrev').style.visibility = curQ===0?'hidden':'visible';
+  document.getElementById('btnNext').textContent = curQ===questions.length-1?'Finish ✓':'Next →';
+}
+
+function pick(i){
+  picked[curQ] = i;
+  renderQ();
+}
+
+function nextQ(){
+  if(curQ < questions.length-1){
+    curQ++;
+    renderQ();
+  } else {
+    finishQuiz();
+  }
+}
+
+function prevQ(){
+  if(curQ > 0){ curQ--; renderQ(); }
+}
+
+function quitQuiz(){
+  if(confirm('Quit quiz? Progress will be lost.')){
+    clearInterval(timerTick);
+    goDash();
+  }
+}
+
+function startTimer(){
+  clearInterval(timerTick);
+  updateTimer();
+  timerTick = setInterval(function(){
+    timerSec--;
+    updateTimer();
+    if(timerSec<=0) finishQuiz();
+  },1000);
+}
+
+function updateTimer(){
+  var m = Math.floor(timerSec/60);
+  var s = timerSec%60;
+  var el = document.getElementById('timerEl');
+  el.textContent = m+':'+(s<10?'0':'')+s;
+  el.className = 'timer'+(timerSec<=60?' red':'');
+}
+
+function finishQuiz(){
+  clearInterval(timerTick);
+  var correct = 0;
+  for(var i=0;i<questions.length;i++){
+    if(picked[i]===questions[i].ans) correct++;
+  }
+  var pct = Math.round(correct/questions.length*100);
+  myResults.unshift({date:new Date().toLocaleDateString(),pct:pct,c:correct,t:questions.length});
+  
+  document.getElementById('resPct').textContent = pct+'%';
+  document.getElementById('resSub').textContent = correct+' out of '+questions.length+' correct';
+  document.getElementById('resMsg').textContent = 
+    pct>=80?'🌟 Excellent! Outstanding!':
+    pct>=60?'👍 Good work! Keep it up!':
+    pct>=40?'📚 Keep practicing!':'💪 Don\'t give up! Try again!';
+  go('pgResult');
+}
+
+// WORKSHEETS
+function goWS(){
+  var html = '';
+  if(worksheets.length===0){
+    html = '<p style="text-align:center;color:#999;padding:40px;">No worksheets available yet.</p>';
+  } else {
+    for(var i=0;i<worksheets.length;i++){
+      var ws = worksheets[i];
+      html += '<div class="ws-card"><h3>📄 '+ws.t+'</h3><p>'+ws.d+'</p>'+
+        '<button class="btn btn-blue" onclick="window.open(\''+ws.l+'\',\'_blank\')">⬇️ Download PDF</button></div>';
+    }
+  }
+  document.getElementById('wsList').innerHTML = html;
+  go('pgWS');
+}
+
+// MY RESULTS
+function goMyResults(){
+  var html = '';
+  if(myResults.length===0){
+    html = '<div style="text-align:center;padding:40px;"><p style="color:#999;margin-bottom:20px;">No results yet. Take a quiz first!</p>'+
+      '<button class="btn btn-orange" onclick="startQuiz()">Take Quiz Now</button></div>';
+  } else {
+    for(var i=0;i<myResults.length;i++){
+      var r = myResults[i];
+      var color = r.pct>=60?'#06D6A0':'#ef4444';
+      html += '<div class="res-card">'+
+        '<div style="display:flex;justify-content:space-between;align-items:center;">'+
+        '<div><div style="font-weight:700;">Quiz #'+(myResults.length-i)+'</div>'+
+        '<div style="color:#999;font-size:13px;">'+r.date+'</div></div>'+
+        '<div class="res-score" style="color:'+color+'">'+r.pct+'%</div></div>'+
+        '<div style="color:#666;margin-top:5px;font-size:14px;">'+r.c+'/'+r.t+' correct</div>'+
+        '</div>';
+    }
+  }
+  document.getElementById('myResList').innerHTML = html;
+  go('pgMyRes');
+}
+
+// ADMIN
+function addQ(){
+  var q = document.getElementById('newQ').value.trim();
+  var o1 = document.getElementById('o1').value.trim();
+  var o2 = document.getElementById('o2').value.trim();
+  var o3 = document.getElementById('o3').value.trim();
+  var o4 = document.getElementById('o4').value.trim();
+  var cor = parseInt(document.querySelector('input[name="cor"]:checked').value);
+  if(!q||!o1||!o2||!o3||!o4){alert('Fill all fields!');return;}
+  questions.push({q:q,opts:[o1,o2,o3,o4],ans:cor});
+  document.getElementById('newQ').value='';
+  document.getElementById('o1').value='';
+  document.getElementById('o2').value='';
+  document.getElementById('o3').value='';
+  document.getElementById('o4').value='';
+  document.querySelector('input[name="cor"][value="0"]').checked=true;
+  updateStats();
+  toast('Question added! ✅');
+}
+
+function addWS(){
+  var t=document.getElementById('wsT').value.trim();
+  var d=document.getElementById('wsD').value.trim();
+  var l=document.getElementById('wsL').value.trim();
+  if(!t||!d||!l){alert('Fill all fields!');return;}
+  worksheets.push({t:t,d:d,l:l});
+  document.getElementById('wsT').value='';
+  document.getElementById('wsD').value='';
+  document.getElementById('wsL').value='';
+  updateStats();
+  toast('Worksheet added! ✅');
+}
+
+function clearAll(){
+  if(confirm('Delete all '+questions.length+' questions?')){
+    questions=[];
+    updateStats();
+    toast('Cleared!');
+  }
+}
+
+function updateStats(){
+  document.getElementById('qCount').textContent=questions.length;
+  document.getElementById('wsCount').textContent=worksheets.length;
+}
+
+// TOAST
+function toast(msg){
+  var el=document.getElementById('toast');
+  el.textContent=msg;
+  el.style.display='block';
+  setTimeout(function(){el.style.display='none';},2500);
+}
+
+// ENTER KEY LOGIN
+document.addEventListener('keydown',function(e){
+  if(e.key==='Enter'){
+    doLogin(currentTab);
+  }
+});
+</script>
 </body>
 </html>
