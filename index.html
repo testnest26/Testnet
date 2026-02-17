@@ -1,29 +1,22 @@
-<!-- Updated index.html to fix mobile login issue -->
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    const form = document.getElementById('loginForm');
-    form.addEventListener('submit', function(event) {
-      event.preventDefault(); // Prevent default submission to handle login via AJAX
-      const formData = new FormData(form);
-      // Implement your AJAX request here
-
-      // For example:
-      fetch('/login', {
-        method: 'POST',
-        body: formData,
-      })
-      .then(response => response.json())
-      .then(data => {
-        // Handle success and error based on response
-        if(data.success) {
-          // Redirect or show success message
-        } else {
-          // Show error message
-        }
-      })
-      .catch(error => {
-        console.error('Error:', error);
-      });
-    });
-  });
-</script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TESTNEST Application</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <h1>Welcome to TESTNEST</h1>
+    </header>
+    <main>
+        <section>
+            <p>This is the TESTNEST application code.</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2026 TESTNEST</p>
+    </footer>
+</body>
+</html>
