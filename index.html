@@ -2,97 +2,122 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>EdTech Startup</title>
+<title>TESTNEST - Google Login</title>
 
-<!-- Firebase CDN -->
+<!-- Firebase (Compat) -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
 <style>
 body{font-family:Arial;margin:0;background:#f4f6f9}
-header{background:#1e272e;color:white;padding:15px;text-align:center;font-size:22px}
-.container{max-width:900px;margin:auto;padding:20px}
-.card{background:white;padding:20px;margin-bottom:20px;border-radius:8px}
-input,textarea{width:100%;padding:8px;margin:5px 0}
-button{padding:10px;background:#27ae60;color:white;border:none;margin-top:8px;width:100%;cursor:pointer}
-.timer{color:red;font-weight:bold;font-size:18px}
-.lock{color:red;font-weight:bold}
+header{background:#1e272e;color:#fff;padding:14px;text-align:center;font-size:20px;font-weight:700}
+.container{max-width:900px;margin:auto;padding:16px}
+.card{background:#fff;padding:16px;margin-bottom:16px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
+input,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid #ddd;border-radius:8px}
+button{width:100%;padding:10px;border:none;border-radius:8px;cursor:pointer;font-weight:700;margin-top:8px}
+.btn-google{background:#4285F4;color:#fff}
+.btn-green{background:#27ae60;color:#fff}
+.btn-dark{background:#111;color:#fff}
+.timer{color:#e74c3c;font-weight:900;font-size:16px}
+.lock{color:#e74c3c;font-weight:900}
+.row{display:flex;gap:10px;flex-wrap:wrap}
+.row > *{flex:1;min-width:220px}
+.small{font-size:12px;color:#666}
+hr{border:none;border-top:1px solid #eee;margin:12px 0}
 </style>
 </head>
 
 <body>
-
-<header>My EdTech Platform</header>
+<header>TESTNEST (Google Login)</header>
 
 <div class="container">
 
-<!-- LOGIN -->
-<div class="card" id="loginBox">
-<h3>Login with Mobile OTP</h3>
-<input type="text" id="phone" placeholder="+91XXXXXXXXXX">
-<div id="recaptcha-container"></div>
-<button onclick="sendOTP()">Send OTP</button>
+  <!-- LOGIN BOX -->
+  <div class="card" id="loginBox">
+    <h3>Login</h3>
+    <button class="btn-google" onclick="googleLogin()">Continue with Google</button>
+    <div class="small">No OTP • No Captcha • Works on GitHub Pages</div>
+  </div>
 
-<input type="text" id="otp" placeholder="Enter OTP">
-<button onclick="verifyOTP()">Verify OTP</button>
-</div>
+  <!-- APP -->
+  <div id="app" style="display:none;">
 
-<!-- MAIN APP -->
-<div id="app" style="display:none">
+    <div class="card">
+      <div class="row">
+        <div>
+          <b>Logged in as:</b>
+          <div id="userName"></div>
+          <div class="small" id="userEmail"></div>
+        </div>
+        <div>
+          <button class="btn-dark" onclick="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
 
-<!-- ADMIN -->
-<div class="card">
-<h3>Admin Panel</h3>
-<input type="password" id="adminPass" placeholder="Admin Password">
-<button onclick="unlockAdmin()">Unlock</button>
+    <!-- ADMIN PANEL -->
+    <div class="card">
+      <h3>Admin Panel</h3>
+      <input type="password" id="adminPass" placeholder="Admin Password (default: admin123)">
+      <button class="btn-dark" onclick="unlockAdmin()">Unlock Admin</button>
 
-<div id="adminSection" style="display:none">
+      <div id="adminSection" style="display:none;margin-top:12px;">
+        <hr>
+        <h4>Add / Update Course</h4>
 
-<input type="text" id="courseName" placeholder="Course Name">
-<label><input type="checkbox" id="paidCourse"> Paid Course</label>
-<button onclick="addCourse()">Add Course</button>
+        <div class="row">
+          <input type="text" id="courseName" placeholder="Course Name (e.g., Class 6 Maths / NEET / JEE)">
+          <label style="display:flex;align-items:center;gap:8px;">
+            <input type="checkbox" id="paidCourse" style="width:18px;height:18px;"> Paid Course
+          </label>
+        </div>
 
-<h4>Add Question</h4>
-<input type="text" id="questionText" placeholder="Question">
-<input type="text" id="opt1" placeholder="Option 1">
-<input type="text" id="opt2" placeholder="Option 2">
-<input type="text" id="opt3" placeholder="Option 3">
-<input type="text" id="opt4" placeholder="Option 4">
-<input type="number" id="correct" placeholder="Correct Option (0-3)">
-<input type="number" id="timeLimit" placeholder="Test Time (minutes)">
-<button onclick="addQuestion()">Save Question</button>
+        <button class="btn-green" onclick="addCourse()">Save Course</button>
 
-</div>
-</div>
+        <hr>
+        <h4>Add Question (to same Course)</h4>
+        <input type="text" id="questionText" placeholder="Question">
+        <input type="text" id="opt1" placeholder="Option A">
+        <input type="text" id="opt2" placeholder="Option B">
+        <input type="text" id="opt3" placeholder="Option C">
+        <input type="text" id="opt4" placeholder="Option D">
+        <input type="number" id="correct" placeholder="Correct option index (0=A, 1=B, 2=C, 3=D)">
+        <input type="number" id="timeLimit" placeholder="Test time in minutes (example: 5)">
+        <button class="btn-green" onclick="addQuestion()">Save Question</button>
 
-<!-- COURSES -->
-<div class="card">
-<h3>Available Courses</h3>
-<div id="courseList"></div>
-</div>
+        <div class="small">
+          Tip: Same courseName must be filled while adding questions.
+        </div>
+      </div>
+    </div>
 
-<!-- TEST -->
-<div class="card" id="testBox" style="display:none">
-<h3 id="testTitle"></h3>
-<div class="timer" id="timerDisplay"></div>
-<div id="questionArea"></div>
-<button onclick="submitTest()">Submit Test</button>
-</div>
+    <!-- COURSES -->
+    <div class="card">
+      <h3>Courses</h3>
+      <div id="courseList">Loading...</div>
+    </div>
 
-<!-- LEADERBOARD -->
-<div class="card">
-<h3>Leaderboard</h3>
-<div id="leaderboard"></div>
-</div>
+    <!-- TEST -->
+    <div class="card" id="testBox" style="display:none;">
+      <h3 id="testTitle"></h3>
+      <div class="timer" id="timerDisplay"></div>
+      <div id="questionArea"></div>
+      <button class="btn-green" onclick="submitTest()">Submit Test</button>
+    </div>
 
-</div>
+    <!-- LEADERBOARD -->
+    <div class="card">
+      <h3>Leaderboard (Top 10)</h3>
+      <div id="leaderboard">Loading...</div>
+    </div>
+
+  </div>
 </div>
 
 <script>
-
 /* ==========================
-   🔥 REPLACE WITH YOUR FIREBASE CONFIG
+   YOUR FIREBASE CONFIG (KEEP AS IT IS)
 ========================== */
 const firebaseConfig = {
   apiKey: "AIzaSyAPML8zK9qgRQbUyv7lMVOtt0c5Osjyw_A",
@@ -101,182 +126,269 @@ const firebaseConfig = {
   storageBucket: "testnest-education.firebasestorage.app",
   messagingSenderId: "1000142199756",
   appId: "1:1000142199756:web:afab8eaa0f6bc638969b69",
-  measurementId: "G-0TCQF9WGB3"};
+  measurementId: "G-0TCQF9WGB3"
+};
 
 firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
 /* ==========================
-   OTP LOGIN
+   GOOGLE LOGIN
 ========================== */
-
-window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier(
-  'recaptcha-container',
-  { size: 'normal' }
-);
-
-function sendOTP(){
-  const phone = document.getElementById("phone").value;
-  auth.signInWithPhoneNumber(phone, window.recaptchaVerifier)
-  .then(result=>{
-    window.confirmationResult = result;
-    alert("OTP Sent");
-  }).catch(e=>alert(e.message));
+function googleLogin(){
+  const provider = new firebase.auth.GoogleAuthProvider();
+  auth.signInWithPopup(provider)
+    .then(() => {
+      onLoggedIn();
+    })
+    .catch((e) => alert(e.message));
 }
 
-function verifyOTP(){
-  const code = document.getElementById("otp").value;
-  confirmationResult.confirm(code).then(result=>{
-    document.getElementById("loginBox").style.display="none";
-    document.getElementById("app").style.display="block";
-    loadCourses();
-    loadLeaderboard();
-  }).catch(()=>alert("Invalid OTP"));
+function logout(){
+  auth.signOut().then(() => {
+    document.getElementById("app").style.display="none";
+    document.getElementById("loginBox").style.display="block";
+  });
+}
+
+auth.onAuthStateChanged((user)=>{
+  if(user){ onLoggedIn(); }
+});
+
+function onLoggedIn(){
+  const user = auth.currentUser;
+  document.getElementById("loginBox").style.display="none";
+  document.getElementById("app").style.display="block";
+  document.getElementById("userName").textContent = user.displayName || "Student";
+  document.getElementById("userEmail").textContent = user.email || "";
+
+  loadCourses();
+  loadLeaderboard();
 }
 
 /* ==========================
    ADMIN
 ========================== */
-
 function unlockAdmin(){
-  if(document.getElementById("adminPass").value==="admin123")
+  if(document.getElementById("adminPass").value === "admin123"){
     document.getElementById("adminSection").style.display="block";
+  }else{
+    alert("Wrong admin password");
+  }
 }
 
 function addCourse(){
-  const name=document.getElementById("courseName").value;
-  const paid=document.getElementById("paidCourse").checked;
+  const name = document.getElementById("courseName").value.trim();
+  const paid = document.getElementById("paidCourse").checked;
 
-  db.collection("courses").doc(name).set({
-    paid:paid
-  });
+  if(!name) return alert("Enter course name");
 
-  alert("Course Added");
-  loadCourses();
+  db.collection("courses").doc(name).set({ paid: paid }, { merge:true })
+    .then(()=>{
+      alert("Course saved!");
+      loadCourses();
+    })
+    .catch(e=>alert(e.message));
 }
 
 function addQuestion(){
-  const name=document.getElementById("courseName").value;
+  const course = document.getElementById("courseName").value.trim();
+  if(!course) return alert("Enter course name first");
 
-  db.collection("courses").doc(name)
-  .collection("questions")
-  .add({
-    question:document.getElementById("questionText").value,
-    options:[
-      document.getElementById("opt1").value,
-      document.getElementById("opt2").value,
-      document.getElementById("opt3").value,
-      document.getElementById("opt4").value
-    ],
-    correct:parseInt(document.getElementById("correct").value),
-    time:parseInt(document.getElementById("timeLimit").value)
-  });
+  const q = document.getElementById("questionText").value.trim();
+  const o1 = document.getElementById("opt1").value.trim();
+  const o2 = document.getElementById("opt2").value.trim();
+  const o3 = document.getElementById("opt3").value.trim();
+  const o4 = document.getElementById("opt4").value.trim();
+  const correct = parseInt(document.getElementById("correct").value, 10);
+  const time = parseInt(document.getElementById("timeLimit").value, 10);
 
-  alert("Question Saved");
+  if(!q || !o1 || !o2 || !o3 || !o4) return alert("Fill question + all options");
+  if(isNaN(correct) || correct<0 || correct>3) return alert("Correct must be 0-3");
+  if(isNaN(time) || time<=0) return alert("Time must be > 0 minutes");
+
+  db.collection("courses").doc(course).collection("questions").add({
+    question: q,
+    options: [o1,o2,o3,o4],
+    correct: correct,
+    time: time
+  }).then(()=>{
+    alert("Question saved!");
+    document.getElementById("questionText").value="";
+    document.getElementById("opt1").value="";
+    document.getElementById("opt2").value="";
+    document.getElementById("opt3").value="";
+    document.getElementById("opt4").value="";
+    document.getElementById("correct").value="";
+    document.getElementById("timeLimit").value="";
+  }).catch(e=>alert(e.message));
 }
 
 /* ==========================
-   LOAD COURSES
+   COURSES + PAID LOCK
 ========================== */
-
 function loadCourses(){
-  const div=document.getElementById("courseList");
-  div.innerHTML="";
+  const div = document.getElementById("courseList");
+  div.innerHTML = "Loading...";
 
   db.collection("courses").get().then(snapshot=>{
+    if(snapshot.empty){
+      div.innerHTML = "<div class='small'>No courses yet. Admin add course first.</div>";
+      return;
+    }
+
+    let html = "";
     snapshot.forEach(doc=>{
-      if(doc.data().paid){
-        div.innerHTML+=`<p>${doc.id} <span class="lock">(Paid)</span></p>`;
+      const c = doc.id;
+      const paid = !!doc.data().paid;
+
+      if(paid){
+        html += `<p><b>${c}</b> <span class="lock">(Paid - Locked)</span></p>`;
       }else{
-        div.innerHTML+=`<button onclick="startTest('${doc.id}')">${doc.id}</button>`;
+        html += `<button class="btn-green" onclick="startTest('${escapeQuotes(c)}')">Start Test: ${c}</button>`;
       }
     });
-  });
+
+    div.innerHTML = html;
+  }).catch(e=>div.innerHTML = e.message);
+}
+
+function escapeQuotes(s){
+  return s.replace(/'/g,"\\'");
 }
 
 /* ==========================
-   TEST SYSTEM
+   TEST SYSTEM (TIMER + RESULT)
 ========================== */
-
-let currentQuestions=[];
-let timeLeft=0;
-let timer;
+let currentCourse = "";
+let currentQuestions = [];
+let timeLeft = 0;
+let timerInt = null;
 
 function startTest(course){
-  document.getElementById("testBox").style.display="block";
-  document.getElementById("testTitle").innerText=course;
+  currentCourse = course;
+  document.getElementById("testTitle").textContent = course;
+  document.getElementById("testBox").style.display = "block";
+  document.getElementById("questionArea").innerHTML = "Loading questions...";
+  document.getElementById("timerDisplay").textContent = "";
 
-  db.collection("courses").doc(course)
-  .collection("questions")
-  .get().then(snapshot=>{
-    currentQuestions=[];
-    snapshot.forEach(doc=>{
-      currentQuestions.push(doc.data());
-    });
-    renderTest();
-  });
+  db.collection("courses").doc(course).collection("questions").get()
+    .then(snapshot=>{
+      currentQuestions = [];
+      snapshot.forEach(doc => currentQuestions.push(doc.data()));
+
+      if(currentQuestions.length === 0){
+        document.getElementById("questionArea").innerHTML = "<div class='small'>No questions in this course yet.</div>";
+        return;
+      }
+
+      renderTest();
+      startTimer(currentQuestions[0].time * 60); // use first question's time
+    })
+    .catch(e=>alert(e.message));
 }
 
 function renderTest(){
-  const div=document.getElementById("questionArea");
-  div.innerHTML="";
-  currentQuestions.forEach((q,i)=>{
-    div.innerHTML+=`<p>${i+1}. ${q.question}</p>
-    ${q.options.map((o,index)=>
-      `<input type="radio" name="q${i}" value="${index}">${o}<br>`
-    ).join("")}`;
-  });
+  const div = document.getElementById("questionArea");
+  div.innerHTML = "";
 
-  timeLeft=currentQuestions[0].time*60;
-  timer=setInterval(()=>{
+  currentQuestions.forEach((q,i)=>{
+    let optsHtml = "";
+    q.options.forEach((opt,idx)=>{
+      optsHtml += `
+        <label style="display:block;margin:6px 0;">
+          <input type="radio" name="q${i}" value="${idx}"> ${opt}
+        </label>
+      `;
+    });
+
+    div.innerHTML += `
+      <div style="padding:10px;border:1px solid #eee;border-radius:10px;margin-bottom:10px;">
+        <b>${i+1}. ${q.question}</b>
+        <div style="margin-top:6px;">${optsHtml}</div>
+      </div>
+    `;
+  });
+}
+
+function startTimer(seconds){
+  clearInterval(timerInt);
+  timeLeft = seconds;
+  updateTimerUI();
+  timerInt = setInterval(()=>{
     timeLeft--;
-    document.getElementById("timerDisplay").innerText="Time Left: "+timeLeft+" sec";
-    if(timeLeft<=0){
-      clearInterval(timer);
+    updateTimerUI();
+    if(timeLeft <= 0){
+      clearInterval(timerInt);
       submitTest();
     }
-  },1000);
+  }, 1000);
+}
+
+function updateTimerUI(){
+  const m = Math.floor(timeLeft/60);
+  const s = timeLeft%60;
+  document.getElementById("timerDisplay").textContent = `Time Left: ${m}:${s<10?'0':''}${s}`;
 }
 
 function submitTest(){
-  clearInterval(timer);
-  let score=0;
+  clearInterval(timerInt);
 
+  let score = 0;
   currentQuestions.forEach((q,i)=>{
-    const selected=document.querySelector(`input[name="q${i}"]:checked`);
-    if(selected && parseInt(selected.value)===q.correct) score++;
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    if(selected && parseInt(selected.value,10) === q.correct){
+      score++;
+    }
   });
 
-  alert("Score: "+score+"/"+currentQuestions.length);
+  alert(`Score: ${score}/${currentQuestions.length}`);
+
+  const user = auth.currentUser;
+  const userName = user.displayName || user.email || "Student";
 
   db.collection("leaderboard").add({
-    user:auth.currentUser.phoneNumber,
-    score:score
+    user: userName,
+    score: score,
+    course: currentCourse,
+    at: firebase.firestore.FieldValue.serverTimestamp()
+  }).then(()=>{
+    loadLeaderboard();
   });
 
-  loadLeaderboard();
-  document.getElementById("testBox").style.display="none";
+  document.getElementById("testBox").style.display = "none";
 }
 
 /* ==========================
    LEADERBOARD
 ========================== */
-
 function loadLeaderboard(){
-  const div=document.getElementById("leaderboard");
-  div.innerHTML="";
+  const div = document.getElementById("leaderboard");
+  div.innerHTML = "Loading...";
 
   db.collection("leaderboard")
-  .orderBy("score","desc")
-  .limit(10)
-  .get().then(snapshot=>{
-    snapshot.forEach(doc=>{
-      div.innerHTML+=`<p>${doc.data().user} - ${doc.data().score}</p>`;
-    });
-  });
-}
+    .orderBy("score","desc")
+    .limit(10)
+    .get()
+    .then(snapshot=>{
+      if(snapshot.empty){
+        div.innerHTML = "<div class='small'>No scores yet.</div>";
+        return;
+      }
 
+      let html = "";
+      let i = 1;
+      snapshot.forEach(doc=>{
+        const d = doc.data();
+        html += `<p>${i}. <b>${d.user}</b> — ${d.score} <span class="small">(${d.course || ""})</span></p>`;
+        i++;
+      });
+      div.innerHTML = html;
+    })
+    .catch(e=>div.innerHTML = e.message);
+}
 </script>
+
 </body>
 </html>
