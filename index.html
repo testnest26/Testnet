@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <title>EdTech Startup</title>
 
-<!-- Firebase -->
+<!-- Firebase CDN -->
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
@@ -14,8 +14,8 @@ body{font-family:Arial;margin:0;background:#f4f6f9}
 header{background:#1e272e;color:white;padding:15px;text-align:center;font-size:22px}
 .container{max-width:900px;margin:auto;padding:20px}
 .card{background:white;padding:20px;margin-bottom:20px;border-radius:8px}
-input,select,textarea{width:100%;padding:8px;margin:5px 0}
-button{padding:10px;background:#27ae60;color:white;border:none;margin-top:8px;width:100%}
+input,textarea{width:100%;padding:8px;margin:5px 0}
+button{padding:10px;background:#27ae60;color:white;border:none;margin-top:8px;width:100%;cursor:pointer}
 .timer{color:red;font-weight:bold;font-size:18px}
 .lock{color:red;font-weight:bold}
 </style>
@@ -44,7 +44,7 @@ button{padding:10px;background:#27ae60;color:white;border:none;margin-top:8px;wi
 <!-- ADMIN -->
 <div class="card">
 <h3>Admin Panel</h3>
-<input type="password" id="adminPass" placeholder="Enter Admin Password">
+<input type="password" id="adminPass" placeholder="Admin Password">
 <button onclick="unlockAdmin()">Unlock</button>
 
 <div id="adminSection" style="display:none">
@@ -53,6 +53,7 @@ button{padding:10px;background:#27ae60;color:white;border:none;margin-top:8px;wi
 <label><input type="checkbox" id="paidCourse"> Paid Course</label>
 <button onclick="addCourse()">Add Course</button>
 
+<h4>Add Question</h4>
 <input type="text" id="questionText" placeholder="Question">
 <input type="text" id="opt1" placeholder="Option 1">
 <input type="text" id="opt2" placeholder="Option 2">
@@ -74,7 +75,7 @@ button{padding:10px;background:#27ae60;color:white;border:none;margin-top:8px;wi
 <!-- TEST -->
 <div class="card" id="testBox" style="display:none">
 <h3 id="testTitle"></h3>
-<div class="timer" id="timer"></div>
+<div class="timer" id="timerDisplay"></div>
 <div id="questionArea"></div>
 <button onclick="submitTest()">Submit Test</button>
 </div>
@@ -163,10 +164,13 @@ function addQuestion(){
   .add({
     question:document.getElementById("questionText").value,
     options:[
-      opt1.value,opt2.value,opt3.value,opt4.value
+      document.getElementById("opt1").value,
+      document.getElementById("opt2").value,
+      document.getElementById("opt3").value,
+      document.getElementById("opt4").value
     ],
-    correct:parseInt(correct.value),
-    time:parseInt(timeLimit.value)
+    correct:parseInt(document.getElementById("correct").value),
+    time:parseInt(document.getElementById("timeLimit").value)
   });
 
   alert("Question Saved");
@@ -227,7 +231,7 @@ function renderTest(){
   timeLeft=currentQuestions[0].time*60;
   timer=setInterval(()=>{
     timeLeft--;
-    timerDisplay.innerText="Time Left: "+timeLeft+" sec";
+    document.getElementById("timerDisplay").innerText="Time Left: "+timeLeft+" sec";
     if(timeLeft<=0){
       clearInterval(timer);
       submitTest();
@@ -238,6 +242,7 @@ function renderTest(){
 function submitTest(){
   clearInterval(timer);
   let score=0;
+
   currentQuestions.forEach((q,i)=>{
     const selected=document.querySelector(`input[name="q${i}"]:checked`);
     if(selected && parseInt(selected.value)===q.correct) score++;
@@ -266,7 +271,7 @@ function loadLeaderboard(){
   .orderBy("score","desc")
   .limit(10)
   .get().then(snapshot=>{
-    snapshot.forEach((doc,i)=>{
+    snapshot.forEach(doc=>{
       div.innerHTML+=`<p>${doc.data().user} - ${doc.data().score}</p>`;
     });
   });
