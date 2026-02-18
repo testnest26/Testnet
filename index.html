@@ -1,123 +1,352 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<title>TESTNEST - Google Login</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>TESTNEST</title>
 
-<!-- Firebase (Compat) -->
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+  <!-- Firebase (Compat for GitHub Pages single HTML) -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 
-<style>
-body{font-family:Arial;margin:0;background:#f4f6f9}
-header{background:#1e272e;color:#fff;padding:14px;text-align:center;font-size:20px;font-weight:700}
-.container{max-width:900px;margin:auto;padding:16px}
-.card{background:#fff;padding:16px;margin-bottom:16px;border-radius:10px;box-shadow:0 2px 8px rgba(0,0,0,0.08)}
-input,textarea{width:100%;padding:10px;margin:6px 0;border:1px solid #ddd;border-radius:8px}
-button{width:100%;padding:10px;border:none;border-radius:8px;cursor:pointer;font-weight:700;margin-top:8px}
-.btn-google{background:#4285F4;color:#fff}
-.btn-green{background:#27ae60;color:#fff}
-.btn-dark{background:#111;color:#fff}
-.timer{color:#e74c3c;font-weight:900;font-size:16px}
-.lock{color:#e74c3c;font-weight:900}
-.row{display:flex;gap:10px;flex-wrap:wrap}
-.row > *{flex:1;min-width:220px}
-.small{font-size:12px;color:#666}
-hr{border:none;border-top:1px solid #eee;margin:12px 0}
-</style>
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card: rgba(255,255,255,0.08);
+      --card2: rgba(255,255,255,0.10);
+      --border: rgba(255,255,255,0.14);
+      --text:#eaf0ff;
+      --muted: rgba(234,240,255,0.70);
+      --brand:#ff6b35;
+      --brand2:#4b7bec;
+      --ok:#2ecc71;
+      --bad:#ff4757;
+      --shadow: 0 18px 60px rgba(0,0,0,0.35);
+      --radius: 18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial;
+      background: radial-gradient(1200px 700px at 20% 0%, rgba(75,123,236,0.28), transparent 55%),
+                  radial-gradient(900px 600px at 80% 10%, rgba(255,107,53,0.22), transparent 60%),
+                  linear-gradient(180deg, #070a14, var(--bg));
+      color:var(--text);
+      min-height:100vh;
+    }
+    .topbar{
+      position:sticky; top:0; z-index:20;
+      backdrop-filter: blur(10px);
+      background: rgba(10,14,30,0.65);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .topbar-inner{
+      max-width:1100px; margin:0 auto; padding:14px 16px;
+      display:flex; align-items:center; justify-content:space-between; gap:12px;
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      font-weight:900; letter-spacing:0.6px;
+    }
+    .logo{
+      width:38px; height:38px; border-radius:12px;
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      box-shadow: 0 10px 30px rgba(255,107,53,0.25);
+    }
+    .brand span{font-size:18px}
+    .pill{
+      padding:8px 12px; border:1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.06);
+      border-radius:999px;
+      font-size:12px; color:var(--muted);
+      display:flex; align-items:center; gap:8px;
+      max-width:60vw;
+      overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+    }
+    .wrap{max-width:1100px; margin:0 auto; padding:18px 16px 40px;}
+    .grid{
+      display:grid; grid-template-columns: 1.2fr 0.8fr;
+      gap:16px;
+    }
+    @media(max-width:900px){ .grid{grid-template-columns:1fr} }
+    .card{
+      background: var(--card);
+      border:1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding:16px;
+    }
+    .card h2,.card h3{margin:0 0 10px 0}
+    .muted{color:var(--muted); font-size:13px; line-height:1.45}
+    .btnrow{display:flex; gap:10px; flex-wrap:wrap}
+    button{
+      border:none; cursor:pointer; font-weight:800;
+      border-radius: 14px;
+      padding:12px 14px;
+      transition: transform .08s ease, filter .12s ease;
+    }
+    button:active{transform: scale(.98)}
+    .btn{
+      background: rgba(255,255,255,0.10);
+      color:var(--text);
+      border:1px solid rgba(255,255,255,0.14);
+    }
+    .btn-brand{
+      background: linear-gradient(135deg, var(--brand), #ff915f);
+      color:#120a07;
+      border: none;
+    }
+    .btn-blue{
+      background: linear-gradient(135deg, var(--brand2), #6ea6ff);
+      color:#081022;
+      border:none;
+    }
+    .btn-dark{
+      background: rgba(0,0,0,0.25);
+      color:var(--text);
+      border:1px solid rgba(255,255,255,0.14);
+    }
+    .btn-ok{
+      background: linear-gradient(135deg, var(--ok), #7bed9f);
+      color:#04140b;
+      border:none;
+    }
+    .btn-bad{
+      background: linear-gradient(135deg, var(--bad), #ff6b81);
+      color:#24060b;
+      border:none;
+    }
+    .row{display:flex; gap:12px; flex-wrap:wrap}
+    .row > *{flex:1; min-width:220px}
+    input, select, textarea{
+      width:100%;
+      padding:12px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,0.16);
+      background: rgba(0,0,0,0.20);
+      color: var(--text);
+      outline:none;
+    }
+    textarea{min-height:90px; resize:vertical}
+    label{display:block; font-size:12px; color:var(--muted); margin:6px 0 6px}
+    .divider{height:1px; background: rgba(255,255,255,0.10); margin:14px 0}
+    .tag{
+      display:inline-flex; align-items:center; gap:6px;
+      font-size:12px; padding:6px 10px; border-radius:999px;
+      background: rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.12);
+      color: var(--muted);
+    }
+    .course{
+      padding:14px; border-radius:16px;
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      display:flex; justify-content:space-between; align-items:center; gap:12px;
+      margin-bottom:10px;
+    }
+    .course b{font-size:15px}
+    .lock{color:#ffd2c2}
+    .timer{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      font-weight:900; font-size:16px; color:#ffd2c2;
+    }
+    .qbox{
+      border:1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      border-radius: 16px;
+      padding:12px; margin:10px 0;
+    }
+    .opt{display:block; padding:8px 10px; margin:7px 0; border-radius:12px;
+      border:1px solid rgba(255,255,255,0.10); background: rgba(0,0,0,0.18)}
+    .small{font-size:12px; color:var(--muted)}
+    .toast{
+      position: fixed; bottom:18px; left:50%; transform:translateX(-50%);
+      background: rgba(0,0,0,0.75);
+      color:var(--text);
+      border:1px solid rgba(255,255,255,0.12);
+      padding:10px 14px;
+      border-radius: 12px;
+      display:none;
+      z-index:999;
+      max-width: 92vw;
+    }
+    .hero{
+      display:flex; align-items:center; justify-content:space-between; gap:14px; flex-wrap:wrap;
+    }
+    .hero h1{margin:0; font-size:28px}
+    .hero .sub{color:var(--muted); max-width:60ch; line-height:1.5}
+  </style>
 </head>
-
 <body>
-<header>TESTNEST (Google Login)</header>
 
-<div class="container">
+<div class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">
+      <div class="logo"></div>
+      <span>TESTNEST</span>
+    </div>
+    <div class="pill" id="topStatus">Not logged in</div>
+  </div>
+</div>
 
-  <!-- LOGIN BOX -->
-  <div class="card" id="loginBox">
-    <h3>Login</h3>
-    <button class="btn-google" onclick="googleLogin()">Continue with Google</button>
-    <div class="small">No OTP • No Captcha • Works on GitHub Pages</div>
+<div class="wrap">
+
+  <!-- LOGIN -->
+  <div class="card" id="loginCard">
+    <div class="hero">
+      <div>
+        <h1>Learn • Practice • Test</h1>
+        <div class="sub">Student login for tests + Leaderboard. Admin login to create courses, add unlimited questions, and lock paid courses.</div>
+        <div style="margin-top:10px" class="row">
+          <span class="tag">✅ Timer Test</span>
+          <span class="tag">✅ Auto Result</span>
+          <span class="tag">✅ Leaderboard</span>
+          <span class="tag">✅ Paid Lock</span>
+        </div>
+      </div>
+      <div style="min-width:260px; width:320px; max-width:100%;">
+        <div class="card" style="box-shadow:none; background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.10);">
+          <h3 style="margin:0 0 8px 0;">Login</h3>
+          <div class="muted">Choose Student or Admin login. Both use Google.</div>
+          <div class="btnrow" style="margin-top:12px;">
+            <button class="btn-brand" onclick="loginAs('student')">Student Login (Google)</button>
+            <button class="btn-blue" onclick="loginAs('admin')">Admin Login (Google)</button>
+          </div>
+          <div class="small" style="margin-top:10px;">No OTP • No captcha • GitHub Pages friendly</div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- APP -->
   <div id="app" style="display:none;">
+    <div class="grid">
 
-    <div class="card">
-      <div class="row">
-        <div>
-          <b>Logged in as:</b>
-          <div id="userName"></div>
-          <div class="small" id="userEmail"></div>
+      <!-- LEFT: Courses + Test -->
+      <div class="card">
+        <div class="row" style="align-items:center">
+          <div>
+            <h2 style="margin:0">Courses</h2>
+            <div class="muted">Start a free test. Paid courses show locked.</div>
+          </div>
+          <div style="text-align:right">
+            <button class="btn-dark" onclick="logout()">Logout</button>
+          </div>
         </div>
-        <div>
-          <button class="btn-dark" onclick="logout()">Logout</button>
+
+        <div class="divider"></div>
+        <div id="courseList">Loading...</div>
+
+        <div class="divider"></div>
+
+        <div id="testBox" style="display:none;">
+          <div class="row" style="align-items:center">
+            <div>
+              <h3 id="testTitle" style="margin:0 0 4px 0;">Test</h3>
+              <div class="small" id="qCountInfo"></div>
+            </div>
+            <div class="timer" id="timerDisplay">00:00</div>
+          </div>
+          <div id="questionArea"></div>
+          <div class="btnrow">
+            <button class="btn-ok" onclick="submitTest()">Submit Test</button>
+            <button class="btn-bad" onclick="closeTest()">Close</button>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- ADMIN PANEL -->
-    <div class="card">
-      <h3>Admin Panel</h3>
-      <input type="password" id="adminPass" placeholder="Admin Password (default: admin123)">
-      <button class="btn-dark" onclick="unlockAdmin()">Unlock Admin</button>
+      <!-- RIGHT: Profile + Admin + Leaderboard -->
+      <div>
+        <div class="card">
+          <h3 style="margin:0 0 8px 0;">Profile</h3>
+          <div><b id="userName">—</b></div>
+          <div class="small" id="userEmail">—</div>
+          <div class="small" id="userRole">Role: —</div>
+        </div>
 
-      <div id="adminSection" style="display:none;margin-top:12px;">
-        <hr>
-        <h4>Add / Update Course</h4>
+        <div class="card" id="adminCard" style="display:none; margin-top:16px;">
+          <h3 style="margin:0 0 8px 0;">Admin Panel</h3>
+          <div class="muted">Create courses, lock paid courses, add unlimited questions.</div>
 
-        <div class="row">
-          <input type="text" id="courseName" placeholder="Course Name (e.g., Class 6 Maths / NEET / JEE)">
-          <label style="display:flex;align-items:center;gap:8px;">
-            <input type="checkbox" id="paidCourse" style="width:18px;height:18px;"> Paid Course
+          <div class="divider"></div>
+
+          <label>Course Name</label>
+          <input type="text" id="courseName" placeholder="e.g., Class 6 Maths / NEET / JEE" />
+          <label style="display:flex; align-items:center; gap:10px; margin-top:8px;">
+            <input type="checkbox" id="paidCourse" style="width:18px;height:18px; accent-color: var(--brand);"> Paid Course (Locked)
           </label>
+          <button class="btn-ok" onclick="addCourse()">Save Course</button>
+
+          <div class="divider"></div>
+
+          <label>Select course for adding questions</label>
+          <select id="coursePick">
+            <option value="">Select course</option>
+          </select>
+
+          <label>Question</label>
+          <textarea id="questionText" placeholder="Type your question..."></textarea>
+
+          <div class="row">
+            <div>
+              <label>Option A</label>
+              <input type="text" id="opt1" placeholder="Option A" />
+            </div>
+            <div>
+              <label>Option B</label>
+              <input type="text" id="opt2" placeholder="Option B" />
+            </div>
+          </div>
+          <div class="row">
+            <div>
+              <label>Option C</label>
+              <input type="text" id="opt3" placeholder="Option C" />
+            </div>
+            <div>
+              <label>Option D</label>
+              <input type="text" id="opt4" placeholder="Option D" />
+            </div>
+          </div>
+
+          <div class="row">
+            <div>
+              <label>Correct Option Index</label>
+              <input type="number" id="correct" placeholder="0=A, 1=B, 2=C, 3=D" />
+            </div>
+            <div>
+              <label>Test Time (minutes)</label>
+              <input type="number" id="timeLimit" placeholder="Example: 5" />
+            </div>
+          </div>
+
+          <div class="btnrow">
+            <button class="btn-brand" onclick="addQuestion()">Save Question</button>
+            <button class="btn" onclick="clearQuestionForm()">Add Next Question</button>
+          </div>
+
+          <div class="small" style="margin-top:10px;">
+            Tip: Select course from dropdown and keep adding questions unlimited.
+          </div>
         </div>
 
-        <button class="btn-green" onclick="addCourse()">Save Course</button>
-
-        <hr>
-        <h4>Add Question (to same Course)</h4>
-        <input type="text" id="questionText" placeholder="Question">
-        <input type="text" id="opt1" placeholder="Option A">
-        <input type="text" id="opt2" placeholder="Option B">
-        <input type="text" id="opt3" placeholder="Option C">
-        <input type="text" id="opt4" placeholder="Option D">
-        <input type="number" id="correct" placeholder="Correct option index (0=A, 1=B, 2=C, 3=D)">
-        <input type="number" id="timeLimit" placeholder="Test time in minutes (example: 5)">
-        <button class="btn-green" onclick="addQuestion()">Save Question</button>
-
-        <div class="small">
-          Tip: Same courseName must be filled while adding questions.
+        <div class="card" style="margin-top:16px;">
+          <h3 style="margin:0 0 8px 0;">Leaderboard (Top 10)</h3>
+          <div class="small">Top scores across all courses.</div>
+          <div class="divider"></div>
+          <div id="leaderboard">Loading...</div>
         </div>
       </div>
-    </div>
 
-    <!-- COURSES -->
-    <div class="card">
-      <h3>Courses</h3>
-      <div id="courseList">Loading...</div>
     </div>
-
-    <!-- TEST -->
-    <div class="card" id="testBox" style="display:none;">
-      <h3 id="testTitle"></h3>
-      <div class="timer" id="timerDisplay"></div>
-      <div id="questionArea"></div>
-      <button class="btn-green" onclick="submitTest()">Submit Test</button>
-    </div>
-
-    <!-- LEADERBOARD -->
-    <div class="card">
-      <h3>Leaderboard (Top 10)</h3>
-      <div id="leaderboard">Loading...</div>
-    </div>
-
   </div>
+
 </div>
+
+<div class="toast" id="toast"></div>
 
 <script>
 /* ==========================
-   YOUR FIREBASE CONFIG (KEEP AS IT IS)
+   FIREBASE CONFIG (YOUR PROJECT)
 ========================== */
 const firebaseConfig = {
   apiKey: "AIzaSyAPML8zK9qgRQbUyv7lMVOtt0c5Osjyw_A",
@@ -134,67 +363,130 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 /* ==========================
-   GOOGLE LOGIN
+   ADMIN CONTROL (VERY IMPORTANT)
+   Put your admin Gmail(s) here.
 ========================== */
-function googleLogin(){
+const ADMIN_EMAILS = [
+  "dnyanrui90@gmail.com"   // ✅ your email (change/add more)
+];
+
+let intendedRole = "student"; // chosen at login
+let currentRole = "student";
+
+/* ==========================
+   UI HELPERS
+========================== */
+function toast(msg){
+  const el = document.getElementById("toast");
+  el.textContent = msg;
+  el.style.display = "block";
+  setTimeout(()=> el.style.display="none", 2500);
+}
+
+function setTopStatus(msg){
+  document.getElementById("topStatus").textContent = msg;
+}
+
+/* ==========================
+   LOGIN (SEPARATE STUDENT / ADMIN)
+========================== */
+function loginAs(role){
+  intendedRole = role; // student or admin
   const provider = new firebase.auth.GoogleAuthProvider();
   auth.signInWithPopup(provider)
-    .then(() => {
-      onLoggedIn();
+    .then(()=> {
+      // role will be applied in onAuthStateChanged
     })
-    .catch((e) => alert(e.message));
+    .catch(e => alert(e.message));
 }
 
 function logout(){
-  auth.signOut().then(() => {
+  auth.signOut().then(()=>{
     document.getElementById("app").style.display="none";
-    document.getElementById("loginBox").style.display="block";
+    document.getElementById("loginCard").style.display="block";
+    setTopStatus("Not logged in");
   });
 }
 
 auth.onAuthStateChanged((user)=>{
-  if(user){ onLoggedIn(); }
-});
+  if(!user) return;
 
-function onLoggedIn(){
-  const user = auth.currentUser;
-  document.getElementById("loginBox").style.display="none";
+  // Decide role: if user email is in admin list AND user clicked Admin Login
+  const email = (user.email || "").toLowerCase();
+  const isAdminEmail = ADMIN_EMAILS.map(x=>x.toLowerCase()).includes(email);
+  currentRole = (intendedRole === "admin" && isAdminEmail) ? "admin" : "student";
+
+  // UI show/hide
+  document.getElementById("loginCard").style.display="none";
   document.getElementById("app").style.display="block";
+
   document.getElementById("userName").textContent = user.displayName || "Student";
   document.getElementById("userEmail").textContent = user.email || "";
+  document.getElementById("userRole").textContent = "Role: " + currentRole.toUpperCase();
+
+  setTopStatus((user.displayName || "User") + " • " + currentRole.toUpperCase());
+
+  document.getElementById("adminCard").style.display = (currentRole === "admin") ? "block" : "none";
 
   loadCourses();
   loadLeaderboard();
-}
+  refreshCoursePick();
+});
 
 /* ==========================
-   ADMIN
+   ADMIN: COURSES + QUESTIONS
 ========================== */
-function unlockAdmin(){
-  if(document.getElementById("adminPass").value === "admin123"){
-    document.getElementById("adminSection").style.display="block";
-  }else{
-    alert("Wrong admin password");
-  }
-}
-
 function addCourse(){
+  if(currentRole !== "admin") return alert("Admin only");
+
   const name = document.getElementById("courseName").value.trim();
   const paid = document.getElementById("paidCourse").checked;
 
   if(!name) return alert("Enter course name");
 
-  db.collection("courses").doc(name).set({ paid: paid }, { merge:true })
-    .then(()=>{
-      alert("Course saved!");
-      loadCourses();
-    })
-    .catch(e=>alert(e.message));
+  db.collection("courses").doc(name).set({
+    paid: paid,
+    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+    createdBy: auth.currentUser.email || ""
+  }, { merge:true })
+  .then(()=>{
+    toast("Course saved!");
+    loadCourses();
+    refreshCoursePick();
+  })
+  .catch(e=>alert(e.message));
+}
+
+function refreshCoursePick(){
+  const sel = document.getElementById("coursePick");
+  if(!sel) return;
+
+  sel.innerHTML = `<option value="">Select course</option>`;
+
+  db.collection("courses").get().then(snap=>{
+    snap.forEach(doc=>{
+      const opt = document.createElement("option");
+      opt.value = doc.id;
+      opt.textContent = doc.id;
+      sel.appendChild(opt);
+    });
+  }).catch(()=>{});
+}
+
+function clearQuestionForm(){
+  document.getElementById("questionText").value="";
+  document.getElementById("opt1").value="";
+  document.getElementById("opt2").value="";
+  document.getElementById("opt3").value="";
+  document.getElementById("opt4").value="";
+  document.getElementById("correct").value="";
 }
 
 function addQuestion(){
-  const course = document.getElementById("courseName").value.trim();
-  if(!course) return alert("Enter course name first");
+  if(currentRole !== "admin") return alert("Admin only");
+
+  const course = (document.getElementById("coursePick").value || "").trim();
+  if(!course) return alert("Select course from dropdown first");
 
   const q = document.getElementById("questionText").value.trim();
   const o1 = document.getElementById("opt1").value.trim();
@@ -212,17 +504,15 @@ function addQuestion(){
     question: q,
     options: [o1,o2,o3,o4],
     correct: correct,
-    time: time
-  }).then(()=>{
-    alert("Question saved!");
-    document.getElementById("questionText").value="";
-    document.getElementById("opt1").value="";
-    document.getElementById("opt2").value="";
-    document.getElementById("opt3").value="";
-    document.getElementById("opt4").value="";
-    document.getElementById("correct").value="";
-    document.getElementById("timeLimit").value="";
-  }).catch(e=>alert(e.message));
+    time: time,
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    createdBy: auth.currentUser.email || ""
+  })
+  .then(()=>{
+    toast("Question saved!");
+    clearQuestionForm(); // ready for next
+  })
+  .catch(e=>alert(e.message));
 }
 
 /* ==========================
@@ -234,32 +524,42 @@ function loadCourses(){
 
   db.collection("courses").get().then(snapshot=>{
     if(snapshot.empty){
-      div.innerHTML = "<div class='small'>No courses yet. Admin add course first.</div>";
+      div.innerHTML = `<div class="muted">No courses yet. Admin add course first.</div>`;
       return;
     }
 
     let html = "";
     snapshot.forEach(doc=>{
-      const c = doc.id;
+      const courseName = doc.id;
       const paid = !!doc.data().paid;
 
-      if(paid){
-        html += `<p><b>${c}</b> <span class="lock">(Paid - Locked)</span></p>`;
-      }else{
-        html += `<button class="btn-green" onclick="startTest('${escapeQuotes(c)}')">Start Test: ${c}</button>`;
-      }
+      html += `<div class="course">
+        <div>
+          <b>${escapeHtml(courseName)}</b><br/>
+          <span class="small">${paid ? "Paid course (Locked)" : "Free course (Test available)"}</span>
+        </div>
+        <div style="min-width:160px; text-align:right">
+          ${paid
+            ? `<span class="tag lock">🔒 Locked</span>`
+            : `<button class="btn-ok" onclick="startTest('${escapeQuotes(courseName)}')">Start Test</button>`
+          }
+        </div>
+      </div>`;
     });
 
     div.innerHTML = html;
-  }).catch(e=>div.innerHTML = e.message);
+  }).catch(e=>{
+    div.innerHTML = `<div class="muted">${escapeHtml(e.message)}</div>`;
+  });
 }
 
-function escapeQuotes(s){
-  return s.replace(/'/g,"\\'");
+function escapeQuotes(s){ return s.replace(/'/g,"\\'"); }
+function escapeHtml(s){
+  return (s||"").replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
 }
 
 /* ==========================
-   TEST SYSTEM (TIMER + RESULT)
+   TEST (TIMER + RESULT)
 ========================== */
 let currentCourse = "";
 let currentQuestions = [];
@@ -268,10 +568,11 @@ let timerInt = null;
 
 function startTest(course){
   currentCourse = course;
-  document.getElementById("testTitle").textContent = course;
+  document.getElementById("testTitle").textContent = "Test: " + course;
   document.getElementById("testBox").style.display = "block";
   document.getElementById("questionArea").innerHTML = "Loading questions...";
-  document.getElementById("timerDisplay").textContent = "";
+  document.getElementById("qCountInfo").textContent = "";
+  stopTimer();
 
   db.collection("courses").doc(course).collection("questions").get()
     .then(snapshot=>{
@@ -279,12 +580,17 @@ function startTest(course){
       snapshot.forEach(doc => currentQuestions.push(doc.data()));
 
       if(currentQuestions.length === 0){
-        document.getElementById("questionArea").innerHTML = "<div class='small'>No questions in this course yet.</div>";
+        document.getElementById("questionArea").innerHTML =
+          `<div class="muted">No questions in this course yet. Admin add questions.</div>`;
         return;
       }
 
+      document.getElementById("qCountInfo").textContent = currentQuestions.length + " questions";
       renderTest();
-      startTimer(currentQuestions[0].time * 60); // use first question's time
+
+      // time in minutes from first question (simple model)
+      const mins = (currentQuestions[0].time || 5);
+      startTimer(mins * 60);
     })
     .catch(e=>alert(e.message));
 }
@@ -295,69 +601,88 @@ function renderTest(){
 
   currentQuestions.forEach((q,i)=>{
     let optsHtml = "";
-    q.options.forEach((opt,idx)=>{
+    (q.options || []).forEach((opt,idx)=>{
       optsHtml += `
-        <label style="display:block;margin:6px 0;">
-          <input type="radio" name="q${i}" value="${idx}"> ${opt}
+        <label class="opt">
+          <input type="radio" name="q${i}" value="${idx}" style="accent-color: var(--brand); transform: translateY(2px);">
+          <span style="margin-left:8px">${escapeHtml(opt)}</span>
         </label>
       `;
     });
 
     div.innerHTML += `
-      <div style="padding:10px;border:1px solid #eee;border-radius:10px;margin-bottom:10px;">
-        <b>${i+1}. ${q.question}</b>
-        <div style="margin-top:6px;">${optsHtml}</div>
+      <div class="qbox">
+        <b>${i+1}. ${escapeHtml(q.question)}</b>
+        <div style="margin-top:8px">${optsHtml}</div>
       </div>
     `;
   });
 }
 
 function startTimer(seconds){
-  clearInterval(timerInt);
+  stopTimer();
   timeLeft = seconds;
   updateTimerUI();
   timerInt = setInterval(()=>{
     timeLeft--;
     updateTimerUI();
     if(timeLeft <= 0){
-      clearInterval(timerInt);
+      stopTimer();
       submitTest();
     }
   }, 1000);
 }
 
+function stopTimer(){
+  if(timerInt) clearInterval(timerInt);
+  timerInt = null;
+}
+
 function updateTimerUI(){
   const m = Math.floor(timeLeft/60);
   const s = timeLeft%60;
-  document.getElementById("timerDisplay").textContent = `Time Left: ${m}:${s<10?'0':''}${s}`;
+  document.getElementById("timerDisplay").textContent =
+    (m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+}
+
+function closeTest(){
+  stopTimer();
+  document.getElementById("testBox").style.display = "none";
 }
 
 function submitTest(){
-  clearInterval(timerInt);
+  stopTimer();
+
+  if(currentQuestions.length === 0){
+    alert("No questions.");
+    return;
+  }
 
   let score = 0;
   currentQuestions.forEach((q,i)=>{
     const selected = document.querySelector(`input[name="q${i}"]:checked`);
-    if(selected && parseInt(selected.value,10) === q.correct){
-      score++;
-    }
+    if(selected && parseInt(selected.value,10) === q.correct) score++;
   });
 
-  alert(`Score: ${score}/${currentQuestions.length}`);
+  const pct = Math.round((score/currentQuestions.length)*100);
+  alert(`Score: ${score}/${currentQuestions.length} (${pct}%)`);
 
   const user = auth.currentUser;
   const userName = user.displayName || user.email || "Student";
 
   db.collection("leaderboard").add({
     user: userName,
+    email: user.email || "",
     score: score,
+    total: currentQuestions.length,
+    pct: pct,
     course: currentCourse,
     at: firebase.firestore.FieldValue.serverTimestamp()
   }).then(()=>{
     loadLeaderboard();
   });
 
-  document.getElementById("testBox").style.display = "none";
+  closeTest();
 }
 
 /* ==========================
@@ -368,12 +693,13 @@ function loadLeaderboard(){
   div.innerHTML = "Loading...";
 
   db.collection("leaderboard")
+    .orderBy("pct","desc")
     .orderBy("score","desc")
     .limit(10)
     .get()
     .then(snapshot=>{
       if(snapshot.empty){
-        div.innerHTML = "<div class='small'>No scores yet.</div>";
+        div.innerHTML = `<div class="muted">No scores yet.</div>`;
         return;
       }
 
@@ -381,14 +707,35 @@ function loadLeaderboard(){
       let i = 1;
       snapshot.forEach(doc=>{
         const d = doc.data();
-        html += `<p>${i}. <b>${d.user}</b> — ${d.score} <span class="small">(${d.course || ""})</span></p>`;
+        html += `
+          <div style="margin:10px 0; padding:10px; border-radius:14px; border:1px solid rgba(255,255,255,0.10); background: rgba(255,255,255,0.05)">
+            <b>${i}. ${escapeHtml(d.user || "Student")}</b>
+            <div class="small">${escapeHtml(d.course || "")} • ${d.score}/${d.total} • ${d.pct}%</div>
+          </div>
+        `;
         i++;
       });
       div.innerHTML = html;
     })
-    .catch(e=>div.innerHTML = e.message);
+    .catch(e=> div.innerHTML = `<div class="muted">${escapeHtml(e.message)}</div>`);
 }
 </script>
+
+<!-- =========================
+  IMPORTANT: FIRESTORE RULES (copy in Firebase -> Firestore -> Rules)
+  Use THIS for now (logged-in users can read/write).
+  Later I will give "Admin-only write" rules.
+========================= -->
+<!--
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if request.auth != null;
+    }
+  }
+}
+-->
 
 </body>
 </html>
