@@ -57,6 +57,7 @@
     <div class="pill" id="topStatus">Not logged in</div>
   </div>
 </div>
+
 <div class="wrap">
   <div class="card" id="loginCard">
     <div class="hero">
@@ -72,7 +73,7 @@
       <div style="min-width:260px;width:320px;max-width:100%;">
         <div class="card" style="box-shadow:none;background:rgba(255,255,255,0.06);">
           <h3 style="margin:0 0 8px 0;">Login</h3>
-          <div class="muted">Click your login type below. You will be redirected to Google.</div>
+          <div class="muted">A Google popup will open. Please allow popups for this site if blocked.</div>
           <div class="btnrow" style="margin-top:12px;">
             <button class="btn-brand" id="btnStudent" onclick="loginAs('student')">Student Login (Google)</button>
             <button class="btn-blue" id="btnAdmin" onclick="loginAs('admin')">Admin Login (Google)</button>
@@ -161,54 +162,55 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
 <script>
-// ── FIREBASE INIT ──
-const firebaseConfig = {
+firebase.initializeApp({
   apiKey: "AIzaSyAPML8zK9qgRQbUyv7lMVOtt0c5Osjyw_A",
   authDomain: "testnest-education.firebaseapp.com",
   projectId: "testnest-education",
   storageBucket: "testnest-education.firebasestorage.app",
   messagingSenderId: "1000142199756",
   appId: "1:1000142199756:web:afab8eaa0f6bc638969b69"
-};
-firebase.initializeApp(firebaseConfig);
+});
 const auth = firebase.auth();
 const db   = firebase.firestore();
-
-const ADMIN_EMAILS = ["dnyanrui90@gmail.com","pawarjai999@gmail.com"];
+const ADMINS = ["dnyanrui90@gmail.com","pawarjai999@gmail.com"];
 
 function g(id){ return document.getElementById(id); }
-function toast(m){ const e=g("toast"); e.textContent=m; e.style.display="block"; setTimeout(()=>e.style.display="none",2800); }
+function toast(m){ const e=g("toast");e.textContent=m;e.style.display="block";setTimeout(()=>e.style.display="none",2800); }
 function setTop(m){ g("topStatus").textContent=m; }
-function showMsg(m,t="info"){ const e=g("loginMsg"); e.textContent=m; e.className="login-msg "+t; e.style.display="block"; }
+function showMsg(m,t="info"){ const e=g("loginMsg");e.textContent=m;e.className="login-msg "+t;e.style.display="block"; }
 function hideMsg(){ g("loginMsg").style.display="none"; }
 function setBtns(d){ g("btnStudent").disabled=d; g("btnAdmin").disabled=d; }
 function esc(s){ return (s||"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 function escQ(s){ return (s||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'"); }
 
-// ── KEY FIX: store role in localStorage (survives redirect better than sessionStorage) ──
+// POPUP LOGIN — works on all devices without redirect session loss
 function loginAs(role){
   localStorage.setItem("tn_role", role);
   setBtns(true);
-  showMsg("Redirecting to Google…","info");
+  showMsg("Opening Google login window…","info");
+
   const provider = new firebase.auth.GoogleAuthProvider();
   provider.setCustomParameters({ prompt:"select_account" });
-  // Always use redirect - works on all devices
-  auth.signInWithRedirect(provider);
-}
 
-// ── HANDLE REDIRECT RESULT - this runs when Google sends user back ──
-auth.getRedirectResult().then(function(result){
-  if(result && result.user){
-    // user logged in via redirect - onAuthStateChanged will handle the rest
-    console.log("Redirect login success:", result.user.email);
-  }
-}).catch(function(err){
-  if(err && err.code && err.code !== "auth/no-current-user"){
-    showMsg("Login error: " + err.message, "error");
-    setBtns(false);
-    console.error("Redirect error:", err);
-  }
-});
+  auth.signInWithPopup(provider)
+    .then(result => {
+      // Success — onAuthStateChanged will handle UI
+      hideMsg();
+    })
+    .catch(err => {
+      if(err.code === "auth/popup-blocked"){
+        // Chrome blocked popup — tell user to allow it
+        showMsg("⚠️ Popup blocked! Click the popup icon in your address bar and allow popups for this site, then try again.","error");
+        setBtns(false);
+      } else if(err.code === "auth/popup-closed-by-user"){
+        showMsg("Login cancelled. Try again.","info");
+        setBtns(false);
+      } else {
+        showMsg("Error: "+err.message,"error");
+        setBtns(false);
+      }
+    });
+}
 
 function logout(){
   auth.signOut().then(()=>{
@@ -221,116 +223,92 @@ function logout(){
   });
 }
 
-// ── AUTH STATE - fires when user is detected (including after redirect) ──
-auth.onAuthStateChanged(function(user){
+auth.onAuthStateChanged(user=>{
   if(!user){
-    // No user - show login page
     g("loginCard").style.display="block";
     g("app").style.display="none";
     return;
   }
-
-  // User is logged in!
-  const savedRole = localStorage.getItem("tn_role") || "student";
-  const email = (user.email||"").toLowerCase();
-  const isAdmin = ADMIN_EMAILS.map(x=>x.toLowerCase()).includes(email);
-  const role = (savedRole === "admin" && isAdmin) ? "admin" : "student";
-
+  const role = (localStorage.getItem("tn_role")==="admin" && ADMINS.includes((user.email||"").toLowerCase())) ? "admin" : "student";
   g("loginCard").style.display="none";
   g("app").style.display="block";
-  hideMsg();
-  setBtns(false);
-
-  g("userName").textContent  = user.displayName || "Student";
-  g("userEmail").textContent = user.email || "";
-  g("userRole").textContent  = "Role: " + role.toUpperCase();
-  setTop((user.displayName||"User") + " • " + role.toUpperCase());
-  g("adminCard").style.display = role==="admin" ? "block":"none";
-
-  loadCourses(role);
-  loadLeaderboard();
+  hideMsg(); setBtns(false);
+  g("userName").textContent = user.displayName||"Student";
+  g("userEmail").textContent = user.email||"";
+  g("userRole").textContent = "Role: "+role.toUpperCase();
+  setTop((user.displayName||"User")+" • "+role.toUpperCase());
+  g("adminCard").style.display = role==="admin"?"block":"none";
+  loadCourses(); loadLeaderboard();
   if(role==="admin") refreshCoursePick();
 });
 
-// ── COURSES ──
-function loadCourses(role){
+function loadCourses(){
   const div=g("courseList"); div.innerHTML="Loading...";
   db.collection("courses").get().then(snap=>{
-    if(snap.empty){ div.innerHTML='<div class="muted">No courses yet.</div>'; return; }
+    if(snap.empty){div.innerHTML='<div class="muted">No courses yet.</div>';return;}
     let html="";
     snap.forEach(doc=>{
-      const name=doc.id, paid=!!doc.data().paid;
-      html+=`<div class="course">
-        <div><b>${esc(name)}</b><br/><span class="small">${paid?"Paid (Locked)":"Free (Test available)"}</span></div>
-        <div style="min-width:160px;text-align:right">${paid?'<span class="tag lock">🔒 Locked</span>':`<button class="btn-ok" onclick="startTest('${escQ(name)}')">Start Test</button>`}</div>
-      </div>`;
+      const name=doc.id,paid=!!doc.data().paid;
+      html+=`<div class="course"><div><b>${esc(name)}</b><br/><span class="small">${paid?"Paid (Locked)":"Free (Test available)"}</span></div><div style="min-width:160px;text-align:right">${paid?'<span class="tag lock">🔒 Locked</span>':`<button class="btn-ok" onclick="startTest('${escQ(name)}')">Start Test</button>`}</div></div>`;
     });
     div.innerHTML=html;
-  }).catch(e=>{ div.innerHTML=`<div class="muted">${esc(e.message)}</div>`; });
+  }).catch(e=>{div.innerHTML=`<div class="muted">${esc(e.message)}</div>`;});
 }
 
 function addCourse(){
-  const name=g("courseName").value.trim(), paid=g("paidCourse").checked;
-  if(!name) return alert("Enter course name");
+  const name=g("courseName").value.trim(),paid=g("paidCourse").checked;
+  if(!name)return alert("Enter course name");
   db.collection("courses").doc(name).set({paid,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:auth.currentUser.email||""},{merge:true})
-    .then(()=>{ toast("Course saved!"); loadCourses("admin"); refreshCoursePick(); }).catch(e=>alert(e.message));
+    .then(()=>{toast("Course saved!");loadCourses();refreshCoursePick();}).catch(e=>alert(e.message));
 }
 
 function refreshCoursePick(){
-  const sel=g("coursePick"); if(!sel) return;
+  const sel=g("coursePick");if(!sel)return;
   sel.innerHTML='<option value="">Select course</option>';
-  db.collection("courses").get().then(snap=>{
-    snap.forEach(doc=>{ const o=document.createElement("option"); o.value=doc.id; o.textContent=doc.id; sel.appendChild(o); });
-  }).catch(()=>{});
+  db.collection("courses").get().then(snap=>{snap.forEach(doc=>{const o=document.createElement("option");o.value=doc.id;o.textContent=doc.id;sel.appendChild(o);});}).catch(()=>{});
 }
 
-function clearQuestionForm(){ ["questionText","opt1","opt2","opt3","opt4","correct"].forEach(id=>g(id).value=""); }
+function clearQuestionForm(){["questionText","opt1","opt2","opt3","opt4","correct"].forEach(id=>g(id).value="");}
 
 function addQuestion(){
-  const course=(g("coursePick").value||"").trim(); if(!course) return alert("Select a course first");
+  const course=(g("coursePick").value||"").trim();if(!course)return alert("Select a course first");
   const q=g("questionText").value.trim(),o1=g("opt1").value.trim(),o2=g("opt2").value.trim(),o3=g("opt3").value.trim(),o4=g("opt4").value.trim();
-  const correct=parseInt(g("correct").value,10), time=parseInt(g("timeLimit").value,10);
-  if(!q||!o1||!o2||!o3||!o4) return alert("Fill question + all options");
-  if(isNaN(correct)||correct<0||correct>3) return alert("Correct must be 0-3");
-  if(isNaN(time)||time<=0) return alert("Time must be > 0 minutes");
-  db.collection("courses").doc(course).collection("questions").add({
-    question:q,options:[o1,o2,o3,o4],correct,time,
-    createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:auth.currentUser.email||""
-  }).then(()=>{ toast("Question saved!"); clearQuestionForm(); }).catch(e=>alert(e.message));
+  const correct=parseInt(g("correct").value,10),time=parseInt(g("timeLimit").value,10);
+  if(!q||!o1||!o2||!o3||!o4)return alert("Fill question + all options");
+  if(isNaN(correct)||correct<0||correct>3)return alert("Correct must be 0-3");
+  if(isNaN(time)||time<=0)return alert("Time must be > 0 minutes");
+  db.collection("courses").doc(course).collection("questions").add({question:q,options:[o1,o2,o3,o4],correct,time,createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:auth.currentUser.email||""})
+    .then(()=>{toast("Question saved!");clearQuestionForm();}).catch(e=>alert(e.message));
 }
 
-// ── TEST ──
 let currentCourse="",currentQuestions=[],timeLeft=0,timerInt=null;
 
 function startTest(course){
-  currentCourse=course; g("testTitle").textContent="Test: "+course;
-  g("testBox").style.display="block"; g("questionArea").innerHTML="Loading..."; g("qCountInfo").textContent=""; stopTimer();
+  currentCourse=course;g("testTitle").textContent="Test: "+course;g("testBox").style.display="block";
+  g("questionArea").innerHTML="Loading...";g("qCountInfo").textContent="";stopTimer();
   db.collection("courses").doc(course).collection("questions").get().then(snap=>{
-    currentQuestions=[]; snap.forEach(doc=>currentQuestions.push(doc.data()));
-    if(!currentQuestions.length){ g("questionArea").innerHTML='<div class="muted">No questions yet.</div>'; return; }
-    g("qCountInfo").textContent=currentQuestions.length+" questions";
-    renderTest(); startTimer((currentQuestions[0].time||5)*60);
+    currentQuestions=[];snap.forEach(doc=>currentQuestions.push(doc.data()));
+    if(!currentQuestions.length){g("questionArea").innerHTML='<div class="muted">No questions yet.</div>';return;}
+    g("qCountInfo").textContent=currentQuestions.length+" questions";renderTest();startTimer((currentQuestions[0].time||5)*60);
   }).catch(e=>alert(e.message));
 }
 
 function renderTest(){
-  const div=g("questionArea"); div.innerHTML="";
+  const div=g("questionArea");div.innerHTML="";
   currentQuestions.forEach((q,i)=>{
-    let opts="";
-    (q.options||[]).forEach((o,idx)=>{ opts+=`<label class="opt"><input type="radio" name="q${i}" value="${idx}" style="accent-color:var(--brand)"><span style="margin-left:8px">${esc(o)}</span></label>`; });
+    let opts="";(q.options||[]).forEach((o,idx)=>{opts+=`<label class="opt"><input type="radio" name="q${i}" value="${idx}" style="accent-color:var(--brand)"><span style="margin-left:8px">${esc(o)}</span></label>`;});
     div.innerHTML+=`<div class="qbox"><b>${i+1}. ${esc(q.question)}</b><div style="margin-top:8px">${opts}</div></div>`;
   });
 }
 
-function startTimer(s){ stopTimer(); timeLeft=s; updateTimer(); timerInt=setInterval(()=>{ timeLeft--; updateTimer(); if(timeLeft<=0){stopTimer();submitTest();} },1000); }
-function stopTimer(){ if(timerInt){clearInterval(timerInt);timerInt=null;} }
-function updateTimer(){ const m=Math.floor(timeLeft/60),s=timeLeft%60; g("timerDisplay").textContent=(m<10?"0":"")+m+":"+(s<10?"0":"")+s; }
-function closeTest(){ stopTimer(); g("testBox").style.display="none"; }
+function startTimer(s){stopTimer();timeLeft=s;updateTimer();timerInt=setInterval(()=>{timeLeft--;updateTimer();if(timeLeft<=0){stopTimer();submitTest();}},1000);}
+function stopTimer(){if(timerInt){clearInterval(timerInt);timerInt=null;}}
+function updateTimer(){const m=Math.floor(timeLeft/60),s=timeLeft%60;g("timerDisplay").textContent=(m<10?"0":"")+m+":"+(s<10?"0":"")+s;}
+function closeTest(){stopTimer();g("testBox").style.display="none";}
 
 function submitTest(){
-  stopTimer(); if(!currentQuestions.length){alert("No questions.");return;}
-  let score=0;
-  currentQuestions.forEach((q,i)=>{ const sel=document.querySelector(`input[name="q${i}"]:checked`); if(sel&&parseInt(sel.value,10)===q.correct) score++; });
+  stopTimer();if(!currentQuestions.length){alert("No questions.");return;}
+  let score=0;currentQuestions.forEach((q,i)=>{const sel=document.querySelector(`input[name="q${i}"]:checked`);if(sel&&parseInt(sel.value,10)===q.correct)score++;});
   const pct=Math.round((score/currentQuestions.length)*100);
   alert(`Score: ${score}/${currentQuestions.length} (${pct}%)`);
   const u=auth.currentUser;
@@ -338,15 +316,14 @@ function submitTest(){
   closeTest();
 }
 
-// ── LEADERBOARD ──
 function loadLeaderboard(){
-  const div=g("leaderboard"); div.innerHTML="Loading...";
+  const div=g("leaderboard");div.innerHTML="Loading...";
   db.collection("leaderboard").orderBy("pct","desc").orderBy("score","desc").limit(10).get().then(snap=>{
     if(snap.empty){div.innerHTML='<div class="muted">No scores yet.</div>';return;}
     let html="",i=1;
-    snap.forEach(doc=>{ const d=doc.data(); html+=`<div style="margin:10px 0;padding:10px;border-radius:14px;border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.05)"><b>${i++}. ${esc(d.user||"Student")}</b><div class="small">${esc(d.course||"")} • ${d.score}/${d.total} • ${d.pct}%</div></div>`; });
+    snap.forEach(doc=>{const d=doc.data();html+=`<div style="margin:10px 0;padding:10px;border-radius:14px;border:1px solid rgba(255,255,255,0.10);background:rgba(255,255,255,0.05)"><b>${i++}. ${esc(d.user||"Student")}</b><div class="small">${esc(d.course||"")} • ${d.score}/${d.total} • ${d.pct}%</div></div>`;});
     div.innerHTML=html;
-  }).catch(e=>{ div.innerHTML=`<div class="muted">${esc(e.message)}</div>`; });
+  }).catch(e=>{div.innerHTML=`<div class="muted">${esc(e.message)}</div>`;});
 }
 </script>
 </body>
