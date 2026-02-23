@@ -372,6 +372,14 @@ firebase.initializeApp({
 });
 const auth=firebase.auth(), db=firebase.firestore();
   auth.getRedirectResult().then((result) => {
+  if (result.user) {
+    hideMsg();
+    setBtns(false);
+  }
+}).catch((error) => {
+  console.error("Redirect error:", error);
+});
+  auth.getRedirectResult().then((result) => {
   if(result.user){
     hideMsg();
     setBtns(false);
