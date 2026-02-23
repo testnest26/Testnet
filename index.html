@@ -371,22 +371,6 @@ firebase.initializeApp({
   appId:"1:1000142199756:web:afab8eaa0f6bc638969b69"
 });
 const auth=firebase.auth(), db=firebase.firestore();
-  auth.getRedirectResult().then((result) => {
-  if (result.user) {
-    hideMsg();
-    setBtns(false);
-  }
-}).catch((error) => {
-  console.error("Redirect error:", error);
-});
-  auth.getRedirectResult().then((result) => {
-  if(result.user){
-    hideMsg();
-    setBtns(false);
-  }
-}).catch((error) => {
-  console.error(error);
-});
 const ADMINS=["dnyanrui90@gmail.com","pawarjai999@gmail.com"];
 
 function g(id){return document.getElementById(id);}
@@ -404,7 +388,7 @@ function loginAs(role){
   showMsg("Opening Google login…","info");
   const p=new firebase.auth.GoogleAuthProvider();
   p.setCustomParameters({prompt:"select_account"});
-  auth.signInWithRedirect(p);
+  auth.signInWithPopup(p).then(()=>hideMsg()).catch(err=>{
     if(err.code==="auth/popup-blocked"){showMsg("⚠️ Popup blocked! Allow popups for this site in your browser settings, then try again.","error");}
     else if(err.code==="auth/popup-closed-by-user"){showMsg("Login cancelled. Try again.","info");}
     else{showMsg("Error: "+err.message,"error");}
