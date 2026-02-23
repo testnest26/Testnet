@@ -430,8 +430,11 @@ auth.onAuthStateChanged(user=>{
   g("profileAvatar").textContent=initials(name);
   g("adminCard").style.display=role==="admin"?"block":"none";
   g("manageBox").style.display=role==="admin"?"block":"none";
-  loadCourses();loadLeaderboard();
-  if(role==="admin"){refreshCoursePick();refreshManagePick();}
+  loadCourses();loadLeaderboard();loadPastScores();refreshLbPick();
+  if(role==="admin"){
+    refreshCoursePick();refreshManagePick();
+    const lbcb=g("lbClearBtn");if(lbcb)lbcb.style.display="block";
+  }
 });
 
 // COURSE EMOJIS
