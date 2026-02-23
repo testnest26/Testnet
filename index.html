@@ -388,7 +388,7 @@ function loginAs(role){
   showMsg("Opening Google login…","info");
   const p=new firebase.auth.GoogleAuthProvider();
   p.setCustomParameters({prompt:"select_account"});
-  auth.signInWithPopup(p).then(()=>hideMsg()).catch(err=>{
+  auth.signInWithRedirect(p);
     if(err.code==="auth/popup-blocked"){showMsg("⚠️ Popup blocked! Allow popups for this site in your browser settings, then try again.","error");}
     else if(err.code==="auth/popup-closed-by-user"){showMsg("Login cancelled. Try again.","info");}
     else{showMsg("Error: "+err.message,"error");}
