@@ -443,7 +443,7 @@ function loadCourses(){
         <div>${paid?'<span class="lock-tag">🔒 Locked</span>':`<button class="btn-start" onclick="startTest('${escQ(name)}')">Start Test ▶</button>`}</div>
       </div>`;
     });
-    div.innerHTML=html;
+    div.innerHTML=html;refreshLbPick();
   }).catch(e=>{div.innerHTML=`<div class="empty"><div class="empty-icon">❌</div>${esc(e.message)}</div>`;});
 }
 
