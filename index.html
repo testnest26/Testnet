@@ -382,24 +382,34 @@ function esc(s){return(s||"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>'
 function escQ(s){return(s||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'");}
 function initials(n){return(n||"?").split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);}
 
+function isMobile(){
+  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+}
+
 function loginAs(role){
   localStorage.setItem("tn_role",role);
   setBtns(true);
   showMsg("Opening Google login…","info");
   const p=new firebase.auth.GoogleAuthProvider();
   p.setCustomParameters({prompt:"select_account"});
-  auth.signInWithPopup(p).then(()=>{
-    hideMsg(); setBtns(false);
-  }).catch(err=>{
-    setBtns(false);
-    if(err.code==="auth/popup-blocked"){
-      showMsg("⚠️ Popup blocked! Please allow popups for this site then try again.","error");
-    } else if(err.code==="auth/popup-closed-by-user"){
-      showMsg("Login cancelled. Try again.","info");
-    } else {
-      showMsg("Error: "+err.message,"error");
-    }
-  });
+  if(isMobile()){
+    // Mobile: use redirect (more reliable on Android/iOS)
+    auth.signInWithRedirect(p);
+  } else {
+    // Desktop: use popup
+    auth.signInWithPopup(p).then(()=>{
+      hideMsg(); setBtns(false);
+    }).catch(err=>{
+      setBtns(false);
+      if(err.code==="auth/popup-blocked"){
+        showMsg("⚠️ Popup blocked! Please allow popups then try again.","error");
+      } else if(err.code==="auth/popup-closed-by-user"){
+        showMsg("Login cancelled. Try again.","info");
+      } else {
+        showMsg("Error: "+err.message,"error");
+      }
+    });
+  }
 }
 
 function logout(){
@@ -414,6 +424,16 @@ function logout(){
 }
 
 
+
+// Handle redirect result on mobile
+auth.getRedirectResult().then(result=>{
+  if(result && result.user){ hideMsg(); setBtns(false); }
+}).catch(err=>{
+  if(err.code && err.code!=="auth/no-current-user"){
+    showMsg("Login error: "+err.message,"error");
+    setBtns(false);
+  }
+});
 
 auth.onAuthStateChanged(user=>{
   if(!user){g("loginCard").style.display="flex";g("app").style.display="none";return;}
