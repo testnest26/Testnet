@@ -1,366 +1,7 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>TESTNEST – Learn • Practice • Test</title>
-  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet"/>
-  <style>
-    :root{
-      --bg:#f0f4ff;--white:#ffffff;--text:#1a1f36;--muted:#6b7280;
-      --brand:#4f46e5;--brand2:#7c3aed;--accent:#f59e0b;--accent2:#10b981;
-      --red:#ef4444;--pink:#ec4899;--sky:#0ea5e9;
-      --shadow:0 4px 24px rgba(79,70,229,0.10);
-      --radius:16px;
-    }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-
-    /* TOPBAR */
-    .topbar{background:var(--white);box-shadow:0 2px 12px rgba(79,70,229,0.08);position:sticky;top:0;z-index:100;}
-    .topbar-inner{max-width:1200px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
-    .logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none;}
-    .logo-icon{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(79,70,229,0.35);}
-    .logo-icon svg{width:24px;height:24px;fill:white;}
-    .logo-text{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;background:linear-gradient(135deg,#4f46e5,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
-    .logo-tag{font-size:10px;background:#eef2ff;color:#4f46e5;border-radius:6px;padding:2px 7px;font-weight:700;}
-    .user-pill{display:flex;align-items:center;gap:8px;background:#f5f3ff;border:1.5px solid #e0e7ff;border-radius:999px;padding:6px 14px 6px 8px;font-size:13px;font-weight:700;color:#4f46e5;}
-    .avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#ec4899);display:flex;align-items:center;justify-content:center;color:white;font-size:13px;font-weight:800;}
-
-    /* WRAP */
-    .wrap{max-width:1200px;margin:0 auto;padding:24px 20px 60px;}
-
-    /* HERO LOGIN */
-    .hero{background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 50%,#ec4899 100%);border-radius:24px;padding:40px;color:white;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:0;overflow:hidden;position:relative;}
-    .hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;background:rgba(255,255,255,0.08);border-radius:50%;}
-    .hero::after{content:'';position:absolute;bottom:-40px;left:30%;width:160px;height:160px;background:rgba(255,255,255,0.06);border-radius:50%;}
-    .hero-left h1{font-family:'Baloo 2',cursive;font-size:36px;font-weight:800;line-height:1.2;margin-bottom:8px;}
-    .hero-left p{font-size:14px;opacity:0.85;max-width:42ch;line-height:1.6;margin-bottom:16px;}
-    .features{display:flex;flex-wrap:wrap;gap:8px;}
-    .feat{background:rgba(255,255,255,0.18);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.25);border-radius:999px;padding:5px 13px;font-size:12px;font-weight:700;}
-    .login-box{background:white;border-radius:20px;padding:24px;min-width:270px;max-width:320px;box-shadow:0 8px 32px rgba(0,0,0,0.15);}
-    .login-box h3{font-family:'Baloo 2',cursive;font-size:20px;color:var(--text);margin-bottom:4px;}
-    .login-box p{font-size:12px;color:var(--muted);margin-bottom:16px;}
-    .btn-google{width:100%;padding:13px;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .1s,box-shadow .1s;margin-bottom:10px;}
-    .btn-google:active{transform:scale(.97)}
-    .btn-student{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;box-shadow:0 4px 14px rgba(79,70,229,0.35);}
-    .btn-student:hover{box-shadow:0 6px 20px rgba(79,70,229,0.45);}
-    .btn-admin{background:linear-gradient(135deg,#f59e0b,#ef4444);color:white;box-shadow:0 4px 14px rgba(245,158,11,0.35);}
-    .btn-admin:hover{box-shadow:0 6px 20px rgba(245,158,11,0.45);}
-    button:disabled{opacity:0.6;cursor:not-allowed;}
-    .login-msg{margin-top:10px;padding:10px 12px;border-radius:12px;font-size:12px;display:none;}
-    .login-msg.info{background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8;}
-    .login-msg.error{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;}
-
-    /* APP LAYOUT */
-    .app-grid{display:grid;grid-template-columns:1fr 360px;gap:20px;margin-top:24px;}
-    @media(max-width:900px){.app-grid{grid-template-columns:1fr}}
-
-    /* CARDS */
-    .card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;}
-    .card-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:700;margin-bottom:4px;}
-    .card-sub{font-size:13px;color:var(--muted);}
-    .divider{height:1px;background:#f1f5f9;margin:16px 0;}
-
-    /* COURSE CARDS */
-    .course-card{border-radius:14px;border:2px solid #e0e7ff;background:linear-gradient(135deg,#f5f3ff,#faf5ff);padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;transition:box-shadow .15s,transform .15s;}
-    .course-card:hover{box-shadow:0 4px 20px rgba(79,70,229,0.12);transform:translateY(-1px);}
-    .course-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
-    .course-info b{font-size:15px;font-weight:800;display:block;}
-    .course-info span{font-size:12px;color:var(--muted);}
-    .btn-start{background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:12px;padding:10px 20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer;transition:transform .1s,box-shadow .1s;box-shadow:0 3px 10px rgba(16,185,129,0.3);}
-    .btn-start:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(16,185,129,0.4);}
-    .btn-start:active{transform:scale(.97)}
-    .lock-tag{background:#fef3c7;border:1.5px solid #fcd34d;color:#92400e;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:800;}
-
-    /* TEST BOX */
-    .test-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;}
-    .timer-box{background:linear-gradient(135deg,#ef4444,#dc2626);color:white;border-radius:12px;padding:8px 16px;font-family:'Baloo 2',cursive;font-size:20px;font-weight:700;box-shadow:0 4px 12px rgba(239,68,68,0.3);}
-    .qbox{background:#f8fafc;border:2px solid #e2e8f0;border-radius:14px;padding:16px;margin:10px 0;}
-    .qbox b{font-size:15px;font-weight:800;display:block;margin-bottom:10px;}
-    .opt{display:flex;align-items:center;gap:10px;padding:10px 14px;margin:7px 0;border-radius:12px;border:2px solid #e2e8f0;background:white;cursor:pointer;transition:all .12s;font-size:14px;font-weight:600;}
-    .opt:hover{border-color:#a5b4fc;background:#f5f3ff;}
-    .opt input{accent-color:#4f46e5;width:16px;height:16px;}
-    .opt.selected{border-color:#4f46e5;background:#eef2ff;}
-    .btn-submit{background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:14px;padding:13px 28px;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 4px 14px rgba(16,185,129,0.3);transition:transform .1s;}
-    .btn-submit:hover{transform:translateY(-1px);}
-    .btn-close{background:#f1f5f9;color:#64748b;border:none;border-radius:14px;padding:13px 20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;cursor:pointer;}
-
-    /* PROFILE */
-    .profile-card{background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:var(--radius);padding:20px;color:white;margin-bottom:16px;}
-    .profile-avatar{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;margin-bottom:10px;}
-    .profile-name{font-family:'Baloo 2',cursive;font-size:18px;font-weight:700;}
-    .profile-email{font-size:12px;opacity:0.8;margin-top:2px;}
-    .role-badge{display:inline-block;margin-top:8px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:999px;padding:3px 12px;font-size:11px;font-weight:800;}
-    .btn-logout{width:100%;margin-top:12px;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);color:white;border-radius:12px;padding:9px;font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:background .12s;}
-    .btn-logout:hover{background:rgba(255,255,255,0.25);}
-
-    /* ADMIN PANEL */
-    .admin-card{background:white;border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:16px;}
-    .admin-title{font-family:'Baloo 2',cursive;font-size:18px;color:#f59e0b;margin-bottom:4px;}
-    .form-label{font-size:12px;font-weight:700;color:var(--muted);margin:10px 0 5px;display:block;}
-    .form-input{width:100%;padding:11px 14px;border-radius:12px;border:2px solid #e2e8f0;background:#f8fafc;font-family:'Nunito',sans-serif;font-size:14px;color:var(--text);outline:none;transition:border .12s;}
-    .form-input:focus{border-color:#a5b4fc;background:white;}
-    textarea.form-input{min-height:80px;resize:vertical;}
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-    .check-row{display:flex;align-items:center;gap:8px;margin:10px 0;font-size:13px;font-weight:700;}
-    .check-row input{width:16px;height:16px;accent-color:#4f46e5;}
-    .btn-save{background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:12px;padding:11px 20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 3px 10px rgba(16,185,129,0.25);transition:transform .1s;margin-top:6px;}
-    .btn-save:hover{transform:translateY(-1px);}
-    .btn-clear{background:#f1f5f9;color:#475569;border:none;border-radius:12px;padding:11px 16px;font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;cursor:pointer;margin-top:6px;}
-
-    /* LEADERBOARD */
-    .lb-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;margin-bottom:8px;background:#f8fafc;border:1.5px solid #e2e8f0;}
-    .lb-rank{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;}
-    .lb-rank.r1{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:white;}
-    .lb-rank.r2{background:linear-gradient(135deg,#94a3b8,#cbd5e1);color:white;}
-    .lb-rank.r3{background:linear-gradient(135deg,#f97316,#fb923c);color:white;}
-    .lb-rank.rn{background:#e2e8f0;color:#64748b;}
-    .lb-name{flex:1;font-weight:700;font-size:14px;}
-    .lb-score{font-size:13px;font-weight:800;color:#4f46e5;}
-
-    /* QUESTION MANAGEMENT */
-    .q-manage{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 14px;margin-bottom:8px;}
-    .q-manage-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
-    .q-text{font-size:13px;font-weight:700;flex:1;}
-    .btn-del{background:#fef2f2;border:1.5px solid #fecaca;color:#dc2626;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;transition:background .1s;}
-    .btn-del:hover{background:#fee2e2;}
-    .q-opts{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
-    .q-opt-chip{font-size:11px;padding:3px 9px;border-radius:999px;background:#e0e7ff;color:#3730a3;font-weight:700;}
-    .q-opt-chip.correct{background:#d1fae5;color:#065f46;}
-
-    /* SECTION HEADER */
-    .sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-
-    /* TOAST */
-    .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1f36;color:white;padding:12px 22px;border-radius:14px;display:none;z-index:9999;font-weight:700;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,0.2);}
-
-    /* EMPTY */
-    .empty{text-align:center;padding:30px 20px;color:var(--muted);}
-    .empty-icon{font-size:40px;margin-bottom:8px;}
-
-    /* ANIMATIONS */
-    @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-    .fade-in{animation:fadeIn .3s ease forwards;}
-  
-    /* MOBILE TABS */
-    .mob-tabs{display:none;}
-    @media(max-width:900px){
-      .app-grid{grid-template-columns:1fr!important;}
-      .right-col-wrap{display:none;}
-      .hero{padding:24px 18px;flex-direction:column;}
-      .hero h1{font-size:24px;}
-      .login-box{width:100%;max-width:100%;}
-      .mob-tabs{display:flex;background:white;border-radius:14px;padding:4px;box-shadow:var(--shadow);margin-bottom:16px;gap:4px;}
-      .mtab{flex:1;padding:9px 4px;border:none;background:transparent;border-radius:10px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;color:#6b7280;cursor:pointer;transition:all .15s;}
-      .mtab.active{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;}
-      .mob-sec{display:none!important;}
-      .mob-sec.active{display:block!important;}
-    }
-    @media(min-width:901px){.right-col-wrap{display:block!important;}.mob-sec{display:block!important;}}
-    /* PAST SCORES */
-    .ps-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:#f8fafc;border:1.5px solid #e2e8f0;margin-bottom:8px;}
-    .ps-info{flex:1;min-width:0;}
-    .ps-info b{font-size:13px;font-weight:800;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-    .ps-info span{font-size:11px;color:var(--muted);}
-    .pct-chip{font-size:12px;font-weight:800;border-radius:999px;padding:3px 10px;white-space:nowrap;}
-    .pg{background:#d1fae5;color:#065f46;}.pb{background:#dbeafe;color:#1e40af;}.po{background:#fef3c7;color:#92400e;}.pr{background:#fee2e2;color:#991b1b;}
-    /* RESULT REVIEW */
-    .result-banner{border-radius:16px;padding:20px;text-align:center;margin-bottom:16px;}
-    .result-banner.great{background:linear-gradient(135deg,#d1fae5,#a7f3d0);border:2px solid #10b981;}
-    .result-banner.good{background:linear-gradient(135deg,#dbeafe,#bfdbfe);border:2px solid #3b82f6;}
-    .result-banner.ok{background:linear-gradient(135deg,#fef3c7,#fde68a);border:2px solid #f59e0b;}
-    .result-banner.bad{background:linear-gradient(135deg,#fee2e2,#fecaca);border:2px solid #ef4444;}
-    .result-score{font-family:'Baloo 2',cursive;font-size:40px;font-weight:800;}
-    .result-msg{font-size:16px;font-weight:700;margin-top:4px;}
-    .review-tag{display:inline-block;font-size:11px;font-weight:800;border-radius:999px;padding:2px 8px;margin-left:4px;}
-    .tag-c{background:#d1fae5;color:#065f46;}.tag-w{background:#fee2e2;color:#991b1b;}.tag-s{background:#f1f5f9;color:#64748b;}
-    .opt.correct-ans{border-color:#10b981!important;background:#d1fae5!important;}
-    .opt.wrong-ans{border-color:#ef4444!important;background:#fef2f2!important;}
-    /* EDIT MODAL */
-    .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;display:none;align-items:center;justify-content:center;padding:16px;}
-    .modal-ov.open{display:flex;}
-    .modal-box{background:white;border-radius:20px;padding:24px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;}
-    .modal-box h3{font-family:'Baloo 2',cursive;font-size:20px;margin-bottom:14px;}
-    .btn-edit{background:#eef2ff;border:1.5px solid #c7d2fe;color:#4f46e5;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;cursor:pointer;}
-    .btn-del{background:#fef2f2;border:1.5px solid #fecaca;color:#dc2626;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;cursor:pointer;}
-
-  .course-card{border-radius:14px;border:2px solid #e0e7ff;background:linear-gradient(135deg,#f5f3ff,#faf5ff);padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px;transition:box-shadow .15s,transform .15s;flex-wrap:wrap;}.course-card:hover{box-shadow:0 4px 20px rgba(79,70,229,0.12);transform:translateY(-1px);}.course-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}.course-info{flex:1;min-width:0;}.course-info b{font-size:15px;font-weight:800;display:block;}.meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:3px;}.qcount{background:#eef2ff;color:#4f46e5;border-radius:999px;padding:2px 9px;font-size:11px;font-weight:800;}.btn-start{background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:12px;padding:10px 18px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;cursor:pointer;box-shadow:0 3px 10px rgba(16,185,129,0.3);white-space:nowrap;}.lock-tag{background:#fef3c7;border:1.5px solid #fcd34d;color:#92400e;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:800;white-space:nowrap;}
-  </style>
-</head>
-<body>
-
-<!-- TOPBAR -->
-<div class="topbar">
-  <div class="topbar-inner">
-    <a class="logo-wrap" href="#">
-      <img src="data:image/jpeg;base64,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" style="width:42px;height:42px;border-radius:14px;object-fit:cover;box-shadow:0 4px 14px rgba(79,70,229,0.35);"/>
-      <span class="logo-text">TestNest</span>
-      <span class="logo-tag">BETA</span>
-    </a>
-    <div class="user-pill" id="topStatus">
-      <div class="avatar" id="topAvatar">?</div>
-      <span id="topName">Not logged in</span>
-    </div>
-  </div>
-</div>
-
-<div class="wrap">
-
-  <!-- LOGIN HERO -->
-  <div id="loginCard" class="hero fade-in">
-    <div class="hero-left">
-      <h1>🎯 Learn Smart,<br/>Score Big!</h1>
-      <p>India's most fun test platform for students. Practice unlimited tests, compete on leaderboard and track your progress!</p>
-      <div class="features">
-        <span class="feat">⏱️ Timer Tests</span>
-        <span class="feat">🏆 Leaderboard</span>
-        <span class="feat">📊 Auto Result</span>
-        <span class="feat">🔒 Premium Courses</span>
-        <span class="feat">✏️ Admin Panel</span>
-      </div>
-    </div>
-    <div class="login-box">
-      <h3>Welcome Back! 👋</h3>
-      <p>Sign in with Google to continue</p>
-      <button class="btn-google btn-student" id="btnStudent" onclick="loginAs('student')">
-        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="white" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="white" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="white" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="white" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-        Student Login (Google)
-      </button>
-      <button class="btn-google btn-admin" id="btnAdmin" onclick="loginAs('admin')">
-        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="white" d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        Admin Login (Google)
-      </button>
-      <div id="loginMsg" class="login-msg"></div>
-    </div>
-  </div>
-
-  <!-- APP -->
-  <div id="app" style="display:none;">
-    <div class="app-grid">
-
-      <!-- LEFT COLUMN -->
-      <div>
-        <!-- COURSES -->
-        <div class="card fade-in">
-          <div class="sec-header">
-            <div><div class="card-title">📚 Courses</div><div class="card-sub">Pick a course and start your test</div></div>
-          </div>
-          <div id="courseList"><div class="empty"><div class="empty-icon">📭</div>Loading courses...</div></div>
-        </div>
-
-        <!-- TEST BOX -->
-        <div id="testBox" style="display:none;" class="card fade-in" style="margin-top:16px;">
-          <div class="test-header">
-            <div>
-              <div class="card-title" id="testTitle">Test</div>
-              <div class="card-sub" id="qCountInfo"></div>
-            </div>
-            <div class="timer-box" id="timerDisplay">00:00</div>
-          </div>
-          <div id="questionArea"></div>
-          <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
-            <button class="btn-submit" onclick="submitTest()">✅ Submit Test</button>
-            <button class="btn-close" onclick="closeTest()">✖ Close</button>
-          </div>
-        </div>
-
-        <!-- ADMIN: MANAGE QUESTIONS -->
-        <div id="manageBox" class="card fade-in" style="display:none;margin-top:16px;">
-          <div class="sec-header">
-            <div><div class="card-title">🗂️ Manage Questions</div><div class="card-sub">View and delete questions from courses</div></div>
-          </div>
-          <label class="form-label">Select Course to Manage</label>
-          <select class="form-input" id="manageCoursePick" onchange="loadManageQuestions()">
-            <option value="">Select course</option>
-          </select>
-          <div id="manageQList" style="margin-top:14px;"></div>
-        </div>
-      </div>
-
-      <!-- RIGHT COLUMN -->
-      <div>
-        <!-- PROFILE -->
-        <div id="profileCard" class="profile-card fade-in">
-          <div class="profile-avatar" id="profileAvatar">👤</div>
-          <div class="profile-name" id="userName">—</div>
-          <div class="profile-email" id="userEmail">—</div>
-          <div class="role-badge" id="userRole">STUDENT</div>
-          <button class="btn-logout" onclick="logout()">🚪 Logout</button>
-        </div>
-
-        <!-- ADMIN PANEL -->
-        <div class="admin-card" id="adminCard" style="display:none;">
-          <div class="admin-title">⚙️ Admin Panel</div>
-          <div class="card-sub" style="margin-bottom:12px;">Create courses & add questions</div>
-          <div class="divider"></div>
-
-          <label class="form-label">Course Name</label>
-          <input type="text" class="form-input" id="courseName" placeholder="e.g., Class 6 Maths / NEET / JEE"/>
-          <div class="check-row">
-            <input type="checkbox" id="paidCourse"> <label for="paidCourse">🔒 Paid Course (Locked)</label>
-          </div>
-          <button class="btn-save" onclick="addCourse()">💾 Save Course</button>
-
-          <div class="divider"></div>
-
-          <label class="form-label">Add Question to Course</label>
-          <select class="form-input" id="coursePick"><option value="">Select course</option></select>
-
-          <label class="form-label">Question</label>
-          <textarea class="form-input" id="questionText" placeholder="Type your question here..."></textarea>
-
-          <div class="form-row">
-            <div><label class="form-label">Option A</label><input type="text" class="form-input" id="opt1" placeholder="Option A"/></div>
-            <div><label class="form-label">Option B</label><input type="text" class="form-input" id="opt2" placeholder="Option B"/></div>
-          </div>
-          <div class="form-row">
-            <div><label class="form-label">Option C</label><input type="text" class="form-input" id="opt3" placeholder="Option C"/></div>
-            <div><label class="form-label">Option D</label><input type="text" class="form-input" id="opt4" placeholder="Option D"/></div>
-          </div>
-          <div class="form-row">
-            <div><label class="form-label">Correct (0=A,1=B,2=C,3=D)</label><input type="number" class="form-input" id="correct" placeholder="0"/></div>
-            <div><label class="form-label">Time (minutes)</label><input type="number" class="form-input" id="timeLimit" placeholder="5"/></div>
-          </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;">
-            <button class="btn-save" onclick="addQuestion()">➕ Save Question</button>
-            <button class="btn-clear" onclick="clearQuestionForm()">🔄 Clear</button>
-          </div>
-        </div>
-
-        <!-- LEADERBOARD -->
-        <div class="card fade-in">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
-            <div><div class="card-title">🏆 Leaderboard</div><div class="card-sub" id="lbCourseLabel">Select a course to view scores</div></div>
-            <div style="display:flex;gap:6px;align-items:center;">
-              <select style="padding:6px 10px;border-radius:10px;border:2px solid #e2e8f0;background:#f8fafc;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:#1a1f36;outline:none;" id="lbCourseSel" onchange="loadLeaderboard()"><option value="">— Select Course —</option></select>
-              <button id="lbClearBtn" style="display:none;background:#fef2f2;border:1.5px solid #fecaca;color:#dc2626;border-radius:10px;padding:6px 10px;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;cursor:pointer;" onclick="clearLeaderboard()">🗑️ Clear</button>
-            </div>
-          </div>
-          <div id="leaderboard"><div class="empty"><div class="empty-icon">📋</div>Select a course above to see its leaderboard</div></div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
-
-        <!-- RESULT REVIEW -->
-        <div id="reviewBox" style="display:none;" class="card fade-in" style="margin-top:16px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
-            <div><h3 style="margin:0;font-family:'Baloo 2',cursive;font-size:18px;">&#128221; Result Review</h3><div class="small" id="reviewSub"></div></div>
-            <button class="btn-dark" style="background:#f1f5f9;color:#64748b;border:none;border-radius:12px;padding:10px 16px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;cursor:pointer;" onclick="document.getElementById('reviewBox').style.display='none'">&#10006; Close</button>
-          </div>
-          <div id="resultBanner"></div>
-          <div id="reviewArea"></div>
-        </div>
-
-<div class="toast" id="toast"></div>
-
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
 <script>
 firebase.initializeApp({
   apiKey:"AIzaSyAPML8zK9qgRQbUyv7lMVOtt0c5Osjyw_A",
@@ -370,368 +11,138 @@ firebase.initializeApp({
   messagingSenderId:"1000142199756",
   appId:"1:1000142199756:web:afab8eaa0f6bc638969b69"
 });
-const auth=firebase.auth(), db=firebase.firestore();
+
+const auth=firebase.auth();
+const db=firebase.firestore();
 const ADMINS=["dnyanrui90@gmail.com","pawarjai999@gmail.com"];
 
 function g(id){return document.getElementById(id);}
-function toast(m,ok=true){const e=g("toast");e.textContent=m;e.style.background=ok?"#1a1f36":"#dc2626";e.style.display="block";setTimeout(()=>e.style.display="none",2800);}
-function showMsg(m,t="info"){const e=g("loginMsg");e.textContent=m;e.className="login-msg "+t;e.style.display="block";}
-function hideMsg(){g("loginMsg").style.display="none";}
-function setBtns(d){g("btnStudent").disabled=d;g("btnAdmin").disabled=d;}
-function esc(s){return(s||"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
-function escQ(s){return(s||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'");}
+function esc(s){return (s||"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
 function initials(n){return(n||"?").split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);}
 
 function loginAs(role){
   localStorage.setItem("tn_role",role);
-  setBtns(true);
-  showMsg("Opening Google login…","info");
   const p=new firebase.auth.GoogleAuthProvider();
   p.setCustomParameters({prompt:"select_account"});
-  auth.signInWithPopup(p).then(()=>hideMsg()).catch(err=>{
-    if(err.code==="auth/popup-blocked"){showMsg("⚠️ Popup blocked! Allow popups for this site in your browser settings, then try again.","error");}
-    else if(err.code==="auth/popup-closed-by-user"){showMsg("Login cancelled. Try again.","info");}
-    else{showMsg("Error: "+err.message,"error");}
-    setBtns(false);
-  });
+  auth.signInWithPopup(p);
 }
 
 function logout(){
-  auth.signOut().then(()=>{
-    localStorage.removeItem("tn_role");
-    g("app").style.display="none";
-    g("loginCard").style.display="flex";
-    g("topName").textContent="Not logged in";
-    g("topAvatar").textContent="?";
-    setBtns(false);hideMsg();
-  });
+  auth.signOut();
+  localStorage.removeItem("tn_role");
 }
 
 auth.onAuthStateChanged(user=>{
-  if(!user){g("loginCard").style.display="flex";g("app").style.display="none";return;}
-  const role=(localStorage.getItem("tn_role")==="admin"&&ADMINS.includes((user.email||"").toLowerCase()))?"admin":"student";
+  if(!user){
+    g("loginCard").style.display="flex";
+    g("app").style.display="none";
+    return;
+  }
+
+  const role=(localStorage.getItem("tn_role")==="admin"
+      && ADMINS.includes((user.email||"").toLowerCase()))
+      ? "admin" : "student";
+
   g("loginCard").style.display="none";
   g("app").style.display="block";
-  hideMsg();setBtns(false);
-  const name=user.displayName||"Student";
-  g("userName").textContent=name;
+
+  g("userName").textContent=user.displayName||"Student";
   g("userEmail").textContent=user.email||"";
   g("userRole").textContent="Role: "+role.toUpperCase();
-  g("topName").textContent=name+" • "+role.toUpperCase();
-  g("topAvatar").textContent=initials(name);
-  g("profileAvatar").textContent=initials(name);
+  g("topName").textContent=(user.displayName||"Student")+" • "+role.toUpperCase();
+  g("topAvatar").textContent=initials(user.displayName||"Student");
+  g("profileAvatar").textContent=initials(user.displayName||"Student");
+
   g("adminCard").style.display=role==="admin"?"block":"none";
   g("manageBox").style.display=role==="admin"?"block":"none";
-  loadCourses();loadLeaderboard();
-  if(role==="admin"){refreshCoursePick();refreshManagePick();}
+
+  loadCourses();
+  loadLeaderboardCourses();
 });
 
-// COURSE EMOJIS
-const emojis=["📘","📗","📙","📕","🔬","🧮","🌍","🎨","🏛️","⚗️"];
-function courseEmoji(name,i){return emojis[i%emojis.length];}
+
+// ================= COURSES =================
 
 function loadCourses(){
-  const div=g("courseList");div.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
+  const div=g("courseList");
+  div.innerHTML="Loading...";
   db.collection("courses").get().then(snap=>{
-    if(snap.empty){div.innerHTML='<div class="empty"><div class="empty-icon">📭</div>No courses yet. Admin please add courses.</div>';return;}
-    let html="",i=0;
-    snap.forEach(doc=>{
-      const name=doc.id,paid=!!doc.data().paid,em=courseEmoji(name,i++);
-      html+=`<div class="course-card">
-        <div class="course-icon">${em}</div>
-        <div class="course-info" style="flex:1"><b>${esc(name)}</b><span>${paid?"🔒 Premium Course":"✅ Free Course"}</span></div>
-        <div>${paid?'<span class="lock-tag">🔒 Locked</span>':`<button class="btn-start" onclick="startTest('${escQ(name)}')">Start Test ▶</button>`}</div>
-      </div>`;
-    });
-    div.innerHTML=html;refreshLbPick();
-  }).catch(e=>{div.innerHTML=`<div class="empty"><div class="empty-icon">❌</div>${esc(e.message)}</div>`;});
-}
-
-function addCourse(){
-  const name=g("courseName").value.trim(),paid=g("paidCourse").checked;
-  if(!name)return alert("Enter course name");
-  db.collection("courses").doc(name).set({paid,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:auth.currentUser.email||""},{merge:true})
-    .then(()=>{toast("✅ Course saved!");loadCourses();refreshCoursePick();refreshManagePick();g("courseName").value="";g("paidCourse").checked=false;}).catch(e=>alert(e.message));
-}
-
-function refreshCoursePick(){
-  const sel=g("coursePick");if(!sel)return;
-  sel.innerHTML='<option value="">Select course</option>';
-  db.collection("courses").get().then(snap=>{snap.forEach(doc=>{const o=document.createElement("option");o.value=doc.id;o.textContent=doc.id;sel.appendChild(o);});}).catch(()=>{});
-}
-
-function refreshManagePick(){
-  const sel=g("manageCoursePick");if(!sel)return;
-  sel.innerHTML='<option value="">Select course</option>';
-  db.collection("courses").get().then(snap=>{snap.forEach(doc=>{const o=document.createElement("option");o.value=doc.id;o.textContent=doc.id;sel.appendChild(o);});}).catch(()=>{});
-}
-
-function clearQuestionForm(){["questionText","opt1","opt2","opt3","opt4","correct"].forEach(id=>g(id).value="");}
-
-function addQuestion(){
-  const course=(g("coursePick").value||"").trim();if(!course)return alert("Select a course first");
-  const q=g("questionText").value.trim(),o1=g("opt1").value.trim(),o2=g("opt2").value.trim(),o3=g("opt3").value.trim(),o4=g("opt4").value.trim();
-  const correct=parseInt(g("correct").value,10),time=parseInt(g("timeLimit").value,10);
-  if(!q||!o1||!o2||!o3||!o4)return alert("Fill question + all 4 options");
-  if(isNaN(correct)||correct<0||correct>3)return alert("Correct must be 0, 1, 2, or 3");
-  if(isNaN(time)||time<=0)return alert("Time must be > 0 minutes");
-  db.collection("courses").doc(course).collection("questions").add({
-    question:q,options:[o1,o2,o3,o4],correct,time,
-    createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:auth.currentUser.email||""
-  }).then(()=>{toast("✅ Question saved!");clearQuestionForm();loadManageQuestions();}).catch(e=>alert(e.message));
-}
-
-// MANAGE + DELETE QUESTIONS
-function loadManageQuestions(){
-  const course=g("manageCoursePick").value;
-  const div=g("manageQList");
-  if(!course){div.innerHTML='';return;}
-  div.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading questions...</div>';
-  db.collection("courses").doc(course).collection("questions").orderBy("createdAt","asc").get().then(snap=>{
-    if(snap.empty){div.innerHTML='<div class="empty"><div class="empty-icon">📭</div>No questions in this course yet.</div>';return;}
+    if(snap.empty){div.innerHTML="No courses yet.";return;}
     let html="";
     snap.forEach(doc=>{
-      const d=doc.data(),id=doc.id;
-      const opts=(d.options||[]).map((o,i)=>`<span class="q-opt-chip${i===d.correct?' correct':''}">${["A","B","C","D"][i]}: ${esc(o)}</span>`).join("");
-      html+=`<div class="q-manage" id="qm_${id}">
-        <div class="q-manage-top">
-          <span class="q-text">${esc(d.question)}</span>
-          <button class="btn-del" onclick="deleteQuestion('${escQ(course)}','${id}')">🗑️ Delete</button>
-        </div>
-        <div class="q-opts">${opts}</div>
-      </div>`;
+      const name=doc.id;
+      const paid=doc.data().paid;
+      html+=`
+        <div class="course-card">
+          <div class="course-info">
+            <b>${esc(name)}</b>
+            <span>${paid?"🔒 Premium":"✅ Free"}</span>
+          </div>
+          ${paid?
+            `<span class="lock-tag">Locked</span>`:
+            `<button class="btn-start" onclick="startTest('${name}')">Start</button>`
+          }
+        </div>`;
     });
     div.innerHTML=html;
-  }).catch(e=>{div.innerHTML=`<div class="empty">${esc(e.message)}</div>`;});
-}
-
-function deleteQuestion(course,qid){
-  if(!confirm("Delete this question? This cannot be undone."))return;
-  db.collection("courses").doc(course).collection("questions").doc(qid).delete()
-    .then(()=>{toast("🗑️ Question deleted!");loadManageQuestions();}).catch(e=>alert(e.message));
-}
-
-// TEST
-let currentCourse="",currentQuestions=[],timeLeft=0,timerInt=null;
-
-function startTest(course){
-  currentCourse=course;
-  g("testTitle").textContent="📝 "+course;
-  g("testBox").style.display="block";
-  g("questionArea").innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading questions...</div>';
-  g("qCountInfo").textContent="";
-  stopTimer();
-  db.collection("courses").doc(course).collection("questions").get().then(snap=>{
-    currentQuestions=[];snap.forEach(doc=>currentQuestions.push(doc.data()));
-    if(!currentQuestions.length){g("questionArea").innerHTML='<div class="empty"><div class="empty-icon">📭</div>No questions in this course yet.</div>';return;}
-    g("qCountInfo").textContent=currentQuestions.length+" questions";
-    renderTest();startTimer((currentQuestions[0].time||5)*60);
-    g("testBox").scrollIntoView({behavior:"smooth"});
-  }).catch(e=>alert(e.message));
-}
-
-function renderTest(){
-  const div=g("questionArea");div.innerHTML="";
-  const labels=["A","B","C","D"];
-  currentQuestions.forEach((q,i)=>{
-    let opts="";
-    (q.options||[]).forEach((o,idx)=>{
-      opts+=`<label class="opt" onclick="this.classList.add('selected');document.querySelectorAll('[name=q${i}]').forEach(r=>r.closest('.opt').classList.remove('selected'));this.classList.add('selected')">
-        <input type="radio" name="q${i}" value="${idx}">
-        <span style="font-weight:700;color:#4f46e5;min-width:20px;">${labels[idx]}.</span>
-        <span>${esc(o)}</span>
-      </label>`;
-    });
-    div.innerHTML+=`<div class="qbox fade-in">
-      <b>Q${i+1}. ${esc(q.question)}</b>
-      <div>${opts}</div>
-    </div>`;
   });
 }
 
-function startTimer(s){stopTimer();timeLeft=s;updateTimer();timerInt=setInterval(()=>{timeLeft--;updateTimer();if(timeLeft<=0){stopTimer();submitTest();}},1000);}
-function stopTimer(){if(timerInt){clearInterval(timerInt);timerInt=null;}}
-function updateTimer(){
-  const m=Math.floor(timeLeft/60),s=timeLeft%60;
-  g("timerDisplay").textContent=(m<10?"0":"")+m+":"+(s<10?"0":"")+s;
-  g("timerDisplay").style.background=timeLeft<=30?"linear-gradient(135deg,#ef4444,#dc2626)":"linear-gradient(135deg,#10b981,#059669)";
-}
-function closeTest(){stopTimer();g("testBox").style.display="none";}
 
-function submitTest(){
-  stopTimer();if(!currentQuestions.length){alert("No questions.");return;}
-  let score=0;
-  currentQuestions.forEach((q,i)=>{const sel=document.querySelector(`input[name="q${i}"]:checked`);if(sel&&parseInt(sel.value,10)===q.correct)score++;});
-  const pct=Math.round((score/currentQuestions.length)*100);
-  const msg=pct>=80?"🎉 Excellent!":pct>=60?"👍 Good job!":pct>=40?"📚 Keep practising!":"💪 Don't give up!";
-  alert(`${msg}\n\nScore: ${score}/${currentQuestions.length} (${pct}%)`);
-  const u=auth.currentUser;
-  db.collection("leaderboard").add({user:u.displayName||u.email||"Student",email:u.email||"",score,total:currentQuestions.length,pct,course:currentCourse,at:firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{
-    const lbSel=g("lbCourseSel");if(lbSel)lbSel.value=currentCourse;
-    loadLeaderboard();loadPastScores();
-  });
-  closeTest();
-}
+// ================= LEADERBOARD FIX =================
 
-function loadLeaderboard(){
-  const div=g("leaderboard"); if(!div) return;
-  const sel=g("lbCourseSel"); const course=sel?sel.value:"";
-  const label=g("lbCourseLabel");
-  if(label) label.textContent = course ? "Top 10 for: "+course : "Select a course to view scores";
-  if(!course){div.innerHTML='<div class="empty"><div class="empty-icon">📋</div>Select a course above to see its leaderboard</div>';return;}
-  div.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
-  db.collection("leaderboard").where("course","==",course).orderBy("pct","desc").orderBy("score","desc").limit(10).get().then(snap=>{
-    if(snap.empty){div.innerHTML='<div class="empty"><div class="empty-icon">🏅</div>No scores yet for this course!</div>';return;}
-    let html="",i=1;
-    const rc=["r1","r2","r3"],med=["🥇","🥈","🥉"];
-    snap.forEach(doc=>{
-      const d=doc.data(),r=i<=3?rc[i-1]:"rn",m=i<=3?med[i-1]:i;
-      html+=`<div class="lb-row">
-        <div class="lb-rank ${r}">${m}</div>
-        <div class="lb-name">${esc(d.user||"Student")}</div>
-        <div class="lb-score">${d.score}/${d.total} (${d.pct}%)</div>
-      </div>`;
-      i++;
-    });
-    div.innerHTML=html;
-  }).catch(e=>{div.innerHTML=`<div class="empty">${esc(e.message)}</div>`;});
-}
-/* ── MOBILE TABS ── */
-function mobTab(id, btn) {
-  document.querySelectorAll('.mob-sec').forEach(s => { s.style.display = 'none'; s.classList.remove('active'); });
-  document.querySelectorAll('.mtab').forEach(b => b.classList.remove('active'));
-  const el = document.getElementById('mob-' + id);
-  if (el) { el.style.display = 'block'; el.classList.add('active'); }
-  btn.classList.add('active');
-}
-
-/* ── PAST SCORES ── */
-function loadPastScores() {
-  const u = auth.currentUser;
-  if (!u) return;
-  const email = u.email || '';
-  const render = (divId) => {
-    const div = document.getElementById(divId); if (!div) return;
-    div.innerHTML = '<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
-    db.collection('leaderboard').where('email', '==', email).orderBy('at', 'desc').limit(20).get().then(snap => {
-      if (snap.empty) { div.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>No attempts yet. Start a test!</div>'; return; }
-      let html = '';
-      snap.forEach(doc => {
-        const d = doc.data(), pct = d.pct || 0;
-        const cls = pct >= 80 ? 'pg' : pct >= 60 ? 'pb' : pct >= 40 ? 'po' : 'pr';
-        const icon = pct >= 80 ? '🌟' : pct >= 60 ? '👍' : pct >= 40 ? '📚' : '💪';
-        const date = d.at?.toDate ? d.at.toDate().toLocaleDateString('en-IN', {day:'numeric',month:'short'}) : '-';
-        html += `<div class="ps-row"><div style="font-size:20px;">${icon}</div><div class="ps-info"><b>${esc(d.course || 'Unknown')}</b><span>${date} • ${d.score}/${d.total} correct</span></div><span class="pct-chip ${cls}">${pct}%</span></div>`;
-      });
-      div.innerHTML = html;
-    }).catch(() => { div.innerHTML = '<div class="empty">⚠️ Could not load scores.</div>'; });
-  };
-  render('sideScoreList'); render('mobScoreList');
-}
-
-/* ── QUESTION COUNT BADGES ── */
-const qCounts = {};
-function getQCount(name, cb) {
-  if (qCounts[name] !== undefined) { cb(qCounts[name]); return; }
-  db.collection('courses').doc(name).collection('questions').get().then(s => { qCounts[name] = s.size; cb(s.size); }).catch(() => cb(0));
-}
-
-/* ── EDIT MODAL ── */
-function openEdit(course, qid, data) {
-  document.getElementById('editQId').value = qid;
-  document.getElementById('editCourse').value = course;
-  document.getElementById('editQText').value = data.question || '';
-  (data.options || []).forEach((o, i) => { const el = document.getElementById('eOpt' + i); if (el) el.value = o; });
-  document.getElementById('eCorrect').value = data.correct ?? 0;
-  document.getElementById('eTime').value = data.time || 5;
-  document.getElementById('editModal').classList.add('open');
-}
-function saveEdit() {
-  const qid = document.getElementById('editQId').value, course = document.getElementById('editCourse').value;
-  const q = document.getElementById('editQText').value.trim();
-  const opts = [0,1,2,3].map(i => document.getElementById('eOpt'+i).value.trim());
-  const correct = parseInt(document.getElementById('eCorrect').value, 10), time = parseInt(document.getElementById('eTime').value, 10);
-  if (!q || opts.some(o => !o)) return alert('Fill all fields');
-  if (isNaN(correct) || correct < 0 || correct > 3) return alert('Correct must be 0-3');
-  if (isNaN(time) || time <= 0) return alert('Time must be > 0');
-  db.collection('courses').doc(course).collection('questions').doc(qid).update({ question:q, options:opts, correct, time })
-    .then(() => { toast('✅ Question updated!'); document.getElementById('editModal').classList.remove('open'); loadManageQDesk(); })
-    .catch(e => alert(e.message));
-}
-
-/* ── MANAGE QUESTIONS (DESKTOP) ── */
-function loadManageQDesk() {
-  const sel = document.getElementById('manageCoursePickDesk');
-  if (!sel) return;
-  const course = sel.value;
-  const div = document.getElementById('manageQListDesk'); if (!div) return;
-  if (!course) { div.innerHTML = ''; return; }
-  div.innerHTML = '<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
-  db.collection('courses').doc(course).collection('questions').orderBy('createdAt','asc').get().then(snap => {
-    if (snap.empty) { div.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>No questions yet.</div>'; return; }
-    let html = '';
-    snap.forEach(doc => {
-      const d = doc.data(), id = doc.id;
-      const opts = (d.options||[]).map((o,i) => `<span class="q-chip${i===d.correct?' correct':''}">${['A','B','C','D'][i]}: ${esc(o)}</span>`).join('');
-      html += `<div class="q-manage"><div class="q-manage-top"><span class="q-text">${esc(d.question)}</span><div class="q-actions"><button class="btn-edit" onclick='openEdit("${escQ(course)}","${id}",${JSON.stringify(d)})'>✏️ Edit</button><button class="btn-del" onclick="delQ('${escQ(course)}','${id}')">🗑️</button></div></div><div class="q-opts">${opts}</div></div>`;
-    });
-    div.innerHTML = html;
-  }).catch(e => { div.innerHTML = `<div class="empty">${esc(e.message)}</div>`; });
-}
-
-/* ── RESULT REVIEW ── */
-function showReview(score, pct, answers) {
-  const total = currentQuestions.length;
-  const cls = pct >= 80 ? 'great' : pct >= 60 ? 'good' : pct >= 40 ? 'ok' : 'bad';
-  const msg = pct >= 80 ? '🎉 Excellent!' : pct >= 60 ? '👍 Good Job!' : pct >= 40 ? '📚 Keep Practising!' : '💪 Don\'t Give Up!';
-  document.getElementById('resultBanner').innerHTML = `<div class="result-banner ${cls}"><div class="result-score">${score}/${total}</div><div class="result-msg">${msg} — ${pct}%</div></div>`;
-  document.getElementById('reviewSub').textContent = currentCourse + ' • ' + score + ' correct of ' + total;
-  const L = ['A','B','C','D']; let html = '';
-  currentQuestions.forEach((q, i) => {
-    const ua = answers[i], ca = q.correct;
-    let opts = '';
-    (q.options||[]).forEach((o, idx) => {
-      let c2 = 'opt', tag = '';
-      if (idx === ca) { c2 += ' correct-ans'; tag = '<span class="review-tag tag-c">✅ Correct</span>'; }
-      else if (idx === ua && ua !== ca) { c2 += ' wrong-ans'; tag = '<span class="review-tag tag-w">❌ Your Answer</span>'; }
-      opts += `<div class="${c2}" style="cursor:default;"><span class="opt-label">${L[idx]}.</span><span>${esc(o)}</span>${tag}</div>`;
-    });
-    const st = ua === -1 ? '<span class="review-tag tag-s">⏭ Skipped</span>' : ua === ca ? '<span class="review-tag tag-c">✅ Correct</span>' : '<span class="review-tag tag-w">❌ Wrong</span>';
-    html += `<div class="qbox"><b>Q${i+1}. ${esc(q.question)} ${st}</b><div>${opts}</div></div>`;
-  });
-  document.getElementById('reviewArea').innerHTML = html;
-  document.getElementById('reviewBox').style.display = 'block';
-  document.getElementById('reviewBox').scrollIntoView({ behavior: 'smooth' });
-}
-
-/* ── CLEAR LEADERBOARD (Admin only) ── */
-function clearLeaderboard(){
-  const sel=g("lbCourseSel"); const course=sel?sel.value:"";
-  if(!course){alert("Select a course first to clear its leaderboard.");return;}
-  if(!confirm("Delete ALL leaderboard scores for: "+course+"?\nThis cannot be undone!"))return;
-  db.collection("leaderboard").where("course","==",course).get().then(snap=>{
-    if(snap.empty){toast("No scores to delete.");return;}
-    const batch=db.batch();
-    snap.forEach(doc=>batch.delete(doc.ref));
-    return batch.commit();
-  }).then(()=>{toast("🗑️ Leaderboard cleared for: "+course);loadLeaderboard();}).catch(e=>alert(e.message));
-}
-
-/* ── POPULATE LEADERBOARD COURSE SELECT ── */
-function refreshLbPick(){
-  const sel=g("lbCourseSel"); if(!sel) return;
-  const cur=sel.value;
+function loadLeaderboardCourses(){
+  const sel=g("lbCourseSel");
   sel.innerHTML='<option value="">— Select Course —</option>';
+
   db.collection("courses").get().then(snap=>{
     snap.forEach(doc=>{
       const o=document.createElement("option");
-      o.value=doc.id; o.textContent=doc.id;
-      if(doc.id===cur) o.selected=true;
+      o.value=doc.id;
+      o.textContent=doc.id;
       sel.appendChild(o);
     });
-  }).catch(()=>{});
+  });
+}
+
+function loadLeaderboard(){
+  const div=g("leaderboard");
+  const course=g("lbCourseSel").value;
+
+  if(!course){
+    div.innerHTML="Select course.";
+    return;
+  }
+
+  div.innerHTML="Loading...";
+
+  db.collection("leaderboard")
+    .where("course","==",course)
+    .orderBy("pct","desc")
+    .limit(10)
+    .get()
+    .then(snap=>{
+      if(snap.empty){
+        div.innerHTML="No scores yet.";
+        return;
+      }
+
+      let html="";
+      let i=1;
+
+      snap.forEach(doc=>{
+        const d=doc.data();
+        html+=`
+          <div class="lb-row">
+            <div class="lb-rank">${i}</div>
+            <div class="lb-name">${esc(d.user)}</div>
+            <div class="lb-score">${d.score}/${d.total} (${d.pct}%)</div>
+          </div>`;
+        i++;
+      });
+
+      div.innerHTML=html;
+    });
 }
 
 </script>
-</body>
-</html>
