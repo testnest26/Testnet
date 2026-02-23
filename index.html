@@ -330,9 +330,14 @@
 
         <!-- LEADERBOARD -->
         <div class="card fade-in">
-          <div class="card-title">🏆 Leaderboard</div>
-          <div class="card-sub" style="margin-bottom:12px;">Top 10 scorers</div>
-          <div id="leaderboard"><div class="empty"><div class="empty-icon">⏳</div>Loading...</div></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
+            <div><div class="card-title">🏆 Leaderboard</div><div class="card-sub" id="lbCourseLabel">Select a course to view scores</div></div>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <select style="padding:6px 10px;border-radius:10px;border:2px solid #e2e8f0;background:#f8fafc;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:#1a1f36;outline:none;" id="lbCourseSel" onchange="loadLeaderboard()"><option value="">— Select Course —</option></select>
+              <button id="lbClearBtn" style="display:none;background:#fef2f2;border:1.5px solid #fecaca;color:#dc2626;border-radius:10px;padding:6px 10px;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;cursor:pointer;" onclick="clearLeaderboard()">🗑️ Clear</button>
+            </div>
+          </div>
+          <div id="leaderboard"><div class="empty"><div class="empty-icon">📋</div>Select a course above to see its leaderboard</div></div>
         </div>
       </div>
 
@@ -561,22 +566,30 @@ function submitTest(){
   const msg=pct>=80?"🎉 Excellent!":pct>=60?"👍 Good job!":pct>=40?"📚 Keep practising!":"💪 Don't give up!";
   alert(`${msg}\n\nScore: ${score}/${currentQuestions.length} (${pct}%)`);
   const u=auth.currentUser;
-  db.collection("leaderboard").add({user:u.displayName||u.email||"Student",email:u.email||"",score,total:currentQuestions.length,pct,course:currentCourse,at:firebase.firestore.FieldValue.serverTimestamp()}).then(()=>loadLeaderboard());
+  db.collection("leaderboard").add({user:u.displayName||u.email||"Student",email:u.email||"",score,total:currentQuestions.length,pct,course:currentCourse,at:firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{
+    const lbSel=g("lbCourseSel");if(lbSel)lbSel.value=currentCourse;
+    loadLeaderboard();loadPastScores();
+  });
   closeTest();
 }
 
 function loadLeaderboard(){
-  const div=g("leaderboard");div.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
-  db.collection("leaderboard").orderBy("pct","desc").orderBy("score","desc").limit(10).get().then(snap=>{
-    if(snap.empty){div.innerHTML='<div class="empty"><div class="empty-icon">🏅</div>No scores yet. Be the first!</div>';return;}
+  const div=g("leaderboard"); if(!div) return;
+  const sel=g("lbCourseSel"); const course=sel?sel.value:"";
+  const label=g("lbCourseLabel");
+  if(label) label.textContent = course ? "Top 10 for: "+course : "Select a course to view scores";
+  if(!course){div.innerHTML='<div class="empty"><div class="empty-icon">📋</div>Select a course above to see its leaderboard</div>';return;}
+  div.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
+  db.collection("leaderboard").where("course","==",course).orderBy("pct","desc").orderBy("score","desc").limit(10).get().then(snap=>{
+    if(snap.empty){div.innerHTML='<div class="empty"><div class="empty-icon">🏅</div>No scores yet for this course!</div>';return;}
     let html="",i=1;
-    const rankClass=["r1","r2","r3"];
+    const rc=["r1","r2","r3"],med=["🥇","🥈","🥉"];
     snap.forEach(doc=>{
-      const d=doc.data(),rc=i<=3?rankClass[i-1]:"rn",medal=i===1?"🥇":i===2?"🥈":i===3?"🥉":i;
+      const d=doc.data(),r=i<=3?rc[i-1]:"rn",m=i<=3?med[i-1]:i;
       html+=`<div class="lb-row">
-        <div class="lb-rank ${rc}">${medal}</div>
-        <div class="lb-name">${esc(d.user||"Student")}<div style="font-size:11px;color:#94a3b8;font-weight:600;">${esc(d.course||"")}</div></div>
-        <div class="lb-score">${d.score}/${d.total} <span style="color:#94a3b8;font-weight:600;">(${d.pct}%)</span></div>
+        <div class="lb-rank ${r}">${m}</div>
+        <div class="lb-name">${esc(d.user||"Student")}</div>
+        <div class="lb-score">${d.score}/${d.total} (${d.pct}%)</div>
       </div>`;
       i++;
     });
@@ -689,6 +702,34 @@ function showReview(score, pct, answers) {
   document.getElementById('reviewArea').innerHTML = html;
   document.getElementById('reviewBox').style.display = 'block';
   document.getElementById('reviewBox').scrollIntoView({ behavior: 'smooth' });
+}
+
+/* ── CLEAR LEADERBOARD (Admin only) ── */
+function clearLeaderboard(){
+  const sel=g("lbCourseSel"); const course=sel?sel.value:"";
+  if(!course){alert("Select a course first to clear its leaderboard.");return;}
+  if(!confirm("Delete ALL leaderboard scores for: "+course+"?\nThis cannot be undone!"))return;
+  db.collection("leaderboard").where("course","==",course).get().then(snap=>{
+    if(snap.empty){toast("No scores to delete.");return;}
+    const batch=db.batch();
+    snap.forEach(doc=>batch.delete(doc.ref));
+    return batch.commit();
+  }).then(()=>{toast("🗑️ Leaderboard cleared for: "+course);loadLeaderboard();}).catch(e=>alert(e.message));
+}
+
+/* ── POPULATE LEADERBOARD COURSE SELECT ── */
+function refreshLbPick(){
+  const sel=g("lbCourseSel"); if(!sel) return;
+  const cur=sel.value;
+  sel.innerHTML='<option value="">— Select Course —</option>';
+  db.collection("courses").get().then(snap=>{
+    snap.forEach(doc=>{
+      const o=document.createElement("option");
+      o.value=doc.id; o.textContent=doc.id;
+      if(doc.id===cur) o.selected=true;
+      sel.appendChild(o);
+    });
+  }).catch(()=>{});
 }
 
 </script>
