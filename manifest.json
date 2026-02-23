@@ -1,0 +1,9 @@
+{
+  "name": "TestNest",
+  "short_name": "TestNest",
+  "start_url": "/Testnet/",
+  "display": "standalone",
+  "background_color": "#4f46e5",
+  "theme_color": "#4f46e5",
+  "icons": []
+}
