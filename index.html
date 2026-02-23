@@ -1,108 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TestNest</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#4f46e5">
+
+<style>
+body{
+  margin:0;
+  font-family:Arial, sans-serif;
+  background:#f4f6ff;
+  text-align:center;
+}
+.container{
+  margin-top:100px;
+}
+.card{
+  background:white;
+  padding:30px;
+  border-radius:16px;
+  width:320px;
+  margin:auto;
+  box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+button{
+  padding:14px 24px;
+  font-size:16px;
+  font-weight:bold;
+  border:none;
+  border-radius:10px;
+  cursor:pointer;
+  margin-top:20px;
+}
+.login-btn{
+  background:#4f46e5;
+  color:white;
+}
+.logout-btn{
+  background:#ef4444;
+  color:white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="card" id="loginCard">
+    <h2>Welcome to TestNest</h2>
+    <p>Login to continue</p>
+    <button class="login-btn" onclick="login()">Login with Google</button>
+  </div>
+
+  <div class="card" id="appCard" style="display:none;">
+    <h2 id="userName"></h2>
+    <p>You are logged in successfully.</p>
+    <button class="logout-btn" onclick="logout()">Logout</button>
+  </div>
+
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
+
 <script>
 firebase.initializeApp({
   apiKey:"AIzaSyAPML8zK9qgRQbUyv7lMVOtt0c5Osjyw_A",
   authDomain:"testnest-education.firebaseapp.com",
   projectId:"testnest-education",
-  storageBucket:"testnest-education.firebasestorage.app",
-  messagingSenderId:"1000142199756",
   appId:"1:1000142199756:web:afab8eaa0f6bc638969b69"
 });
 
 const auth = firebase.auth();
-const db = firebase.firestore();
 
-/* ✅ HANDLE REDIRECT RESULT */
-auth.getRedirectResult().then((result)=>{
-  if(result && result.user){
-    hideMsg();
-    setBtns(false);
-  }
-}).catch((error)=>{
-  console.log("Redirect error:", error);
-  showMsg("Login error: "+error.message,"error");
-  setBtns(false);
-});
+/* Handle redirect result */
+auth.getRedirectResult().catch(console.error);
 
-const ADMINS=["dnyanrui90@gmail.com","pawarjai999@gmail.com"];
-
-/* ---------------- HELPERS ---------------- */
-
-function g(id){return document.getElementById(id);}
-function toast(m,ok=true){
-  const e=g("toast");
-  e.textContent=m;
-  e.style.background=ok?"#1a1f36":"#dc2626";
-  e.style.display="block";
-  setTimeout(()=>e.style.display="none",2800);
-}
-function showMsg(m,t="info"){
-  const e=g("loginMsg");
-  e.textContent=m;
-  e.className="login-msg "+t;
-  e.style.display="block";
-}
-function hideMsg(){ g("loginMsg").style.display="none"; }
-function setBtns(d){
-  g("btnStudent").disabled=d;
-  g("btnAdmin").disabled=d;
-}
-function initials(n){
-  return (n||"?").split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);
-}
-
-/* ---------------- UPDATED LOGIN ---------------- */
-
-function loginAs(role){
-  localStorage.setItem("tn_role",role);
-  setBtns(true);
-  showMsg("Redirecting to Google login…","info");
-
+function login(){
   const provider = new firebase.auth.GoogleAuthProvider();
   provider.setCustomParameters({prompt:"select_account"});
-
   auth.signInWithRedirect(provider);
 }
 
-/* ---------------- LOGOUT ---------------- */
-
 function logout(){
-  auth.signOut().then(()=>{
-    localStorage.removeItem("tn_role");
-    g("app").style.display="none";
-    g("loginCard").style.display="flex";
-    g("topName").textContent="Not logged in";
-    g("topAvatar").textContent="?";
-    setBtns(false);
-    hideMsg();
-  });
+  auth.signOut();
 }
 
-/* ---------------- AUTH STATE ---------------- */
-
 auth.onAuthStateChanged(user=>{
-  if(!user){
-    g("loginCard").style.display="flex";
-    g("app").style.display="none";
-    return;
+  if(user){
+    document.getElementById("loginCard").style.display="none";
+    document.getElementById("appCard").style.display="block";
+    document.getElementById("userName").innerText =
+      "Hello, " + (user.displayName || "Student");
+  }else{
+    document.getElementById("loginCard").style.display="block";
+    document.getElementById("appCard").style.display="none";
   }
-
-  const role=(localStorage.getItem("tn_role")==="admin" &&
-      ADMINS.includes((user.email||"").toLowerCase()))
-      ? "admin" : "student";
-
-  g("loginCard").style.display="none";
-  g("app").style.display="block";
-  hideMsg();
-  setBtns(false);
-
-  const name=user.displayName||"Student";
-  g("userName").textContent=name;
-  g("userEmail").textContent=user.email||"";
-  g("userRole").textContent="Role: "+role.toUpperCase();
-  g("topName").textContent=name+" • "+role.toUpperCase();
-  g("topAvatar").textContent=initials(name);
-  g("profileAvatar").textContent=initials(name);
-  g("adminCard").style.display=role==="admin"?"block":"none";
-  g("manageBox").style.display=role==="admin"?"block":"none";
 });
 </script>
+
+<script>
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('sw.js');
+}
+</script>
+
+</body>
+</html>
