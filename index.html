@@ -186,6 +186,66 @@
     .btn-del{background:#fef2f2;border:1.5px solid #fecaca;color:#dc2626;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;cursor:pointer;}
 
   .course-card{border-radius:14px;border:2px solid #e0e7ff;background:linear-gradient(135deg,#f5f3ff,#faf5ff);padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px;transition:box-shadow .15s,transform .15s;flex-wrap:wrap;}.course-card:hover{box-shadow:0 4px 20px rgba(79,70,229,0.12);transform:translateY(-1px);}.course-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}.course-info{flex:1;min-width:0;}.course-info b{font-size:15px;font-weight:800;display:block;}.meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:3px;}.qcount{background:#eef2ff;color:#4f46e5;border-radius:999px;padding:2px 9px;font-size:11px;font-weight:800;}.btn-start{background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:12px;padding:10px 18px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;cursor:pointer;box-shadow:0 3px 10px rgba(16,185,129,0.3);white-space:nowrap;}.lock-tag{background:#fef3c7;border:1.5px solid #fcd34d;color:#92400e;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:800;white-space:nowrap;}
+
+    /* CLASS/SUBJECT SELECTOR */
+    .class-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;scrollbar-width:none;}
+    .class-scroll::-webkit-scrollbar{display:none;}
+    .class-chip{flex-shrink:0;padding:7px 16px;border-radius:999px;border:2px solid #e0e7ff;background:#f5f3ff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:#4f46e5;cursor:pointer;transition:all .15s;}
+    .class-chip.active,.class-chip:hover{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;border-color:transparent;box-shadow:0 3px 10px rgba(79,70,229,0.3);}
+    .subj-scroll{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+    .subj-chip{padding:6px 14px;border-radius:10px;border:2px solid #e0e7ff;background:white;font-size:12px;font-weight:800;color:#374151;cursor:pointer;transition:all .15s;}
+    .subj-chip.active,.subj-chip:hover{background:linear-gradient(135deg,#10b981,#059669);color:white;border-color:transparent;}
+
+    /* SEARCH BAR */
+    .search-wrap{position:relative;margin-bottom:14px;}
+    .search-wrap input{width:100%;padding:11px 14px 11px 40px;border-radius:12px;border:2px solid #e2e8f0;background:#f8fafc;font-family:'Nunito',sans-serif;font-size:14px;color:#1a1f36;outline:none;transition:border .12s;}
+    .search-wrap input:focus{border-color:#a5b4fc;background:white;}
+    .search-wrap .si{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;}
+
+    /* QUESTION NAV GRID */
+    .qnav-panel{background:#f8fafc;border:2px solid #e2e8f0;border-radius:14px;padding:14px;margin-bottom:14px;}
+    .qnav-legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
+    .qnav-leg{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#6b7280;}
+    .qnav-dot{width:14px;height:14px;border-radius:4px;}
+    .qnav-dot.attempted{background:#10b981;}.qnav-dot.skipped{background:#f59e0b;}.qnav-dot.notvisited{background:#e2e8f0;}
+    .qnav-stats{display:flex;gap:8px;margin-bottom:10px;flex-wrap:wrap;}
+    .qnav-stat{flex:1;min-width:80px;border-radius:10px;padding:7px 10px;text-align:center;}
+    .qnav-stat.ns-attempted{background:#d1fae5;}.qnav-stat.ns-skipped{background:#fef3c7;}.qnav-stat.ns-notvisited{background:#f1f5f9;}
+    .qnav-stat b{font-size:18px;font-weight:900;display:block;}.qnav-stat span{font-size:10px;font-weight:700;color:#6b7280;}
+    .qnav-grid{display:flex;flex-wrap:wrap;gap:5px;}
+    .qnav-btn{width:34px;height:34px;border-radius:8px;border:none;font-size:12px;font-weight:800;cursor:pointer;transition:all .12s;background:#e2e8f0;color:#374151;}
+    .qnav-btn.attempted{background:#10b981;color:white;}.qnav-btn.skipped{background:#f59e0b;color:white;}.qnav-btn.current{box-shadow:0 0 0 3px #4f46e5;transform:scale(1.1);}
+
+    /* SKIP + SAVE NEXT BUTTONS */
+    .test-btn-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;justify-content:space-between;align-items:center;}
+    .btn-skip{background:#fef3c7;border:2px solid #fcd34d;color:#92400e;border-radius:12px;padding:10px 20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer;}
+    .btn-savenext{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;border:none;border-radius:12px;padding:10px 20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 3px 10px rgba(79,70,229,0.3);}
+    .btn-savenext:hover{transform:translateY(-1px);}
+
+    /* RANK BADGE IN PROFILE */
+    .rank-badge{margin-top:10px;background:linear-gradient(135deg,#f59e0b,#fbbf24);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;}
+    .rank-icon{font-size:24px;}.rank-info b{font-size:14px;font-weight:900;display:block;}.rank-info span{font-size:11px;opacity:0.85;}
+
+    /* CHATBOT */
+    .chat-fab{position:fixed;bottom:24px;right:24px;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;color:white;font-size:24px;cursor:pointer;box-shadow:0 6px 20px rgba(79,70,229,0.4);z-index:999;transition:transform .2s;}
+    .chat-fab:hover{transform:scale(1.1);}
+    .chat-box{position:fixed;bottom:90px;right:24px;width:300px;background:white;border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,0.15);z-index:998;display:none;flex-direction:column;overflow:hidden;max-height:400px;}
+    .chat-box.open{display:flex;}
+    .chat-head{background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:14px 16px;color:white;display:flex;align-items:center;gap:10px;}
+    .chat-head b{font-size:14px;font-weight:800;flex:1;}
+    .chat-msgs{flex:1;overflow-y:auto;padding:14px;display:flex;flex-direction:column;gap:8px;min-height:200px;}
+    .chat-msg{max-width:85%;padding:8px 12px;border-radius:12px;font-size:13px;font-weight:600;line-height:1.4;}
+    .chat-msg.bot{background:#f0f4ff;color:#1a1f36;align-self:flex-start;border-bottom-left-radius:4px;}
+    .chat-msg.user{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;align-self:flex-end;border-bottom-right-radius:4px;}
+    .chat-input-row{display:flex;gap:6px;padding:10px 12px;border-top:1px solid #f1f5f9;}
+    .chat-input-row input{flex:1;padding:8px 12px;border-radius:10px;border:2px solid #e2e8f0;font-family:'Nunito',sans-serif;font-size:13px;outline:none;}
+    .chat-input-row input:focus{border-color:#a5b4fc;}
+    .chat-send{background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;border-radius:10px;padding:8px 12px;color:white;font-size:16px;cursor:pointer;}
+
+    /* SYLLABUS IN ADMIN */
+    .syl-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;margin-bottom:8px;}
+    .syl-row span{font-size:13px;font-weight:700;}
+    .btn-dl{background:#eef2ff;border:1.5px solid #c7d2fe;color:#4f46e5;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:800;cursor:pointer;}
   </style>
 </head>
 <body>
@@ -246,6 +306,24 @@
           <div class="sec-header">
             <div><div class="card-title">📚 Courses</div><div class="card-sub">Pick a course and start your test</div></div>
           </div>
+          <!-- SEARCH -->
+          <div class="search-wrap">
+            <span class="si">🔍</span>
+            <input type="text" id="courseSearch" placeholder="Search courses..." oninput="filterCourses()"/>
+          </div>
+          <!-- CLASS FILTER -->
+          <div class="class-scroll" id="classFilter">
+            <button class="class-chip active" onclick="setClass('all',this)">All</button>
+            <button class="class-chip" onclick="setClass('Balvatika',this)">Balvatika</button>
+            <button class="class-chip" onclick="setClass('Class 1',this)">Class 1</button>
+            <button class="class-chip" onclick="setClass('Class 2',this)">Class 2</button>
+            <button class="class-chip" onclick="setClass('Class 3',this)">Class 3</button>
+            <button class="class-chip" onclick="setClass('Class 4',this)">Class 4</button>
+            <button class="class-chip" onclick="setClass('Class 5',this)">Class 5</button>
+            <button class="class-chip" onclick="setClass('Class 6',this)">Class 6</button>
+            <button class="class-chip" onclick="setClass('Class 7',this)">Class 7</button>
+            <button class="class-chip" onclick="setClass('Class 8',this)">Class 8</button>
+          </div>
           <div id="courseList"><div class="empty"><div class="empty-icon">📭</div>Loading courses...</div></div>
         </div>
 
@@ -259,9 +337,30 @@
             <div class="timer-box" id="timerDisplay">00:00</div>
           </div>
           <div id="questionArea"></div>
-          <div style="display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;">
-            <button class="btn-submit" onclick="submitTest()">✅ Submit Test</button>
-            <button class="btn-close" onclick="closeTest()">✖ Close</button>
+          <!-- QUESTION NAV -->
+          <div class="qnav-panel" id="qnavPanel" style="display:none;">
+            <div class="qnav-stats">
+              <div class="qnav-stat ns-attempted"><b id="navAttempted">0</b><span>Attempted</span></div>
+              <div class="qnav-stat ns-skipped"><b id="navSkipped">0</b><span>Skipped</span></div>
+              <div class="qnav-stat ns-notvisited"><b id="navNotVisited">0</b><span>Not Visited</span></div>
+            </div>
+            <div class="qnav-legend">
+              <div class="qnav-leg"><div class="qnav-dot attempted"></div>Attempted</div>
+              <div class="qnav-leg"><div class="qnav-dot skipped"></div>Skipped</div>
+              <div class="qnav-leg"><div class="qnav-dot notvisited"></div>Not Visited</div>
+            </div>
+            <div class="qnav-grid" id="qnavGrid"></div>
+          </div>
+          <!-- ONE-BY-ONE NAV BUTTONS -->
+          <div class="test-btn-row">
+            <div style="display:flex;gap:8px;">
+              <button class="btn-skip" onclick="skipQuestion()">⏭ Skip</button>
+              <button class="btn-savenext" onclick="saveAndNext()">Save & Next ▶</button>
+            </div>
+            <div style="display:flex;gap:8px;">
+              <button class="btn-submit" onclick="submitTest()">✅ Submit</button>
+              <button class="btn-close" onclick="closeTest()">✖</button>
+            </div>
           </div>
         </div>
 
@@ -286,6 +385,10 @@
           <div class="profile-name" id="userName">—</div>
           <div class="profile-email" id="userEmail">—</div>
           <div class="role-badge" id="userRole">STUDENT</div>
+          <div class="rank-badge" id="rankBadge" style="display:none;">
+            <div class="rank-icon" id="rankIcon">🥇</div>
+            <div class="rank-info"><b id="rankTitle">High Achiever</b><span id="rankAvg">Avg: —%</span></div>
+          </div>
           <button class="btn-logout" onclick="logout()">🚪 Logout</button>
         </div>
 
@@ -357,6 +460,23 @@
         </div>
 
 <div class="toast" id="toast"></div>
+
+<!-- CHATBOT -->
+<button class="chat-fab" id="chatFab" onclick="toggleChat()">🦉</button>
+<div class="chat-box" id="chatBox">
+  <div class="chat-head">
+    <div style="width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:18px;">🦉</div>
+    <b>TestNest AI Tutor</b>
+    <button onclick="toggleChat()" style="background:none;border:none;color:white;font-size:18px;cursor:pointer;">✕</button>
+  </div>
+  <div class="chat-msgs" id="chatMsgs">
+    <div class="chat-msg bot">Hi dear learner! 👋 Ask me any question and I will try to answer it!</div>
+  </div>
+  <div class="chat-input-row">
+    <input type="text" id="chatInput" placeholder="Type your question..." onkeydown="if(event.key==='Enter')sendChat()"/>
+    <button class="chat-send" onclick="sendChat()">➤</button>
+  </div>
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
@@ -450,7 +570,7 @@ auth.onAuthStateChanged(user=>{
   g("profileAvatar").textContent=initials(name);
   g("adminCard").style.display=role==="admin"?"block":"none";
   g("manageBox").style.display=role==="admin"?"block":"none";
-  loadCourses();loadLeaderboard();loadPastScores();refreshLbPick();
+  loadCourses();loadLeaderboard();loadPastScores();refreshLbPick();updateRankBadge();
   if(role==="admin"){
     refreshCoursePick();refreshManagePick();
     const lbcb=g("lbClearBtn");if(lbcb)lbcb.style.display="block";
@@ -761,6 +881,235 @@ function refreshLbPick(){
       sel.appendChild(o);
     });
   }).catch(()=>{});
+}
+
+/* ══ CLASS FILTER & SEARCH ══ */
+let activeClass = 'all';
+let allCourseDocs = [];
+
+function setClass(cls, btn){
+  activeClass = cls;
+  document.querySelectorAll('.class-chip').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderFilteredCourses();
+}
+
+function filterCourses(){ renderFilteredCourses(); }
+
+function renderFilteredCourses(){
+  const div = g('courseList');
+  const search = (g('courseSearch')?.value||'').toLowerCase();
+  let filtered = allCourseDocs.filter(doc=>{
+    const name = doc.id.toLowerCase();
+    const matchClass = activeClass==='all' || name.includes(activeClass.toLowerCase());
+    const matchSearch = !search || name.includes(search);
+    return matchClass && matchSearch;
+  });
+  if(!filtered.length){
+    div.innerHTML='<div class="empty"><div class="empty-icon">🔍</div>No courses found.</div>';return;
+  }
+  const emojisL=["📘","📗","📙","📕","🔬","🧮","🌍","🎨","🏛️","⚗️"];
+  let html2="";
+  filtered.forEach((doc,i)=>{
+    const name=doc.id, paid=!!doc.data().paid, em=emojisL[i%emojisL.length];
+    html2+=`<div class="course-card">
+      <div class="course-icon" style="background:linear-gradient(135deg,${['#4f46e5,#7c3aed','#10b981,#059669','#f59e0b,#ef4444','#0ea5e9,#6366f1'][i%4]})">${em}</div>
+      <div class="course-info" style="flex:1"><b>${esc(name)}</b><span>${paid?"🔒 Premium Course":"✅ Free Course"}</span></div>
+      <div>${paid?'<span class="lock-tag">🔒 Locked</span>':`<button class="btn-start" onclick="startTest('${escQ(name)}')">Start ▶</button>`}</div>
+    </div>`;
+  });
+  div.innerHTML=html2;
+}
+
+/* Override loadCourses to cache docs */
+const _origLoadCourses = loadCourses;
+function loadCourses(){
+  const div=g("courseList");div.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
+  db.collection("courses").get().then(snap=>{
+    if(snap.empty){div.innerHTML='<div class="empty"><div class="empty-icon">📭</div>No courses yet.</div>';return;}
+    allCourseDocs=[];snap.forEach(doc=>allCourseDocs.push(doc));
+    renderFilteredCourses();
+  }).catch(e=>{div.innerHTML=`<div class="empty">❌ ${esc(e.message)}</div>`;});
+}
+
+/* ══ QUESTION-BY-QUESTION NAVIGATION ══ */
+let currentQIndex = 0;
+let qAnswers = [];  // -1 = not visited, -2 = skipped, 0-3 = answered
+let qStatus = [];   // 'notvisited','skipped','attempted'
+
+function startTest(course){
+  currentCourse=course;
+  g("testTitle").textContent="📝 "+course;
+  g("testBox").style.display="block";
+  g("questionArea").innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading questions...</div>';
+  g("qCountInfo").textContent="";
+  stopTimer();
+  db.collection("courses").doc(course).collection("questions").get().then(snap=>{
+    currentQuestions=[];snap.forEach(doc=>currentQuestions.push(doc.data()));
+    if(!currentQuestions.length){g("questionArea").innerHTML='<div class="empty"><div class="empty-icon">📭</div>No questions yet.</div>';return;}
+    currentQIndex=0;
+    qAnswers=new Array(currentQuestions.length).fill(-1);
+    qStatus=new Array(currentQuestions.length).fill('notvisited');
+    g("qCountInfo").textContent=currentQuestions.length+" questions";
+    g("qnavPanel").style.display="block";
+    renderSingleQ(currentQIndex);
+    buildNavGrid();
+    startTimer((currentQuestions[0].time||5)*60);
+    g("testBox").scrollIntoView({behavior:"smooth"});
+  }).catch(e=>alert(e.message));
+}
+
+function renderSingleQ(idx){
+  const q = currentQuestions[idx];
+  const labels=["A","B","C","D"];
+  if(qStatus[idx]==='notvisited') qStatus[idx]='notvisited'; // stays until saved
+  let opts="";
+  (q.options||[]).forEach((o,oi)=>{
+    const sel = qAnswers[idx]===oi;
+    opts+=`<label class="opt${sel?' selected':''}" onclick="selectOpt(${oi},this,${idx})">
+      <input type="radio" name="cq" value="${oi}" ${sel?'checked':''}>
+      <span style="font-weight:700;color:#4f46e5;min-width:20px;">${labels[oi]}.</span>
+      <span>${esc(o)}</span>
+    </label>`;
+  });
+  g("questionArea").innerHTML=`<div class="qbox fade-in">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <b style="font-size:13px;color:#6b7280;">Question ${idx+1} of ${currentQuestions.length}</b>
+    </div>
+    <b>Q${idx+1}. ${esc(q.question)}</b>
+    <div>${opts}</div>
+  </div>`;
+  updateNavGrid();
+  updateNavStats();
+}
+
+function selectOpt(val, lbl, idx){
+  qAnswers[idx]=val;
+  document.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
+  lbl.classList.add('selected');
+}
+
+function saveAndNext(){
+  const sel=document.querySelector('input[name="cq"]:checked');
+  if(sel) qAnswers[currentQIndex]=parseInt(sel.value);
+  if(qAnswers[currentQIndex]>=0) qStatus[currentQIndex]='attempted';
+  if(currentQIndex<currentQuestions.length-1){
+    currentQIndex++;
+    renderSingleQ(currentQIndex);
+  } else {
+    toast("✅ All questions done! Click Submit to finish.");
+  }
+  buildNavGrid();
+}
+
+function skipQuestion(){
+  qStatus[currentQIndex]='skipped';
+  if(qAnswers[currentQIndex]===-1) qAnswers[currentQIndex]=-2;
+  if(currentQIndex<currentQuestions.length-1){
+    currentQIndex++;
+    renderSingleQ(currentQIndex);
+  }
+  buildNavGrid();
+}
+
+function buildNavGrid(){
+  const grid=g("qnavGrid"); if(!grid) return;
+  let html="";
+  qStatus.forEach((st,i)=>{
+    const cls=i===currentQIndex?'current '+(st==='attempted'?'attempted':st==='skipped'?'skipped':''):st;
+    html+=`<button class="qnav-btn ${cls}" onclick="goToQ(${i})">${i+1}</button>`;
+  });
+  grid.innerHTML=html;
+  updateNavStats();
+}
+
+function updateNavGrid(){ buildNavGrid(); }
+
+function updateNavStats(){
+  const att=qStatus.filter(s=>s==='attempted').length;
+  const sk=qStatus.filter(s=>s==='skipped').length;
+  const nv=qStatus.filter(s=>s==='notvisited').length;
+  const ea=g("navAttempted"),es=g("navSkipped"),en=g("navNotVisited");
+  if(ea) ea.textContent=att;
+  if(es) es.textContent=sk;
+  if(en) en.textContent=nv;
+}
+
+function goToQ(idx){
+  currentQIndex=idx;
+  renderSingleQ(idx);
+}
+
+/* Override submitTest to use qAnswers */
+function submitTest(){
+  stopTimer();
+  if(!currentQuestions.length){alert("No questions.");return;}
+  let score=0;
+  currentQuestions.forEach((q,i)=>{
+    if(qAnswers[i]===q.correct) score++;
+  });
+  const pct=Math.round((score/currentQuestions.length)*100);
+  const u=auth.currentUser;
+  db.collection("leaderboard").add({user:u.displayName||u.email||"Student",email:u.email||"",score,total:currentQuestions.length,pct,course:currentCourse,at:firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{
+    const lbSel=g("lbCourseSel");if(lbSel)lbSel.value=currentCourse;
+    loadLeaderboard();loadPastScores();updateRankBadge();
+  });
+  showReview(score,pct,qAnswers);
+  closeTest();
+}
+
+function closeTest(){
+  stopTimer();
+  g("testBox").style.display="none";
+  g("qnavPanel") && (g("qnavPanel").style.display="none");
+  currentQIndex=0; qAnswers=[]; qStatus=[];
+}
+
+/* ══ RANK BADGE ══ */
+function updateRankBadge(){
+  const u=auth.currentUser; if(!u) return;
+  db.collection('leaderboard').where('email','==',u.email||'').get().then(snap=>{
+    if(snap.empty) return;
+    let total=0,count=0;
+    snap.forEach(doc=>{const d=doc.data();if(d.pct!==undefined){total+=d.pct;count++;}});
+    const avg=count?Math.round(total/count):0;
+    const rank=avg>=90?{icon:'🥇',title:'Gold Achiever'}:avg>=75?{icon:'🥈',title:'Silver Achiever'}:avg>=60?{icon:'🥉',title:'Bronze Achiever'}:{icon:'📚',title:'Active Learner'};
+    const rb=g('rankBadge');
+    if(rb){rb.style.display='flex';g('rankIcon').textContent=rank.icon;g('rankTitle').textContent=rank.title;g('rankAvg').textContent='Avg: '+avg+'%';}
+  }).catch(()=>{});
+}
+
+/* ══ CHATBOT ══ */
+function toggleChat(){
+  const box=g('chatBox');
+  box.classList.toggle('open');
+  if(box.classList.contains('open')) g('chatInput').focus();
+}
+
+function sendChat(){
+  const inp=g('chatInput');
+  const msg=(inp.value||'').trim();
+  if(!msg) return;
+  inp.value='';
+  const msgs=g('chatMsgs');
+  msgs.innerHTML+=`<div class="chat-msg user">${esc(msg)}</div>`;
+  msgs.innerHTML+=`<div class="chat-msg bot" id="chatTyping">🦉 Thinking...</div>`;
+  msgs.scrollTop=msgs.scrollHeight;
+  // Simple rule-based responses
+  const lower=msg.toLowerCase();
+  let reply="I'm here to help! Ask me about any subject or topic you're studying. 📚";
+  if(lower.includes('hello')||lower.includes('hi')) reply="Hello! 👋 Great to see you here! What would you like to learn today?";
+  else if(lower.includes('maths')||lower.includes('math')) reply="Maths is fun! 🧮 Practice makes perfect. Which topic in Maths do you need help with?";
+  else if(lower.includes('science')) reply="Science is amazing! 🔬 Are you studying Physics, Chemistry, or Biology?";
+  else if(lower.includes('english')) reply="English is the language of the world! 📖 Grammar, vocabulary, or comprehension?";
+  else if(lower.includes('score')||lower.includes('marks')) reply="Keep practising and your scores will improve! 🌟 Attempt tests regularly!";
+  else if(lower.includes('help')) reply="I'm here to help! 💪 Ask me about any subject or tell me what you're struggling with.";
+  else if(lower.includes('thank')) reply="You're welcome! 😊 Keep learning and never give up! 🚀";
+  setTimeout(()=>{
+    const t=document.getElementById('chatTyping');
+    if(t) t.outerHTML=`<div class="chat-msg bot">${reply}</div>`;
+    msgs.scrollTop=msgs.scrollHeight;
+  },800);
 }
 
 </script>
