@@ -584,22 +584,7 @@ auth.onAuthStateChanged(user=>{
 const emojis=["📘","📗","📙","📕","🔬","🧮","🌍","🎨","🏛️","⚗️"];
 function courseEmoji(name,i){return emojis[i%emojis.length];}
 
-function loadCourses(){
-  const div=g("courseList");div.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
-  db.collection("courses").get().then(snap=>{
-    if(snap.empty){div.innerHTML='<div class="empty"><div class="empty-icon">📭</div>No courses yet. Admin please add courses.</div>';return;}
-    let html="",i=0;
-    snap.forEach(doc=>{
-      const name=doc.id,paid=!!doc.data().paid,em=courseEmoji(name,i++);
-      html+=`<div class="course-card">
-        <div class="course-icon">${em}</div>
-        <div class="course-info" style="flex:1"><b>${esc(name)}</b><span>${paid?"🔒 Premium Course":"✅ Free Course"}</span></div>
-        <div>${paid?'<span class="lock-tag">🔒 Locked</span>':`<button class="btn-start" onclick="startTest('${escQ(name)}')">Start Test ▶</button>`}</div>
-      </div>`;
-    });
-    div.innerHTML=html;
-  }).catch(e=>{div.innerHTML=`<div class="empty"><div class="empty-icon">❌</div>${esc(e.message)}</div>`;});
-}
+/* loadCourses moved below */
 
 function addCourse(){
   const name=g("courseName").value.trim(),paid=g("paidCourse").checked;
@@ -668,40 +653,9 @@ function deleteQuestion(course,qid){
 // TEST
 let currentCourse="",currentQuestions=[],timeLeft=0,timerInt=null;
 
-function startTest(course){
-  currentCourse=course;
-  g("testTitle").textContent="📝 "+course;
-  g("testBox").style.display="block";
-  g("questionArea").innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading questions...</div>';
-  g("qCountInfo").textContent="";
-  stopTimer();
-  db.collection("courses").doc(course).collection("questions").get().then(snap=>{
-    currentQuestions=[];snap.forEach(doc=>currentQuestions.push(doc.data()));
-    if(!currentQuestions.length){g("questionArea").innerHTML='<div class="empty"><div class="empty-icon">📭</div>No questions in this course yet.</div>';return;}
-    g("qCountInfo").textContent=currentQuestions.length+" questions";
-    renderTest();startTimer((currentQuestions[0].time||5)*60);
-    g("testBox").scrollIntoView({behavior:"smooth"});
-  }).catch(e=>alert(e.message));
-}
+/* startTest moved below */
 
-function renderTest(){
-  const div=g("questionArea");div.innerHTML="";
-  const labels=["A","B","C","D"];
-  currentQuestions.forEach((q,i)=>{
-    let opts="";
-    (q.options||[]).forEach((o,idx)=>{
-      opts+=`<label class="opt" onclick="this.classList.add('selected');document.querySelectorAll('[name=q${i}]').forEach(r=>r.closest('.opt').classList.remove('selected'));this.classList.add('selected')">
-        <input type="radio" name="q${i}" value="${idx}">
-        <span style="font-weight:700;color:#4f46e5;min-width:20px;">${labels[idx]}.</span>
-        <span>${esc(o)}</span>
-      </label>`;
-    });
-    div.innerHTML+=`<div class="qbox fade-in">
-      <b>Q${i+1}. ${esc(q.question)}</b>
-      <div>${opts}</div>
-    </div>`;
-  });
-}
+/* renderTest replaced by renderSingleQ */
 
 function startTimer(s){stopTimer();timeLeft=s;updateTimer();timerInt=setInterval(()=>{timeLeft--;updateTimer();if(timeLeft<=0){stopTimer();submitTest();}},1000);}
 function stopTimer(){if(timerInt){clearInterval(timerInt);timerInt=null;}}
@@ -710,22 +664,9 @@ function updateTimer(){
   g("timerDisplay").textContent=(m<10?"0":"")+m+":"+(s<10?"0":"")+s;
   g("timerDisplay").style.background=timeLeft<=30?"linear-gradient(135deg,#ef4444,#dc2626)":"linear-gradient(135deg,#10b981,#059669)";
 }
-function closeTest(){stopTimer();g("testBox").style.display="none";}
+/* closeTest moved below */
 
-function submitTest(){
-  stopTimer();if(!currentQuestions.length){alert("No questions.");return;}
-  let score=0;
-  currentQuestions.forEach((q,i)=>{const sel=document.querySelector(`input[name="q${i}"]:checked`);if(sel&&parseInt(sel.value,10)===q.correct)score++;});
-  const pct=Math.round((score/currentQuestions.length)*100);
-  const msg=pct>=80?"🎉 Excellent!":pct>=60?"👍 Good job!":pct>=40?"📚 Keep practising!":"💪 Don't give up!";
-  alert(`${msg}\n\nScore: ${score}/${currentQuestions.length} (${pct}%)`);
-  const u=auth.currentUser;
-  db.collection("leaderboard").add({user:u.displayName||u.email||"Student",email:u.email||"",score,total:currentQuestions.length,pct,course:currentCourse,at:firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{
-    const lbSel=g("lbCourseSel");if(lbSel)lbSel.value=currentCourse;
-    loadLeaderboard();loadPastScores();
-  });
-  closeTest();
-}
+/* submitTest moved below */
 
 function loadLeaderboard(){
   const div=g("leaderboard"); if(!div) return;
@@ -925,7 +866,6 @@ function renderFilteredCourses(){
 }
 
 /* Override loadCourses to cache docs */
-const _origLoadCourses = loadCourses;
 function loadCourses(){
   const div=g("courseList");div.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
   db.collection("courses").get().then(snap=>{
