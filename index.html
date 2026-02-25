@@ -1086,6 +1086,8 @@ function toggleChat(){
   if(box.classList.contains('open')) g('chatInput').focus();
 }
 
+let chatHistory = [];
+
 function sendChat(){
   const inp=g('chatInput');
   const msg=(inp.value||'').trim();
@@ -1093,23 +1095,39 @@ function sendChat(){
   inp.value='';
   const msgs=g('chatMsgs');
   msgs.innerHTML+=`<div class="chat-msg user">${esc(msg)}</div>`;
-  msgs.innerHTML+=`<div class="chat-msg bot" id="chatTyping">🦉 Thinking...</div>`;
+  const typingId='ct'+Date.now();
+  msgs.innerHTML+=`<div class="chat-msg bot" id="${typingId}">🦉 Thinking...</div>`;
   msgs.scrollTop=msgs.scrollHeight;
-  // Simple rule-based responses
-  const lower=msg.toLowerCase();
-  let reply="I'm here to help! Ask me about any subject or topic you're studying. 📚";
-  if(lower.includes('hello')||lower.includes('hi')) reply="Hello! 👋 Great to see you here! What would you like to learn today?";
-  else if(lower.includes('maths')||lower.includes('math')) reply="Maths is fun! 🧮 Practice makes perfect. Which topic in Maths do you need help with?";
-  else if(lower.includes('science')) reply="Science is amazing! 🔬 Are you studying Physics, Chemistry, or Biology?";
-  else if(lower.includes('english')) reply="English is the language of the world! 📖 Grammar, vocabulary, or comprehension?";
-  else if(lower.includes('score')||lower.includes('marks')) reply="Keep practising and your scores will improve! 🌟 Attempt tests regularly!";
-  else if(lower.includes('help')) reply="I'm here to help! 💪 Ask me about any subject or tell me what you're struggling with.";
-  else if(lower.includes('thank')) reply="You're welcome! 😊 Keep learning and never give up! 🚀";
-  setTimeout(()=>{
-    const t=document.getElementById('chatTyping');
-    if(t) t.outerHTML=`<div class="chat-msg bot">${reply}</div>`;
+
+  // Add to history
+  chatHistory.push({role:"user", content: msg});
+
+  // Call Claude AI API
+  fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      model:"claude-sonnet-4-20250514",
+      max_tokens:1000,
+      system:"You are TestNest AI Tutor 🦉, a friendly and helpful tutor for Indian school students (Class 1 to Class 8). Answer questions clearly and simply. Use simple English. Add relevant emojis. Keep answers short (2-4 sentences). If it's a subject question, explain with a simple example. Always encourage the student. Never say you are Claude or made by Anthropic — you are TestNest AI Tutor.",
+      messages: chatHistory
+    })
+  })
+  .then(r=>r.json())
+  .then(data=>{
+    const reply = data.content?.[0]?.text || "Sorry, I couldn't understand that. Please try again! 😊";
+    chatHistory.push({role:"assistant", content: reply});
+    // Keep history to last 10 messages
+    if(chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
+    const t=document.getElementById(typingId);
+    if(t) t.outerHTML=`<div class="chat-msg bot">${esc(reply)}</div>`;
     msgs.scrollTop=msgs.scrollHeight;
-  },800);
+  })
+  .catch(()=>{
+    const t=document.getElementById(typingId);
+    if(t) t.outerHTML=`<div class="chat-msg bot">🦉 Hmm, I'm having trouble connecting. Please try again!</div>`;
+    msgs.scrollTop=msgs.scrollHeight;
+  });
 }
 
 </script>
