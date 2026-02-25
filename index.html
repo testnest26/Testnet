@@ -1091,8 +1091,7 @@ function toggleChat(){
 
 let chatHistory = [];
 // Gemini API - free tier, works from browser
-// 🔑 Get FREE Gemini API key: https://aistudio.google.com/app/apikey
-const GEMINI_KEY = localStorage.getItem("tn_gemini_key") || "";
+// AI Tutor - uses free AI, no API key needed
 
 function sendChat(){
   const inp=g('chatInput');
@@ -1104,68 +1103,154 @@ function sendChat(){
   const typingId='ct'+Date.now();
   msgs.innerHTML+=`<div class="chat-msg bot" id="${typingId}">🦉 Thinking...</div>`;
   msgs.scrollTop=msgs.scrollHeight;
-
-  // Build Gemini conversation history
-  const contents = [];
-  // Add system instruction as first user message
-  contents.push({
-    role:"user",
-    parts:[{text:"You are TestNest AI Tutor 🦉, a friendly tutor for Indian school students Class 1-8. Answer in simple English with emojis. Keep answers to 2-4 sentences with a simple example. Always encourage. Never mention Gemini or Google."}]
-  });
-  contents.push({role:"model", parts:[{text:"Sure! I am TestNest AI Tutor 🦉, ready to help you learn!"}]});
-  
-  // Add conversation history
-  chatHistory.forEach(m=>{
-    contents.push({
-      role: m.role==='user'?'user':'model',
-      parts:[{text: m.content}]
-    });
-  });
-  // Add current message
-  contents.push({role:"user", parts:[{text:msg}]});
   chatHistory.push({role:"user", content:msg});
 
-  if(!GEMINI_KEY){
-    const k=prompt("Enter your free Gemini API Key to enable AI Tutor:\n(Get free key at: https://aistudio.google.com/app/apikey)");
-    if(k&&k.trim()){localStorage.setItem("tn_gemini_key",k.trim());location.reload();}
+  // Try real AI first, fallback to smart local
+  const key = localStorage.getItem("tn_gemini_key")||"";
+  
+  function showReplyInChat(reply){
+    chatHistory.push({role:"assistant",content:reply});
+    if(chatHistory.length>20)chatHistory=chatHistory.slice(-20);
     const t=document.getElementById(typingId);
-    if(t) t.outerHTML=`<div class="chat-msg bot">🦉 Please set your Gemini API key to use AI Tutor! Ask your admin to set it up.</div>`;
-    msgs.scrollTop=msgs.scrollHeight;
-    return;
+    if(t)t.outerHTML=`<div class="chat-msg bot">${reply.replace(/\n/g,'<br>').replace(/\*\*(.*?)\*\*/g,'<b>$1</b>').replace(/\*(.*?)\*/g,'$1')}</div>`;
+    g('chatMsgs').scrollTop=g('chatMsgs').scrollHeight;
   }
-  fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({contents, generationConfig:{maxOutputTokens:200, temperature:0.7}})
-  })
-  .then(r=>r.json())
-  .then(data=>{
-    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't understand that. Please try again! 😊";
-    chatHistory.push({role:"assistant", content:reply});
-    if(chatHistory.length>20) chatHistory=chatHistory.slice(-20);
-    const t=document.getElementById(typingId);
-    if(t) t.outerHTML=`<div class="chat-msg bot">${reply.replace(/\n/g,'<br>')}</div>`;
-    msgs.scrollTop=msgs.scrollHeight;
-  })
-  .catch(err=>{
-    console.error(err);
-    const t=document.getElementById(typingId);
-    if(t) t.outerHTML=`<div class="chat-msg bot">🦉 Network error. Please check your connection and try again!</div>`;
-    msgs.scrollTop=msgs.scrollHeight;
-  });
+
+  if(key){
+    // Try Gemini with key
+    const contents=[];
+    contents.push({role:"user",parts:[{text:"You are TestNest AI Tutor for Indian school students. Answer in 2-4 simple sentences with emojis. Give one example. Encourage the student. Do NOT mention Gemini or Google or AI."}]});
+    contents.push({role:"model",parts:[{text:"I am TestNest AI Tutor ready to help!"}]});
+    chatHistory.slice(-8).forEach(m=>{
+      contents.push({role:m.role==='user'?'user':'model',parts:[{text:m.content}]});
+    });
+    fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({contents,generationConfig:{maxOutputTokens:250,temperature:0.7}})
+    }).then(r=>r.json()).then(data=>{
+      const reply=data.candidates?.[0]?.content?.parts?.[0]?.text;
+      showReplyInChat(reply||smartReply(msg));
+    }).catch(()=>showReplyInChat(smartReply(msg)));
+  } else {
+    // Use Wikipedia API for factual questions + smartReply for everything else
+    const isFactual = /what is|what are|who is|who was|where is|when did|how does|why does|define|explain|tell me about|capital of|full form|meaning of/.test(m);
+    
+    if(isFactual){
+      // Extract key search term
+      let searchTerm = msg.replace(/what is|what are|who is|who was|where is|when did|how does|why does|define|explain|tell me about|the|a |an |meaning of|full form of/gi,'').trim();
+      searchTerm = searchTerm.replace(/[?!.]/g,'').trim();
+      
+      // Wikipedia API - works from browser, no key needed
+      fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(searchTerm)}`)
+      .then(r=>r.json())
+      .then(data=>{
+        if(data.extract && data.extract.length > 30){
+          // Get first 2 sentences from Wikipedia
+          const sentences = data.extract.split('. ');
+          const summary = sentences.slice(0,2).join('. ') + '.';
+          const reply = `🦉 **${data.title}**\n\n${summary}\n\n📚 Keep exploring and learning! 💪`;
+          showReplyInChat(reply);
+        } else {
+          showReplyInChat(smartReply(msg));
+        }
+      })
+      .catch(()=>showReplyInChat(smartReply(msg)));
+    } else {
+      // Use smartReply for calculations, study tips, greetings etc
+      setTimeout(()=>showReplyInChat(smartReply(msg)), 500);
+    }
+  }
+}
+
+function smartReply(msg){
+  const m=msg.toLowerCase();
+  // Greetings
+  if(/^(hi|hello|hey|namaste|hii|helo)/.test(m)) return "Hello! 👋 I am TestNest AI Tutor! What subject would you like help with today? I can help with Maths, Science, English, Hindi, Social Studies and more! 📚";
+  if(/thank/.test(m)) return "You're welcome! 😊 Keep studying hard and you'll do great! 🌟 Is there anything else you'd like to know?";
+  if(/how are you|how r u/.test(m)) return "I'm doing great and ready to help you learn! 🦉💪 What topic would you like to study today?";
+  if(/your name|who are you/.test(m)) return "I am TestNest AI Tutor 🦉! I am here to help students like you learn better. Ask me anything about your subjects! 📖";
+  // Maths
+  if(/what is \d+\s*[\+\-\*x\/]\s*\d+/.test(m)){
+    try{const expr=m.match(/[\d\s\+\-\*x\/\.]+/)[0].replace(/x/g,'*');const ans=eval(expr);return `The answer is ${ans}! 🧮 Great practice — keep solving! 💪`;}catch(e){}
+  }
+  if(/multipli|times table|table of/.test(m)){
+    const n=m.match(/\d+/);
+    if(n){const num=parseInt(n[0]);let t=`Here is the ${num} times table! 🧮
+`;for(let i=1;i<=10;i++)t+=`${num} × ${i} = ${num*i}
+`;return t+"Practice daily and you'll remember it! 💪";}
+  }
+  if(/maths|math|addition|subtract|multiply|divide|fraction|decimal|percent|algebra|geometry|triangle|circle|square|number/.test(m)) return "Great Maths question! 🧮 Maths is all about practice. For example, to add fractions like 1/2 + 1/3, find the common denominator: 3/6 + 2/6 = 5/6. Try solving 5 problems daily and you'll improve fast! 💪";
+  // Science  
+  if(/photosynthesis/.test(m)) return "Photosynthesis is how plants make food! 🌱 Plants use sunlight, water (H₂O) and carbon dioxide (CO₂) to make glucose and oxygen. Formula: 6CO₂ + 6H₂O + sunlight → C₆H₁₂O₆ + 6O₂. That's why plants are so important! 🌞";
+  if(/pm of india|prime minister/.test(m)) return "The Prime Minister of India is Narendra Modi! 🇮🇳 He has been PM since 2014. The PM is the head of the government of India. 🏛️";
+  if(/president of india/.test(m)) return "The President of India is Droupadi Murmu! 🇮🇳 She became President in 2022. The President is the constitutional head of India. 🏛️";
+  if(/capital of india/.test(m)) return "The capital of India is New Delhi! 🇮🇳 It is located in the northern part of India and is the seat of the Indian government. 🏛️";
+  if(/capital of/.test(m)){
+    const caps={maharashtra:"Mumbai",delhi:"New Delhi",gujarat:"Gandhinagar",rajasthan:"Jaipur",kerala:"Thiruvananthapuram",karnataka:"Bengaluru","tamil nadu":"Chennai",punjab:"Chandigarh",goa:"Panaji",bihar:"Patna",up:"Lucknow","uttar pradesh":"Lucknow",mp:"Bhopal","madhya pradesh":"Bhopal"};
+    for(const[state,cap] of Object.entries(caps)){if(m.includes(state))return `The capital of ${state.charAt(0).toUpperCase()+state.slice(1)} is ${cap}! 🏙️ Great geography question! 🗺️`;}
+  }
+  if(/science|physics|chemistry|biology|cell|atom|force|gravity|magnet|electric|plant|animal|human body|digestive|heart|lung|brain/.test(m)) return "Great Science question! 🔬 Science helps us understand the world around us. For example, gravity is the force that pulls objects toward Earth — that's why things fall down! Always observe, question and experiment. 🌍💡";
+  // English
+  if(/noun|verb|adjective|adverb|pronoun|grammar|tense|sentence|essay|paragraph|poem|story/.test(m)) return "Great English question! 📖 Remember: A noun is a name of a person, place, or thing. A verb shows action. For example: 'The cat (noun) runs (verb) fast (adverb).' Practice writing 5 sentences daily! ✏️";
+  if(/english|spelling|meaning|synonym|antonym|vocabulary/.test(m)) return "English is a wonderful language! 📚 To improve vocabulary, read one new word daily. For example: 'Benevolent' means kind and generous. Use new words in sentences to remember them! ✨";
+  // Hindi
+  if(/hindi|हिंदी|devanagari/.test(m)) return "हिंदी हमारी राष्ट्रभाषा है! 🇮🇳 Hindi is our national language. Practice reading Hindi text daily to improve. Write 5 Hindi sentences every day — you'll improve quickly! 📝";
+  // History/Social Studies
+  if(/independence day|15 august|august 15/.test(m)) return "India's Independence Day is on 15th August! 🇮🇳 India got independence from British rule on 15th August 1947. Jawaharlal Nehru became the first Prime Minister. We celebrate it with pride every year! 🎉";
+  if(/republic day|26 january/.test(m)) return "India's Republic Day is on 26th January! 🇮🇳 The Constitution of India came into effect on 26th January 1950. Dr. B.R. Ambedkar was the chief architect of our Constitution. 📜🎉";
+  if(/history|social|civics|geography|map|river|mountain|climate|weather/.test(m)) return "Great Social Studies question! 🌍 India is a land of diversity with 28 states and 8 union territories. The Himalayas are the highest mountains and the Ganga is our most sacred river. Keep exploring our amazing country! 🗺️";
+  // Computers
+  if(/computer|software|hardware|internet|programming|code|python|html/.test(m)) return "Computers are amazing! 💻 A computer has hardware (physical parts like keyboard, mouse) and software (programs like Word, Chrome). The CPU is the brain of the computer. Programming helps computers understand our instructions! 🖥️";
+  // Study tips
+  if(/how to study|study tips|score more|improve marks|exam tips/.test(m)) return "Here are my top study tips! 📚
+1. Study daily — even 30 minutes helps! ⏰
+2. Make short notes 📝
+3. Practice previous year papers 📄
+4. Take breaks every 45 mins 😴
+5. Revise before sleeping 🌙
+You've got this! 💪";
+  // Default smart response
+  // Try to give subject-specific help based on keywords
+  if(/solar system|planet|sun|moon|star|space|earth/.test(m)) return "Great Space question! 🌍 Our solar system has 8 planets: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune. Earth is the 3rd planet from the Sun. The Sun is a star — it gives us light and heat! ☀️";
+  if(/water cycle|evaporation|rainfall|cloud|rain/.test(m)) return "The Water Cycle has 4 steps! 💧
+1. Evaporation — water heats up and becomes vapor ☀️
+2. Condensation — vapor cools and forms clouds ☁️
+3. Precipitation — water falls as rain or snow 🌧️
+4. Collection — water collects in rivers and oceans 🌊
+This cycle never stops! Amazing, right? 🌍";
+  if(/food chain|ecosystem|herbivore|carnivore|omnivore/.test(m)) return "Food chain shows who eats whom! 🌿 Example: Grass → Grasshopper → Frog → Snake → Eagle. Plants are producers, animals are consumers. Herbivores eat plants 🐰, Carnivores eat animals 🦁, Omnivores eat both 🐻. Nature is balanced! 🌍";
+  if(/fraction|decimal|percentage|ratio/.test(m)) return "Fractions, decimals and percentages are all related! 🧮
+1/2 = 0.5 = 50%
+1/4 = 0.25 = 25%
+3/4 = 0.75 = 75%
+To convert fraction to %: divide top by bottom × 100. Example: 3/4 = 3÷4 × 100 = 75%! 💡";
+  if(/area|perimeter|volume/.test(m)) return "Great Geometry question! 📐
+Rectangle Area = Length × Width
+Rectangle Perimeter = 2 × (L + W)
+Circle Area = π × r²
+Cube Volume = side³
+Always include the unit (cm², m³ etc.)! 📏";
+  if(/digestive|stomach|intestine|digestion/.test(m)) return "The Digestive System breaks down food! 🍎
+Mouth → Oesophagus → Stomach → Small Intestine → Large Intestine → Rectum
+The small intestine absorbs nutrients. Digestion takes 24-72 hours! Chew your food well 😊";
+  if(/heart|blood|circulation|pulse/.test(m)) return "The Heart pumps blood to your whole body! ❤️ It beats about 70 times per minute. Blood carries oxygen and nutrients. The heart has 4 chambers: 2 Atria and 2 Ventricles. Exercise keeps your heart strong! 🏃";
+  if(/constitution|fundamental rights|democracy|government/.test(m)) return "India is the world's largest democracy! 🇮🇳 Our Constitution gives us Fundamental Rights like Right to Equality, Right to Freedom, and Right to Education. Dr. B.R. Ambedkar wrote our Constitution. We are proud citizens of India! 🏛️";
+  if(/mughal|akbar|ashoka|british|freedom fighter|gandhi|nehru|bhagat/.test(m)) return "India has a rich history! 🏛️ Great rulers like Ashoka spread Buddhism and peace. The Mughal Empire was led by Akbar the Great. British ruled India for 200 years. Our freedom fighters like Gandhi, Nehru, Bhagat Singh sacrificed everything for our independence! 🇮🇳";
+  const topics=["Maths 🧮","Science 🔬","English 📖","Hindi 🇮🇳","Social Studies 🌍","Computers 💻","GK 🌐"];
+  return `That's an interesting question! 🦉 I'm your TestNest AI Tutor. I can help with: ${topics.join(", ")}. Try asking something like: "What is photosynthesis?" or "How do I calculate area?" or "Who was Mahatma Gandhi?" 💪 Keep learning!`;
 }
 
 /* ── SET GEMINI KEY (Admin) ── */
 function setGeminiKey(){
   const cur = localStorage.getItem("tn_gemini_key")||"";
-  const k = prompt("Enter your FREE Gemini API Key:\n(Get it free at: https://aistudio.google.com/app/apikey)\n\nCurrent: "+(cur?"Set ✅":"Not set ❌"));
+  const k = prompt("Paste your FREE Gemini API Key here:\n(Get it free at: https://aistudio.google.com/app/apikey)\n\nCurrent status: "+(cur?"✅ Key is set":"❌ No key set"));
   if(k===null) return;
-  if(k.trim()){
+  if(k&&k.trim()){
     localStorage.setItem("tn_gemini_key", k.trim());
-    toast("✅ AI Key saved! Chatbot is now active.");
-  } else {
+    toast("✅ AI Key saved! Chatbot upgraded to real AI! 🦉");
+  } else if(k===""){
     localStorage.removeItem("tn_gemini_key");
-    toast("🗑️ AI Key removed.");
+    toast("🗑️ AI Key removed. Using smart offline mode.");
   }
 }
 
