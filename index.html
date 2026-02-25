@@ -394,7 +394,10 @@
 
         <!-- ADMIN PANEL -->
         <div class="admin-card" id="adminCard" style="display:none;">
-          <div class="admin-title">⚙️ Admin Panel</div>
+          <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
+            <div class="admin-title">⚙️ Admin Panel</div>
+            <button onclick="setGeminiKey()" style="background:#fef3c7;border:1.5px solid #fcd34d;color:#92400e;border-radius:10px;padding:6px 12px;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;cursor:pointer;">🔑 Set AI Key</button>
+          </div>
           <div class="card-sub" style="margin-bottom:12px;">Create courses & add questions</div>
           <div class="divider"></div>
 
@@ -1087,6 +1090,9 @@ function toggleChat(){
 }
 
 let chatHistory = [];
+// Gemini API - free tier, works from browser
+// 🔑 Get FREE Gemini API key: https://aistudio.google.com/app/apikey
+const GEMINI_KEY = localStorage.getItem("tn_gemini_key") || "";
 
 function sendChat(){
   const inp=g('chatInput');
@@ -1099,35 +1105,68 @@ function sendChat(){
   msgs.innerHTML+=`<div class="chat-msg bot" id="${typingId}">🦉 Thinking...</div>`;
   msgs.scrollTop=msgs.scrollHeight;
 
-  // Add to history
-  chatHistory.push({role:"user", content: msg});
+  // Build Gemini conversation history
+  const contents = [];
+  // Add system instruction as first user message
+  contents.push({
+    role:"user",
+    parts:[{text:"You are TestNest AI Tutor 🦉, a friendly tutor for Indian school students Class 1-8. Answer in simple English with emojis. Keep answers to 2-4 sentences with a simple example. Always encourage. Never mention Gemini or Google."}]
+  });
+  contents.push({role:"model", parts:[{text:"Sure! I am TestNest AI Tutor 🦉, ready to help you learn!"}]});
+  
+  // Add conversation history
+  chatHistory.forEach(m=>{
+    contents.push({
+      role: m.role==='user'?'user':'model',
+      parts:[{text: m.content}]
+    });
+  });
+  // Add current message
+  contents.push({role:"user", parts:[{text:msg}]});
+  chatHistory.push({role:"user", content:msg});
 
-  // Call Claude AI API
-  fetch("https://api.anthropic.com/v1/messages",{
+  if(!GEMINI_KEY){
+    const k=prompt("Enter your free Gemini API Key to enable AI Tutor:\n(Get free key at: https://aistudio.google.com/app/apikey)");
+    if(k&&k.trim()){localStorage.setItem("tn_gemini_key",k.trim());location.reload();}
+    const t=document.getElementById(typingId);
+    if(t) t.outerHTML=`<div class="chat-msg bot">🦉 Please set your Gemini API key to use AI Tutor! Ask your admin to set it up.</div>`;
+    msgs.scrollTop=msgs.scrollHeight;
+    return;
+  }
+  fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_KEY}`,{
     method:"POST",
     headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      model:"claude-sonnet-4-20250514",
-      max_tokens:1000,
-      system:"You are TestNest AI Tutor 🦉, a friendly and helpful tutor for Indian school students (Class 1 to Class 8). Answer questions clearly and simply. Use simple English. Add relevant emojis. Keep answers short (2-4 sentences). If it's a subject question, explain with a simple example. Always encourage the student. Never say you are Claude or made by Anthropic — you are TestNest AI Tutor.",
-      messages: chatHistory
-    })
+    body:JSON.stringify({contents, generationConfig:{maxOutputTokens:200, temperature:0.7}})
   })
   .then(r=>r.json())
   .then(data=>{
-    const reply = data.content?.[0]?.text || "Sorry, I couldn't understand that. Please try again! 😊";
-    chatHistory.push({role:"assistant", content: reply});
-    // Keep history to last 10 messages
-    if(chatHistory.length > 20) chatHistory = chatHistory.slice(-20);
+    const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I couldn't understand that. Please try again! 😊";
+    chatHistory.push({role:"assistant", content:reply});
+    if(chatHistory.length>20) chatHistory=chatHistory.slice(-20);
     const t=document.getElementById(typingId);
-    if(t) t.outerHTML=`<div class="chat-msg bot">${esc(reply)}</div>`;
+    if(t) t.outerHTML=`<div class="chat-msg bot">${reply.replace(/\n/g,'<br>')}</div>`;
     msgs.scrollTop=msgs.scrollHeight;
   })
-  .catch(()=>{
+  .catch(err=>{
+    console.error(err);
     const t=document.getElementById(typingId);
-    if(t) t.outerHTML=`<div class="chat-msg bot">🦉 Hmm, I'm having trouble connecting. Please try again!</div>`;
+    if(t) t.outerHTML=`<div class="chat-msg bot">🦉 Network error. Please check your connection and try again!</div>`;
     msgs.scrollTop=msgs.scrollHeight;
   });
+}
+
+/* ── SET GEMINI KEY (Admin) ── */
+function setGeminiKey(){
+  const cur = localStorage.getItem("tn_gemini_key")||"";
+  const k = prompt("Enter your FREE Gemini API Key:\n(Get it free at: https://aistudio.google.com/app/apikey)\n\nCurrent: "+(cur?"Set ✅":"Not set ❌"));
+  if(k===null) return;
+  if(k.trim()){
+    localStorage.setItem("tn_gemini_key", k.trim());
+    toast("✅ AI Key saved! Chatbot is now active.");
+  } else {
+    localStorage.removeItem("tn_gemini_key");
+    toast("🗑️ AI Key removed.");
+  }
 }
 
 </script>
