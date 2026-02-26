@@ -1043,11 +1043,8 @@ function sendChat(){
   const typingId='ct'+Date.now();
   msgs.innerHTML+=`<div class="chat-msg bot" id="${typingId}">🦉 Thinking...</div>`;
   msgs.scrollTop=msgs.scrollHeight;
-  chatHistory.push({role:"user", content:msg});
+  chatHistory.push({role:"user",content:msg});
 
-  // Try real AI first, fallback to smart local
-  const key = localStorage.getItem("tn_gemini_key")||"";
-  
   function showReplyInChat(reply){
     chatHistory.push({role:"assistant",content:reply});
     if(chatHistory.length>20)chatHistory=chatHistory.slice(-20);
@@ -1056,51 +1053,57 @@ function sendChat(){
     g('chatMsgs').scrollTop=g('chatMsgs').scrollHeight;
   }
 
-  if(key){
-    // Try Gemini with key
-    const contents=[];
-    contents.push({role:"user",parts:[{text:"You are TestNest AI Tutor for Indian school students. Answer in 2-4 simple sentences with emojis. Give one example. Encourage the student. Do NOT mention Gemini or Google or AI."}]});
-    contents.push({role:"model",parts:[{text:"I am TestNest AI Tutor ready to help!"}]});
-    chatHistory.slice(-8).forEach(m=>{
-      contents.push({role:m.role==='user'?'user':'model',parts:[{text:m.content}]});
-    });
-    fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,{
-      method:"POST",headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({contents,generationConfig:{maxOutputTokens:250,temperature:0.7}})
-    }).then(r=>r.json()).then(data=>{
-      const reply=data.candidates?.[0]?.content?.parts?.[0]?.text;
-      showReplyInChat(reply||smartReply(msg));
-    }).catch(()=>showReplyInChat(smartReply(msg)));
-  } else {
-    // Use Wikipedia API for factual questions + smartReply for everything else
-    const isFactual = /what is|what are|who is|who was|where is|when did|how does|why does|define|explain|tell me about|capital of|full form|meaning of/.test(m);
-    
-    if(isFactual){
-      // Extract key search term
-      let searchTerm = msg.replace(/what is|what are|who is|who was|where is|when did|how does|why does|define|explain|tell me about|the|a |an |meaning of|full form of/gi,'').trim();
-      searchTerm = searchTerm.replace(/[?!.]/g,'').trim();
-      
-      // Wikipedia API - works from browser, no key needed
-      fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(searchTerm)}`)
-      .then(r=>r.json())
-      .then(data=>{
-        if(data.extract && data.extract.length > 30){
-          // Get first 2 sentences from Wikipedia
-          const sentences = data.extract.split('. ');
-          const summary = sentences.slice(0,2).join('. ') + '.';
-          const reply = `🦉 **${data.title}**\n\n${summary}\n\n📚 Keep exploring and learning! 💪`;
-          showReplyInChat(reply);
-        } else {
-          showReplyInChat(smartReply(msg));
-        }
-      })
-      .catch(()=>showReplyInChat(smartReply(msg)));
-    } else {
-      // Use smartReply for calculations, study tips, greetings etc
-      setTimeout(()=>showReplyInChat(smartReply(msg)), 500);
-    }
+  // Build conversation for API
+  const messages = chatHistory.slice(-10).map(h=>({role:h.role==='assistant'?'assistant':'user', content:h.content}));
+  if(messages.length===0||messages[messages.length-1].role!=='user'){
+    messages.push({role:'user',content:msg});
   }
+
+  // Try Anthropic Claude API (built-in, no key needed)
+  fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({
+      model:"claude-sonnet-4-20250514",
+      max_tokens:300,
+      system:"You are TestNest AI Tutor, a friendly and encouraging tutor for Indian school students (Class 1-8). Answer ANY question clearly in 2-4 sentences with relevant emojis. For maths, show the calculation. For science/history/geography, give a simple explanation with one example. Always end with encouragement. Keep answers short and easy to understand. Do not mention Claude or Anthropic.",
+      messages:messages
+    })
+  })
+  .then(r=>r.json())
+  .then(data=>{
+    const reply=data.content?.[0]?.text;
+    if(reply && reply.length>5){
+      showReplyInChat(reply);
+    } else {
+      // Fallback to Gemini if available
+      const key=localStorage.getItem("tn_gemini_key")||"";
+      if(key){useGemini(key,msg,showReplyInChat);}
+      else{showReplyInChat(smartReply(msg));}
+    }
+  })
+  .catch(()=>{
+    // Fallback to Gemini
+    const key=localStorage.getItem("tn_gemini_key")||"";
+    if(key){useGemini(key,msg,showReplyInChat);}
+    else{showReplyInChat(smartReply(msg));}
+  });
 }
+
+function useGemini(key,msg,showReplyInChat){
+  const contents=[];
+  contents.push({role:"user",parts:[{text:"You are TestNest AI Tutor for Indian school students. Answer in 2-4 simple sentences with emojis. Give one example. Encourage the student."}]});
+  contents.push({role:"model",parts:[{text:"I am TestNest AI Tutor ready to help!"}]});
+  chatHistory.slice(-8).forEach(h=>{contents.push({role:h.role==='user'?'user':'model',parts:[{text:h.content}]});});
+  fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,{
+    method:"POST",headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({contents,generationConfig:{maxOutputTokens:250,temperature:0.7}})
+  }).then(r=>r.json()).then(data=>{
+    const reply=data.candidates?.[0]?.content?.parts?.[0]?.text;
+    showReplyInChat(reply||smartReply(msg));
+  }).catch(()=>showReplyInChat(smartReply(msg)));
+}
+
 
 function smartReply(msg){
   const m=msg.toLowerCase();
@@ -1110,8 +1113,8 @@ function smartReply(msg){
   if(/how are you|how r u/.test(m)) return "I'm doing great and ready to help you learn! 🦉💪 What topic would you like to study today?";
   if(/your name|who are you/.test(m)) return "I am TestNest AI Tutor 🦉! I am here to help students like you learn better. Ask me anything about your subjects! 📖";
   // Maths
-  if(/\d+\s*[\+\-\*x\/]\s*\d+/.test(m)){
-    try{const expr=m.match(/[\d\s\+\-\*x\/\.]+/)[0].replace(/x/g,'*');const ans=eval(expr);return `The answer is ${ans}! 🧮 Great practice — keep solving! 💪`;}catch(e){}
+  if(/\d+\s*[\+\-\*\/]\s*\d+/.test(m) || /\d+\s*x\s*\d+/.test(m)){
+    try{let expr=m.match(/\d+\s*[\+\-\*\/x]\s*\d+/)[0].replace(/x/gi,'*');const ans=eval(expr);if(ans!==undefined && !isNaN(ans))return `${m.replace(/[^\d\+\-\*\/x\s\.]/gi,'').trim()} = ${ans} 🧮 Great job! Keep practising! 💪`;}catch(e){}
   }
   if(/multipli|times table|table of/.test(m)){
     const n=m.match(/\d+/);
