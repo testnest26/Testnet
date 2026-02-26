@@ -15,23 +15,15 @@
     }
     *{box-sizing:border-box;margin:0;padding:0}
     body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
-
-    /* TOPBAR */
     .topbar{background:var(--white);box-shadow:0 2px 12px rgba(79,70,229,0.08);position:sticky;top:0;z-index:100;}
     .topbar-inner{max-width:1200px;margin:0 auto;padding:10px 20px;display:flex;align-items:center;justify-content:space-between;gap:12px;}
     .logo-wrap{display:flex;align-items:center;gap:10px;text-decoration:none;}
-    .logo-icon{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(79,70,229,0.35);}
-    .logo-icon svg{width:24px;height:24px;fill:white;}
     .logo-text{font-family:'Baloo 2',cursive;font-size:22px;font-weight:800;background:linear-gradient(135deg,#4f46e5,#7c3aed);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
     .logo-tag{font-size:10px;background:#eef2ff;color:#4f46e5;border-radius:6px;padding:2px 7px;font-weight:700;}
     .user-pill{display:flex;align-items:center;gap:8px;background:#f5f3ff;border:1.5px solid #e0e7ff;border-radius:999px;padding:6px 14px 6px 8px;font-size:13px;font-weight:700;color:#4f46e5;}
     .avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#ec4899);display:flex;align-items:center;justify-content:center;color:white;font-size:13px;font-weight:800;}
-
-    /* WRAP */
     .wrap{max-width:1200px;margin:0 auto;padding:24px 20px 60px;}
-
-    /* HERO LOGIN */
-    .hero{background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 50%,#ec4899 100%);border-radius:24px;padding:40px;color:white;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-bottom:0;overflow:hidden;position:relative;}
+    .hero{background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 50%,#ec4899 100%);border-radius:24px;padding:40px;color:white;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;overflow:hidden;position:relative;}
     .hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;background:rgba(255,255,255,0.08);border-radius:50%;}
     .hero::after{content:'';position:absolute;bottom:-40px;left:30%;width:160px;height:160px;background:rgba(255,255,255,0.06);border-radius:50%;}
     .hero-left h1{font-family:'Baloo 2',cursive;font-size:36px;font-weight:800;line-height:1.2;margin-bottom:8px;}
@@ -42,38 +34,25 @@
     .login-box h3{font-family:'Baloo 2',cursive;font-size:20px;color:var(--text);margin-bottom:4px;}
     .login-box p{font-size:12px;color:var(--muted);margin-bottom:16px;}
     .btn-google{width:100%;padding:13px;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .1s,box-shadow .1s;margin-bottom:10px;}
-    .btn-google:active{transform:scale(.97)}
     .btn-student{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;box-shadow:0 4px 14px rgba(79,70,229,0.35);}
-    .btn-student:hover{box-shadow:0 6px 20px rgba(79,70,229,0.45);}
     .btn-admin{background:linear-gradient(135deg,#f59e0b,#ef4444);color:white;box-shadow:0 4px 14px rgba(245,158,11,0.35);}
-    .btn-admin:hover{box-shadow:0 6px 20px rgba(245,158,11,0.45);}
     button:disabled{opacity:0.6;cursor:not-allowed;}
     .login-msg{margin-top:10px;padding:10px 12px;border-radius:12px;font-size:12px;display:none;}
     .login-msg.info{background:#eff6ff;border:1px solid #bfdbfe;color:#1d4ed8;}
     .login-msg.error{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;}
-
-    /* APP LAYOUT */
     .app-grid{display:grid;grid-template-columns:1fr 360px;gap:20px;margin-top:24px;}
     @media(max-width:900px){.app-grid{grid-template-columns:1fr}}
-
-    /* CARDS */
     .card{background:var(--white);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;}
     .card-title{font-family:'Baloo 2',cursive;font-size:20px;font-weight:700;margin-bottom:4px;}
     .card-sub{font-size:13px;color:var(--muted);}
     .divider{height:1px;background:#f1f5f9;margin:16px 0;}
-
-    /* COURSE CARDS */
-    .course-card{border-radius:14px;border:2px solid #e0e7ff;background:linear-gradient(135deg,#f5f3ff,#faf5ff);padding:16px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;transition:box-shadow .15s,transform .15s;}
+    .course-card{border-radius:14px;border:2px solid #e0e7ff;background:linear-gradient(135deg,#f5f3ff,#faf5ff);padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px;transition:box-shadow .15s,transform .15s;flex-wrap:wrap;}
     .course-card:hover{box-shadow:0 4px 20px rgba(79,70,229,0.12);transform:translateY(-1px);}
-    .course-icon{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,#4f46e5,#7c3aed);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+    .course-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+    .course-info{flex:1;min-width:0;}
     .course-info b{font-size:15px;font-weight:800;display:block;}
-    .course-info span{font-size:12px;color:var(--muted);}
-    .btn-start{background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:12px;padding:10px 20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer;transition:transform .1s,box-shadow .1s;box-shadow:0 3px 10px rgba(16,185,129,0.3);}
-    .btn-start:hover{transform:translateY(-1px);box-shadow:0 5px 16px rgba(16,185,129,0.4);}
-    .btn-start:active{transform:scale(.97)}
-    .lock-tag{background:#fef3c7;border:1.5px solid #fcd34d;color:#92400e;border-radius:999px;padding:6px 14px;font-size:12px;font-weight:800;}
-
-    /* TEST BOX */
+    .btn-start{background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:12px;padding:10px 18px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;cursor:pointer;box-shadow:0 3px 10px rgba(16,185,129,0.3);white-space:nowrap;}
+    .lock-tag{background:#fef3c7;border:1.5px solid #fcd34d;color:#92400e;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:800;white-space:nowrap;}
     .test-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px;}
     .timer-box{background:linear-gradient(135deg,#ef4444,#dc2626);color:white;border-radius:12px;padding:8px 16px;font-family:'Baloo 2',cursive;font-size:20px;font-weight:700;box-shadow:0 4px 12px rgba(239,68,68,0.3);}
     .qbox{background:#f8fafc;border:2px solid #e2e8f0;border-radius:14px;padding:16px;margin:10px 0;}
@@ -82,20 +61,14 @@
     .opt:hover{border-color:#a5b4fc;background:#f5f3ff;}
     .opt input{accent-color:#4f46e5;width:16px;height:16px;}
     .opt.selected{border-color:#4f46e5;background:#eef2ff;}
-    .btn-submit{background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:14px;padding:13px 28px;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 4px 14px rgba(16,185,129,0.3);transition:transform .1s;}
-    .btn-submit:hover{transform:translateY(-1px);}
+    .btn-submit{background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:14px;padding:13px 28px;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;cursor:pointer;box-shadow:0 4px 14px rgba(16,185,129,0.3);}
     .btn-close{background:#f1f5f9;color:#64748b;border:none;border-radius:14px;padding:13px 20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:15px;cursor:pointer;}
-
-    /* PROFILE */
     .profile-card{background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:var(--radius);padding:20px;color:white;margin-bottom:16px;}
     .profile-avatar{width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,0.25);display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;margin-bottom:10px;}
     .profile-name{font-family:'Baloo 2',cursive;font-size:18px;font-weight:700;}
     .profile-email{font-size:12px;opacity:0.8;margin-top:2px;}
     .role-badge{display:inline-block;margin-top:8px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:999px;padding:3px 12px;font-size:11px;font-weight:800;}
-    .btn-logout{width:100%;margin-top:12px;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);color:white;border-radius:12px;padding:9px;font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;cursor:pointer;transition:background .12s;}
-    .btn-logout:hover{background:rgba(255,255,255,0.25);}
-
-    /* ADMIN PANEL */
+    .btn-logout{width:100%;margin-top:12px;background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);color:white;border-radius:12px;padding:9px;font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;cursor:pointer;}
     .admin-card{background:white;border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:16px;}
     .admin-title{font-family:'Baloo 2',cursive;font-size:18px;color:#f59e0b;margin-bottom:4px;}
     .form-label{font-size:12px;font-weight:700;color:var(--muted);margin:10px 0 5px;display:block;}
@@ -105,11 +78,8 @@
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
     .check-row{display:flex;align-items:center;gap:8px;margin:10px 0;font-size:13px;font-weight:700;}
     .check-row input{width:16px;height:16px;accent-color:#4f46e5;}
-    .btn-save{background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:12px;padding:11px 20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 3px 10px rgba(16,185,129,0.25);transition:transform .1s;margin-top:6px;}
-    .btn-save:hover{transform:translateY(-1px);}
+    .btn-save{background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:12px;padding:11px 20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer;margin-top:6px;}
     .btn-clear{background:#f1f5f9;color:#475569;border:none;border-radius:12px;padding:11px 16px;font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;cursor:pointer;margin-top:6px;}
-
-    /* LEADERBOARD */
     .lb-row{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;margin-bottom:8px;background:#f8fafc;border:1.5px solid #e2e8f0;}
     .lb-rank{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;}
     .lb-rank.r1{background:linear-gradient(135deg,#f59e0b,#fbbf24);color:white;}
@@ -118,54 +88,25 @@
     .lb-rank.rn{background:#e2e8f0;color:#64748b;}
     .lb-name{flex:1;font-weight:700;font-size:14px;}
     .lb-score{font-size:13px;font-weight:800;color:#4f46e5;}
-
-    /* QUESTION MANAGEMENT */
     .q-manage{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:12px 14px;margin-bottom:8px;}
     .q-manage-top{display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
     .q-text{font-size:13px;font-weight:700;flex:1;}
-    .btn-del{background:#fef2f2;border:1.5px solid #fecaca;color:#dc2626;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;cursor:pointer;white-space:nowrap;transition:background .1s;}
-    .btn-del:hover{background:#fee2e2;}
+    .btn-del{background:#fef2f2;border:1.5px solid #fecaca;color:#dc2626;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;cursor:pointer;}
     .q-opts{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px;}
     .q-opt-chip{font-size:11px;padding:3px 9px;border-radius:999px;background:#e0e7ff;color:#3730a3;font-weight:700;}
     .q-opt-chip.correct{background:#d1fae5;color:#065f46;}
-
-    /* SECTION HEADER */
     .sec-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;}
-
-    /* TOAST */
     .toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1a1f36;color:white;padding:12px 22px;border-radius:14px;display:none;z-index:9999;font-weight:700;font-size:14px;box-shadow:0 8px 24px rgba(0,0,0,0.2);}
-
-    /* EMPTY */
     .empty{text-align:center;padding:30px 20px;color:var(--muted);}
     .empty-icon{font-size:40px;margin-bottom:8px;}
-
-    /* ANIMATIONS */
     @keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
     .fade-in{animation:fadeIn .3s ease forwards;}
-  
-    /* MOBILE TABS */
-    .mob-tabs{display:none;}
-    @media(max-width:900px){
-      .app-grid{grid-template-columns:1fr!important;}
-      .right-col-wrap{display:none;}
-      .hero{padding:24px 18px;flex-direction:column;}
-      .hero h1{font-size:24px;}
-      .login-box{width:100%;max-width:100%;}
-      .mob-tabs{display:flex;background:white;border-radius:14px;padding:4px;box-shadow:var(--shadow);margin-bottom:16px;gap:4px;}
-      .mtab{flex:1;padding:9px 4px;border:none;background:transparent;border-radius:10px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;color:#6b7280;cursor:pointer;transition:all .15s;}
-      .mtab.active{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;}
-      .mob-sec{display:none!important;}
-      .mob-sec.active{display:block!important;}
-    }
-    @media(min-width:901px){.right-col-wrap{display:block!important;}.mob-sec{display:block!important;}}
-    /* PAST SCORES */
     .ps-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:#f8fafc;border:1.5px solid #e2e8f0;margin-bottom:8px;}
     .ps-info{flex:1;min-width:0;}
     .ps-info b{font-size:13px;font-weight:800;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
     .ps-info span{font-size:11px;color:var(--muted);}
     .pct-chip{font-size:12px;font-weight:800;border-radius:999px;padding:3px 10px;white-space:nowrap;}
     .pg{background:#d1fae5;color:#065f46;}.pb{background:#dbeafe;color:#1e40af;}.po{background:#fef3c7;color:#92400e;}.pr{background:#fee2e2;color:#991b1b;}
-    /* RESULT REVIEW */
     .result-banner{border-radius:16px;padding:20px;text-align:center;margin-bottom:16px;}
     .result-banner.great{background:linear-gradient(135deg,#d1fae5,#a7f3d0);border:2px solid #10b981;}
     .result-banner.good{background:linear-gradient(135deg,#dbeafe,#bfdbfe);border:2px solid #3b82f6;}
@@ -177,32 +118,14 @@
     .tag-c{background:#d1fae5;color:#065f46;}.tag-w{background:#fee2e2;color:#991b1b;}.tag-s{background:#f1f5f9;color:#64748b;}
     .opt.correct-ans{border-color:#10b981!important;background:#d1fae5!important;}
     .opt.wrong-ans{border-color:#ef4444!important;background:#fef2f2!important;}
-    /* EDIT MODAL */
-    .modal-ov{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:500;display:none;align-items:center;justify-content:center;padding:16px;}
-    .modal-ov.open{display:flex;}
-    .modal-box{background:white;border-radius:20px;padding:24px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;}
-    .modal-box h3{font-family:'Baloo 2',cursive;font-size:20px;margin-bottom:14px;}
-    .btn-edit{background:#eef2ff;border:1.5px solid #c7d2fe;color:#4f46e5;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;cursor:pointer;}
-    .btn-del{background:#fef2f2;border:1.5px solid #fecaca;color:#dc2626;border-radius:8px;padding:5px 10px;font-size:12px;font-weight:800;cursor:pointer;}
-
-  .course-card{border-radius:14px;border:2px solid #e0e7ff;background:linear-gradient(135deg,#f5f3ff,#faf5ff);padding:14px 16px;display:flex;align-items:center;gap:12px;margin-bottom:10px;transition:box-shadow .15s,transform .15s;flex-wrap:wrap;}.course-card:hover{box-shadow:0 4px 20px rgba(79,70,229,0.12);transform:translateY(-1px);}.course-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}.course-info{flex:1;min-width:0;}.course-info b{font-size:15px;font-weight:800;display:block;}.meta{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:3px;}.qcount{background:#eef2ff;color:#4f46e5;border-radius:999px;padding:2px 9px;font-size:11px;font-weight:800;}.btn-start{background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:12px;padding:10px 18px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;cursor:pointer;box-shadow:0 3px 10px rgba(16,185,129,0.3);white-space:nowrap;}.lock-tag{background:#fef3c7;border:1.5px solid #fcd34d;color:#92400e;border-radius:999px;padding:6px 12px;font-size:11px;font-weight:800;white-space:nowrap;}
-
-    /* CLASS/SUBJECT SELECTOR */
-    .class-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;scrollbar-width:none;}
-    .class-scroll::-webkit-scrollbar{display:none;}
-    .class-chip{flex-shrink:0;padding:7px 16px;border-radius:999px;border:2px solid #e0e7ff;background:#f5f3ff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:#4f46e5;cursor:pointer;transition:all .15s;}
-    .class-chip.active,.class-chip:hover{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;border-color:transparent;box-shadow:0 3px 10px rgba(79,70,229,0.3);}
-    .subj-scroll{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
-    .subj-chip{padding:6px 14px;border-radius:10px;border:2px solid #e0e7ff;background:white;font-size:12px;font-weight:800;color:#374151;cursor:pointer;transition:all .15s;}
-    .subj-chip.active,.subj-chip:hover{background:linear-gradient(135deg,#10b981,#059669);color:white;border-color:transparent;}
-
-    /* SEARCH BAR */
     .search-wrap{position:relative;margin-bottom:14px;}
     .search-wrap input{width:100%;padding:11px 14px 11px 40px;border-radius:12px;border:2px solid #e2e8f0;background:#f8fafc;font-family:'Nunito',sans-serif;font-size:14px;color:#1a1f36;outline:none;transition:border .12s;}
     .search-wrap input:focus{border-color:#a5b4fc;background:white;}
     .search-wrap .si{position:absolute;left:13px;top:50%;transform:translateY(-50%);font-size:16px;pointer-events:none;}
-
-    /* QUESTION NAV GRID */
+    .class-scroll{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;margin-bottom:14px;scrollbar-width:none;}
+    .class-scroll::-webkit-scrollbar{display:none;}
+    .class-chip{flex-shrink:0;padding:7px 16px;border-radius:999px;border:2px solid #e0e7ff;background:#f5f3ff;font-family:'Nunito',sans-serif;font-size:12px;font-weight:800;color:#4f46e5;cursor:pointer;transition:all .15s;}
+    .class-chip.active,.class-chip:hover{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;border-color:transparent;box-shadow:0 3px 10px rgba(79,70,229,0.3);}
     .qnav-panel{background:#f8fafc;border:2px solid #e2e8f0;border-radius:14px;padding:14px;margin-bottom:14px;}
     .qnav-legend{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:10px;}
     .qnav-leg{display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:#6b7280;}
@@ -215,20 +138,12 @@
     .qnav-grid{display:flex;flex-wrap:wrap;gap:5px;}
     .qnav-btn{width:34px;height:34px;border-radius:8px;border:none;font-size:12px;font-weight:800;cursor:pointer;transition:all .12s;background:#e2e8f0;color:#374151;}
     .qnav-btn.attempted{background:#10b981;color:white;}.qnav-btn.skipped{background:#f59e0b;color:white;}.qnav-btn.current{box-shadow:0 0 0 3px #4f46e5;transform:scale(1.1);}
-
-    /* SKIP + SAVE NEXT BUTTONS */
     .test-btn-row{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap;justify-content:space-between;align-items:center;}
     .btn-skip{background:#fef3c7;border:2px solid #fcd34d;color:#92400e;border-radius:12px;padding:10px 20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer;}
     .btn-savenext{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;border:none;border-radius:12px;padding:10px 20px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer;box-shadow:0 3px 10px rgba(79,70,229,0.3);}
-    .btn-savenext:hover{transform:translateY(-1px);}
-
-    /* RANK BADGE IN PROFILE */
     .rank-badge{margin-top:10px;background:linear-gradient(135deg,#f59e0b,#fbbf24);border-radius:12px;padding:10px 14px;display:flex;align-items:center;gap:10px;}
     .rank-icon{font-size:24px;}.rank-info b{font-size:14px;font-weight:900;display:block;}.rank-info span{font-size:11px;opacity:0.85;}
-
-    /* CHATBOT */
-    .chat-fab{position:fixed;bottom:24px;right:24px;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;color:white;font-size:24px;cursor:pointer;box-shadow:0 6px 20px rgba(79,70,229,0.4);z-index:999;transition:transform .2s;}
-    .chat-fab:hover{transform:scale(1.1);}
+    .chat-fab{position:fixed;bottom:24px;right:24px;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;color:white;font-size:24px;cursor:pointer;box-shadow:0 6px 20px rgba(79,70,229,0.4);z-index:999;}
     .chat-box{position:fixed;bottom:90px;right:24px;width:300px;background:white;border-radius:20px;box-shadow:0 8px 32px rgba(0,0,0,0.15);z-index:998;display:none;flex-direction:column;overflow:hidden;max-height:400px;}
     .chat-box.open{display:flex;}
     .chat-head{background:linear-gradient(135deg,#4f46e5,#7c3aed);padding:14px 16px;color:white;display:flex;align-items:center;gap:10px;}
@@ -239,22 +154,19 @@
     .chat-msg.user{background:linear-gradient(135deg,#4f46e5,#7c3aed);color:white;align-self:flex-end;border-bottom-right-radius:4px;}
     .chat-input-row{display:flex;gap:6px;padding:10px 12px;border-top:1px solid #f1f5f9;}
     .chat-input-row input{flex:1;padding:8px 12px;border-radius:10px;border:2px solid #e2e8f0;font-family:'Nunito',sans-serif;font-size:13px;outline:none;}
-    .chat-input-row input:focus{border-color:#a5b4fc;}
     .chat-send{background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;border-radius:10px;padding:8px 12px;color:white;font-size:16px;cursor:pointer;}
-
-    /* SYLLABUS IN ADMIN */
-    .syl-row{display:flex;align-items:center;justify-content:space-between;padding:10px 12px;background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:10px;margin-bottom:8px;}
-    .syl-row span{font-size:13px;font-weight:700;}
-    .btn-dl{background:#eef2ff;border:1.5px solid #c7d2fe;color:#4f46e5;border-radius:8px;padding:5px 12px;font-size:12px;font-weight:800;cursor:pointer;}
+    @media(max-width:900px){
+      .hero{padding:24px 18px;flex-direction:column;}
+      .hero h1{font-size:24px;}
+      .login-box{width:100%;max-width:100%;}
+    }
   </style>
 </head>
 <body>
-
-<!-- TOPBAR -->
 <div class="topbar">
   <div class="topbar-inner">
     <a class="logo-wrap" href="#">
-      <img src="data:image/jpeg;base64,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" style="width:42px;height:42px;border-radius:14px;object-fit:cover;box-shadow:0 4px 14px rgba(79,70,229,0.35);"/>
+      <img src="data:image/jpeg;base64,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" style="width:42px;height:42px;border-radius:14px;object-fit:cover;"/>
       <span class="logo-text">TestNest</span>
       <span class="logo-tag">BETA</span>
     </a>
@@ -266,8 +178,6 @@
 </div>
 
 <div class="wrap">
-
-  <!-- LOGIN HERO -->
   <div id="loginCard" class="hero fade-in">
     <div class="hero-left">
       <h1>🎯 Learn Smart,<br/>Score Big!</h1>
@@ -295,23 +205,17 @@
     </div>
   </div>
 
-  <!-- APP -->
   <div id="app" style="display:none;">
     <div class="app-grid">
-
-      <!-- LEFT COLUMN -->
       <div>
-        <!-- COURSES -->
         <div class="card fade-in">
           <div class="sec-header">
             <div><div class="card-title">📚 Courses</div><div class="card-sub">Pick a course and start your test</div></div>
           </div>
-          <!-- SEARCH -->
           <div class="search-wrap">
             <span class="si">🔍</span>
             <input type="text" id="courseSearch" placeholder="Search courses..." oninput="filterCourses()"/>
           </div>
-          <!-- CLASS FILTER -->
           <div class="class-scroll" id="classFilter">
             <button class="class-chip active" onclick="setClass('all',this)">All</button>
             <button class="class-chip" onclick="setClass('Balvatika',this)">Balvatika</button>
@@ -327,8 +231,7 @@
           <div id="courseList"><div class="empty"><div class="empty-icon">📭</div>Loading courses...</div></div>
         </div>
 
-        <!-- TEST BOX -->
-        <div id="testBox" style="display:none;" class="card fade-in" style="margin-top:16px;">
+        <div id="testBox" style="display:none;" class="card fade-in">
           <div class="test-header">
             <div>
               <div class="card-title" id="testTitle">Test</div>
@@ -337,7 +240,6 @@
             <div class="timer-box" id="timerDisplay">00:00</div>
           </div>
           <div id="questionArea"></div>
-          <!-- QUESTION NAV -->
           <div class="qnav-panel" id="qnavPanel" style="display:none;">
             <div class="qnav-stats">
               <div class="qnav-stat ns-attempted"><b id="navAttempted">0</b><span>Attempted</span></div>
@@ -351,7 +253,6 @@
             </div>
             <div class="qnav-grid" id="qnavGrid"></div>
           </div>
-          <!-- ONE-BY-ONE NAV BUTTONS -->
           <div class="test-btn-row">
             <div style="display:flex;gap:8px;">
               <button class="btn-skip" onclick="skipQuestion()">⏭ Skip</button>
@@ -364,7 +265,6 @@
           </div>
         </div>
 
-        <!-- ADMIN: MANAGE QUESTIONS -->
         <div id="manageBox" class="card fade-in" style="display:none;margin-top:16px;">
           <div class="sec-header">
             <div><div class="card-title">🗂️ Manage Questions</div><div class="card-sub">View and delete questions from courses</div></div>
@@ -377,9 +277,7 @@
         </div>
       </div>
 
-      <!-- RIGHT COLUMN -->
       <div>
-        <!-- PROFILE -->
         <div id="profileCard" class="profile-card fade-in">
           <div class="profile-avatar" id="profileAvatar">👤</div>
           <div class="profile-name" id="userName">—</div>
@@ -392,7 +290,6 @@
           <button class="btn-logout" onclick="logout()">🚪 Logout</button>
         </div>
 
-        <!-- ADMIN PANEL -->
         <div class="admin-card" id="adminCard" style="display:none;">
           <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
             <div class="admin-title">⚙️ Admin Panel</div>
@@ -400,22 +297,17 @@
           </div>
           <div class="card-sub" style="margin-bottom:12px;">Create courses & add questions</div>
           <div class="divider"></div>
-
           <label class="form-label">Course Name</label>
           <input type="text" class="form-input" id="courseName" placeholder="e.g., Class 6 Maths / NEET / JEE"/>
           <div class="check-row">
             <input type="checkbox" id="paidCourse"> <label for="paidCourse">🔒 Paid Course (Locked)</label>
           </div>
           <button class="btn-save" onclick="addCourse()">💾 Save Course</button>
-
           <div class="divider"></div>
-
           <label class="form-label">Add Question to Course</label>
           <select class="form-input" id="coursePick"><option value="">Select course</option></select>
-
           <label class="form-label">Question</label>
           <textarea class="form-input" id="questionText" placeholder="Type your question here..."></textarea>
-
           <div class="form-row">
             <div><label class="form-label">Option A</label><input type="text" class="form-input" id="opt1" placeholder="Option A"/></div>
             <div><label class="form-label">Option B</label><input type="text" class="form-input" id="opt2" placeholder="Option B"/></div>
@@ -434,7 +326,6 @@
           </div>
         </div>
 
-        <!-- LEADERBOARD -->
         <div class="card fade-in">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
             <div><div class="card-title">🏆 Leaderboard</div><div class="card-sub" id="lbCourseLabel">Select a course to view scores</div></div>
@@ -446,25 +337,23 @@
           <div id="leaderboard"><div class="empty"><div class="empty-icon">📋</div>Select a course above to see its leaderboard</div></div>
         </div>
       </div>
-
     </div>
   </div>
 </div>
 
-
-        <!-- RESULT REVIEW -->
-        <div id="reviewBox" style="display:none;" class="card fade-in" style="margin-top:16px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
-            <div><h3 style="margin:0;font-family:'Baloo 2',cursive;font-size:18px;">&#128221; Result Review</h3><div class="small" id="reviewSub"></div></div>
-            <button class="btn-dark" style="background:#f1f5f9;color:#64748b;border:none;border-radius:12px;padding:10px 16px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;cursor:pointer;" onclick="document.getElementById('reviewBox').style.display='none'">&#10006; Close</button>
-          </div>
-          <div id="resultBanner"></div>
-          <div id="reviewArea"></div>
-        </div>
+<div id="reviewBox" style="display:none;margin:20px auto;max-width:1200px;padding:0 20px;" class="fade-in">
+  <div class="card">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;flex-wrap:wrap;gap:8px;">
+      <div><h3 style="margin:0;font-family:'Baloo 2',cursive;font-size:18px;">📝 Result Review</h3><div id="reviewSub"></div></div>
+      <button style="background:#f1f5f9;color:#64748b;border:none;border-radius:12px;padding:10px 16px;font-family:'Nunito',sans-serif;font-weight:800;font-size:13px;cursor:pointer;" onclick="document.getElementById('reviewBox').style.display='none'">✖ Close</button>
+    </div>
+    <div id="resultBanner"></div>
+    <div id="reviewArea"></div>
+  </div>
+</div>
 
 <div class="toast" id="toast"></div>
 
-<!-- CHATBOT -->
 <button class="chat-fab" id="chatFab" onclick="toggleChat()">🦉</button>
 <div class="chat-box" id="chatBox">
   <div class="chat-head">
@@ -493,9 +382,8 @@ firebase.initializeApp({
   messagingSenderId:"1000142199756",
   appId:"1:1000142199756:web:afab8eaa0f6bc638969b69"
 });
-const auth=firebase.auth(), db=firebase.firestore();
+const auth=firebase.auth(),db=firebase.firestore();
 const ADMINS=["dnyanrui90@gmail.com","pawarjai999@gmail.com"];
-
 function g(id){return document.getElementById(id);}
 function toast(m,ok=true){const e=g("toast");e.textContent=m;e.style.background=ok?"#1a1f36":"#dc2626";e.style.display="block";setTimeout(()=>e.style.display="none",2800);}
 function showMsg(m,t="info"){const e=g("loginMsg");e.textContent=m;e.className="login-msg "+t;e.style.display="block";}
@@ -504,69 +392,30 @@ function setBtns(d){g("btnStudent").disabled=d;g("btnAdmin").disabled=d;}
 function esc(s){return(s||"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));}
 function escQ(s){return(s||"").replace(/\\/g,"\\\\").replace(/'/g,"\\'");}
 function initials(n){return(n||"?").split(" ").map(w=>w[0]).join("").toUpperCase().slice(0,2);}
-
-function isMobile(){
-  return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-}
+function isMobile(){return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);}
 
 function loginAs(role){
   localStorage.setItem("tn_role",role);
-  setBtns(true);
-  showMsg("Opening Google login…","info");
+  setBtns(true);showMsg("Opening Google login…","info");
   const p=new firebase.auth.GoogleAuthProvider();
   p.setCustomParameters({prompt:"select_account"});
-  if(isMobile()){
-    // Mobile: use redirect (more reliable on Android/iOS)
-    auth.signInWithRedirect(p);
-  } else {
-    // Desktop: use popup
-    auth.signInWithPopup(p).then(()=>{
-      hideMsg(); setBtns(false);
-    }).catch(err=>{
-      setBtns(false);
-      if(err.code==="auth/popup-blocked"){
-        showMsg("⚠️ Popup blocked! Please allow popups then try again.","error");
-      } else if(err.code==="auth/popup-closed-by-user"){
-        showMsg("Login cancelled. Try again.","info");
-      } else {
-        showMsg("Error: "+err.message,"error");
-      }
-    });
-  }
+  if(isMobile()){auth.signInWithRedirect(p);}
+  else{auth.signInWithPopup(p).then(()=>{hideMsg();setBtns(false);}).catch(err=>{setBtns(false);if(err.code==="auth/popup-blocked"){showMsg("⚠️ Popup blocked! Please allow popups.","error");}else if(err.code==="auth/popup-closed-by-user"){showMsg("Login cancelled.","info");}else{showMsg("Error: "+err.message,"error");}});}
 }
 
 function logout(){
-  auth.signOut().then(()=>{
-    localStorage.removeItem("tn_role");
-    g("app").style.display="none";
-    g("loginCard").style.display="flex";
-    g("topName").textContent="Not logged in";
-    g("topAvatar").textContent="?";
-    setBtns(false); hideMsg();
-  });
+  auth.signOut().then(()=>{localStorage.removeItem("tn_role");g("app").style.display="none";g("loginCard").style.display="flex";g("topName").textContent="Not logged in";g("topAvatar").textContent="?";setBtns(false);hideMsg();});
 }
 
-
-
-// Handle redirect result on mobile
-auth.getRedirectResult().then(result=>{
-  if(result && result.user){ hideMsg(); setBtns(false); }
-}).catch(err=>{
-  if(err.code && err.code!=="auth/no-current-user"){
-    showMsg("Login error: "+err.message,"error");
-    setBtns(false);
-  }
-});
+auth.getRedirectResult().then(result=>{if(result&&result.user){hideMsg();setBtns(false);}}).catch(err=>{if(err.code&&err.code!=="auth/no-current-user"){showMsg("Login error: "+err.message,"error");setBtns(false);}});
 
 auth.onAuthStateChanged(user=>{
   if(!user){g("loginCard").style.display="flex";g("app").style.display="none";return;}
   const role=(localStorage.getItem("tn_role")==="admin"&&ADMINS.includes((user.email||"").toLowerCase()))?"admin":"student";
-  g("loginCard").style.display="none";
-  g("app").style.display="block";
+  g("loginCard").style.display="none";g("app").style.display="block";
   hideMsg();setBtns(false);
   const name=user.displayName||"Student";
-  g("userName").textContent=name;
-  g("userEmail").textContent=user.email||"";
+  g("userName").textContent=name;g("userEmail").textContent=user.email||"";
   g("userRole").textContent="Role: "+role.toUpperCase();
   g("topName").textContent=name+" • "+role.toUpperCase();
   g("topAvatar").textContent=initials(name);
@@ -574,17 +423,37 @@ auth.onAuthStateChanged(user=>{
   g("adminCard").style.display=role==="admin"?"block":"none";
   g("manageBox").style.display=role==="admin"?"block":"none";
   loadCourses();loadLeaderboard();loadPastScores();refreshLbPick();updateRankBadge();
-  if(role==="admin"){
-    refreshCoursePick();refreshManagePick();
-    const lbcb=g("lbClearBtn");if(lbcb)lbcb.style.display="block";
-  }
+  if(role==="admin"){refreshCoursePick();refreshManagePick();const lbcb=g("lbClearBtn");if(lbcb)lbcb.style.display="block";}
 });
 
-// COURSE EMOJIS
-const emojis=["📘","📗","📙","📕","🔬","🧮","🌍","🎨","🏛️","⚗️"];
-function courseEmoji(name,i){return emojis[i%emojis.length];}
+let activeClass='all',allCourseDocs=[];
+function setClass(cls,btn){activeClass=cls;document.querySelectorAll('.class-chip').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderFilteredCourses();}
+function filterCourses(){renderFilteredCourses();}
+function renderFilteredCourses(){
+  const div=g('courseList');
+  const search=(g('courseSearch')?.value||'').toLowerCase();
+  let filtered=allCourseDocs.filter(doc=>{
+    const name=doc.id.toLowerCase();
+    return(activeClass==='all'||name.includes(activeClass.toLowerCase()))&&(!search||name.includes(search));
+  });
+  if(!filtered.length){div.innerHTML='<div class="empty"><div class="empty-icon">🔍</div>No courses found.</div>';return;}
+  const em=["📘","📗","📙","📕","🔬","🧮","🌍","🎨","🏛️","⚗️"];
+  const gr=['#4f46e5,#7c3aed','#10b981,#059669','#f59e0b,#ef4444','#0ea5e9,#6366f1'];
+  let html="";
+  filtered.forEach((doc,i)=>{
+    const name=doc.id,paid=!!doc.data().paid;
+    html+=`<div class="course-card"><div class="course-icon" style="background:linear-gradient(135deg,${gr[i%4]})">${em[i%em.length]}</div><div class="course-info" style="flex:1"><b>${esc(name)}</b><span>${paid?"🔒 Premium":"✅ Free Course"}</span></div><div>${paid?'<span class="lock-tag">🔒 Locked</span>':`<button class="btn-start" onclick="startTest('${escQ(name)}')">Start ▶</button>`}</div></div>`;
+  });
+  div.innerHTML=html;
+}
 
-/* loadCourses moved below */
+function loadCourses(){
+  const div=g("courseList");div.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
+  db.collection("courses").get().then(snap=>{
+    if(snap.empty){div.innerHTML='<div class="empty"><div class="empty-icon">📭</div>No courses yet.</div>';return;}
+    allCourseDocs=[];snap.forEach(doc=>allCourseDocs.push(doc));renderFilteredCourses();
+  }).catch(e=>{div.innerHTML=`<div class="empty">❌ ${esc(e.message)}</div>`;});
+}
 
 function addCourse(){
   const name=g("courseName").value.trim(),paid=g("paidCourse").checked;
@@ -596,13 +465,13 @@ function addCourse(){
 function refreshCoursePick(){
   const sel=g("coursePick");if(!sel)return;
   sel.innerHTML='<option value="">Select course</option>';
-  db.collection("courses").get().then(snap=>{snap.forEach(doc=>{const o=document.createElement("option");o.value=doc.id;o.textContent=doc.id;sel.appendChild(o);});}).catch(()=>{});
+  db.collection("courses").get().then(snap=>{snap.forEach(doc=>{const o=document.createElement("option");o.value=doc.id;o.textContent=doc.id;sel.appendChild(o);});});
 }
 
 function refreshManagePick(){
   const sel=g("manageCoursePick");if(!sel)return;
   sel.innerHTML='<option value="">Select course</option>';
-  db.collection("courses").get().then(snap=>{snap.forEach(doc=>{const o=document.createElement("option");o.value=doc.id;o.textContent=doc.id;sel.appendChild(o);});}).catch(()=>{});
+  db.collection("courses").get().then(snap=>{snap.forEach(doc=>{const o=document.createElement("option");o.value=doc.id;o.textContent=doc.id;sel.appendChild(o);});});
 }
 
 function clearQuestionForm(){["questionText","opt1","opt2","opt3","opt4","correct"].forEach(id=>g(id).value="");}
@@ -612,279 +481,42 @@ function addQuestion(){
   const q=g("questionText").value.trim(),o1=g("opt1").value.trim(),o2=g("opt2").value.trim(),o3=g("opt3").value.trim(),o4=g("opt4").value.trim();
   const correct=parseInt(g("correct").value,10),time=parseInt(g("timeLimit").value,10);
   if(!q||!o1||!o2||!o3||!o4)return alert("Fill question + all 4 options");
-  if(isNaN(correct)||correct<0||correct>3)return alert("Correct must be 0, 1, 2, or 3");
-  if(isNaN(time)||time<=0)return alert("Time must be > 0 minutes");
-  db.collection("courses").doc(course).collection("questions").add({
-    question:q,options:[o1,o2,o3,o4],correct,time,
-    createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:auth.currentUser.email||""
-  }).then(()=>{toast("✅ Question saved!");clearQuestionForm();loadManageQuestions();}).catch(e=>alert(e.message));
+  if(isNaN(correct)||correct<0||correct>3)return alert("Correct must be 0,1,2,3");
+  if(isNaN(time)||time<=0)return alert("Time must be > 0");
+  db.collection("courses").doc(course).collection("questions").add({question:q,options:[o1,o2,o3,o4],correct,time,createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:auth.currentUser.email||""})
+    .then(()=>{toast("✅ Question saved!");clearQuestionForm();loadManageQuestions();}).catch(e=>alert(e.message));
 }
 
-// MANAGE + DELETE QUESTIONS
 function loadManageQuestions(){
-  const course=g("manageCoursePick").value;
-  const div=g("manageQList");
+  const course=g("manageCoursePick").value,div=g("manageQList");
   if(!course){div.innerHTML='';return;}
-  div.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading questions...</div>';
+  div.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
   db.collection("courses").doc(course).collection("questions").orderBy("createdAt","asc").get().then(snap=>{
-    if(snap.empty){div.innerHTML='<div class="empty"><div class="empty-icon">📭</div>No questions in this course yet.</div>';return;}
+    if(snap.empty){div.innerHTML='<div class="empty"><div class="empty-icon">📭</div>No questions yet.</div>';return;}
     let html="";
     snap.forEach(doc=>{
       const d=doc.data(),id=doc.id;
       const opts=(d.options||[]).map((o,i)=>`<span class="q-opt-chip${i===d.correct?' correct':''}">${["A","B","C","D"][i]}: ${esc(o)}</span>`).join("");
-      html+=`<div class="q-manage" id="qm_${id}">
-        <div class="q-manage-top">
-          <span class="q-text">${esc(d.question)}</span>
-          <button class="btn-del" onclick="deleteQuestion('${escQ(course)}','${id}')">🗑️ Delete</button>
-        </div>
-        <div class="q-opts">${opts}</div>
-      </div>`;
+      html+=`<div class="q-manage"><div class="q-manage-top"><span class="q-text">${esc(d.question)}</span><button class="btn-del" onclick="deleteQuestion('${escQ(course)}','${id}')">🗑️ Delete</button></div><div class="q-opts">${opts}</div></div>`;
     });
     div.innerHTML=html;
   }).catch(e=>{div.innerHTML=`<div class="empty">${esc(e.message)}</div>`;});
 }
 
 function deleteQuestion(course,qid){
-  if(!confirm("Delete this question? This cannot be undone."))return;
+  if(!confirm("Delete this question?"))return;
   db.collection("courses").doc(course).collection("questions").doc(qid).delete()
-    .then(()=>{toast("🗑️ Question deleted!");loadManageQuestions();}).catch(e=>alert(e.message));
+    .then(()=>{toast("🗑️ Deleted!");loadManageQuestions();}).catch(e=>alert(e.message));
 }
 
-// TEST
 let currentCourse="",currentQuestions=[],timeLeft=0,timerInt=null;
-
-/* startTest moved below */
-
-/* renderTest replaced by renderSingleQ */
-
-function startTimer(s){stopTimer();timeLeft=s;updateTimer();timerInt=setInterval(()=>{timeLeft--;updateTimer();if(timeLeft<=0){stopTimer();submitTest();}},1000);}
-function stopTimer(){if(timerInt){clearInterval(timerInt);timerInt=null;}}
-function updateTimer(){
-  const m=Math.floor(timeLeft/60),s=timeLeft%60;
-  g("timerDisplay").textContent=(m<10?"0":"")+m+":"+(s<10?"0":"")+s;
-  g("timerDisplay").style.background=timeLeft<=30?"linear-gradient(135deg,#ef4444,#dc2626)":"linear-gradient(135deg,#10b981,#059669)";
-}
-/* closeTest moved below */
-
-/* submitTest moved below */
-
-function loadLeaderboard(){
-  const div=g("leaderboard"); if(!div) return;
-  const sel=g("lbCourseSel"); const course=sel?sel.value:"";
-  const label=g("lbCourseLabel");
-  if(label) label.textContent = course ? "Top 10 for: "+course : "Select a course to view scores";
-  if(!course){div.innerHTML='<div class="empty"><div class="empty-icon">📋</div>Select a course above to see its leaderboard</div>';return;}
-  div.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
-  db.collection("leaderboard").where("course","==",course).orderBy("pct","desc").orderBy("score","desc").limit(10).get().then(snap=>{
-    if(snap.empty){div.innerHTML='<div class="empty"><div class="empty-icon">🏅</div>No scores yet for this course!</div>';return;}
-    let html="",i=1;
-    const rc=["r1","r2","r3"],med=["🥇","🥈","🥉"];
-    snap.forEach(doc=>{
-      const d=doc.data(),r=i<=3?rc[i-1]:"rn",m=i<=3?med[i-1]:i;
-      html+=`<div class="lb-row">
-        <div class="lb-rank ${r}">${m}</div>
-        <div class="lb-name">${esc(d.user||"Student")}</div>
-        <div class="lb-score">${d.score}/${d.total} (${d.pct}%)</div>
-      </div>`;
-      i++;
-    });
-    div.innerHTML=html;
-  }).catch(e=>{div.innerHTML=`<div class="empty">${esc(e.message)}</div>`;});
-}
-/* ── MOBILE TABS ── */
-function mobTab(id, btn) {
-  document.querySelectorAll('.mob-sec').forEach(s => { s.style.display = 'none'; s.classList.remove('active'); });
-  document.querySelectorAll('.mtab').forEach(b => b.classList.remove('active'));
-  const el = document.getElementById('mob-' + id);
-  if (el) { el.style.display = 'block'; el.classList.add('active'); }
-  btn.classList.add('active');
-}
-
-/* ── PAST SCORES ── */
-function loadPastScores() {
-  const u = auth.currentUser;
-  if (!u) return;
-  const email = u.email || '';
-  const render = (divId) => {
-    const div = document.getElementById(divId); if (!div) return;
-    div.innerHTML = '<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
-    db.collection('leaderboard').where('email', '==', email).orderBy('at', 'desc').limit(20).get().then(snap => {
-      if (snap.empty) { div.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>No attempts yet. Start a test!</div>'; return; }
-      let html = '';
-      snap.forEach(doc => {
-        const d = doc.data(), pct = d.pct || 0;
-        const cls = pct >= 80 ? 'pg' : pct >= 60 ? 'pb' : pct >= 40 ? 'po' : 'pr';
-        const icon = pct >= 80 ? '🌟' : pct >= 60 ? '👍' : pct >= 40 ? '📚' : '💪';
-        const date = d.at?.toDate ? d.at.toDate().toLocaleDateString('en-IN', {day:'numeric',month:'short'}) : '-';
-        html += `<div class="ps-row"><div style="font-size:20px;">${icon}</div><div class="ps-info"><b>${esc(d.course || 'Unknown')}</b><span>${date} • ${d.score}/${d.total} correct</span></div><span class="pct-chip ${cls}">${pct}%</span></div>`;
-      });
-      div.innerHTML = html;
-    }).catch(() => { div.innerHTML = '<div class="empty">⚠️ Could not load scores.</div>'; });
-  };
-  render('sideScoreList'); render('mobScoreList');
-}
-
-/* ── QUESTION COUNT BADGES ── */
-const qCounts = {};
-function getQCount(name, cb) {
-  if (qCounts[name] !== undefined) { cb(qCounts[name]); return; }
-  db.collection('courses').doc(name).collection('questions').get().then(s => { qCounts[name] = s.size; cb(s.size); }).catch(() => cb(0));
-}
-
-/* ── EDIT MODAL ── */
-function openEdit(course, qid, data) {
-  document.getElementById('editQId').value = qid;
-  document.getElementById('editCourse').value = course;
-  document.getElementById('editQText').value = data.question || '';
-  (data.options || []).forEach((o, i) => { const el = document.getElementById('eOpt' + i); if (el) el.value = o; });
-  document.getElementById('eCorrect').value = data.correct ?? 0;
-  document.getElementById('eTime').value = data.time || 5;
-  document.getElementById('editModal').classList.add('open');
-}
-function saveEdit() {
-  const qid = document.getElementById('editQId').value, course = document.getElementById('editCourse').value;
-  const q = document.getElementById('editQText').value.trim();
-  const opts = [0,1,2,3].map(i => document.getElementById('eOpt'+i).value.trim());
-  const correct = parseInt(document.getElementById('eCorrect').value, 10), time = parseInt(document.getElementById('eTime').value, 10);
-  if (!q || opts.some(o => !o)) return alert('Fill all fields');
-  if (isNaN(correct) || correct < 0 || correct > 3) return alert('Correct must be 0-3');
-  if (isNaN(time) || time <= 0) return alert('Time must be > 0');
-  db.collection('courses').doc(course).collection('questions').doc(qid).update({ question:q, options:opts, correct, time })
-    .then(() => { toast('✅ Question updated!'); document.getElementById('editModal').classList.remove('open'); loadManageQDesk(); })
-    .catch(e => alert(e.message));
-}
-
-/* ── MANAGE QUESTIONS (DESKTOP) ── */
-function loadManageQDesk() {
-  const sel = document.getElementById('manageCoursePickDesk');
-  if (!sel) return;
-  const course = sel.value;
-  const div = document.getElementById('manageQListDesk'); if (!div) return;
-  if (!course) { div.innerHTML = ''; return; }
-  div.innerHTML = '<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
-  db.collection('courses').doc(course).collection('questions').orderBy('createdAt','asc').get().then(snap => {
-    if (snap.empty) { div.innerHTML = '<div class="empty"><div class="empty-icon">📭</div>No questions yet.</div>'; return; }
-    let html = '';
-    snap.forEach(doc => {
-      const d = doc.data(), id = doc.id;
-      const opts = (d.options||[]).map((o,i) => `<span class="q-chip${i===d.correct?' correct':''}">${['A','B','C','D'][i]}: ${esc(o)}</span>`).join('');
-      html += `<div class="q-manage"><div class="q-manage-top"><span class="q-text">${esc(d.question)}</span><div class="q-actions"><button class="btn-edit" onclick='openEdit("${escQ(course)}","${id}",${JSON.stringify(d)})'>✏️ Edit</button><button class="btn-del" onclick="delQ('${escQ(course)}','${id}')">🗑️</button></div></div><div class="q-opts">${opts}</div></div>`;
-    });
-    div.innerHTML = html;
-  }).catch(e => { div.innerHTML = `<div class="empty">${esc(e.message)}</div>`; });
-}
-
-/* ── RESULT REVIEW ── */
-function showReview(score, pct, answers) {
-  const total = currentQuestions.length;
-  const cls = pct >= 80 ? 'great' : pct >= 60 ? 'good' : pct >= 40 ? 'ok' : 'bad';
-  const msg = pct >= 80 ? '🎉 Excellent!' : pct >= 60 ? '👍 Good Job!' : pct >= 40 ? '📚 Keep Practising!' : '💪 Don\'t Give Up!';
-  document.getElementById('resultBanner').innerHTML = `<div class="result-banner ${cls}"><div class="result-score">${score}/${total}</div><div class="result-msg">${msg} — ${pct}%</div></div>`;
-  document.getElementById('reviewSub').textContent = currentCourse + ' • ' + score + ' correct of ' + total;
-  const L = ['A','B','C','D']; let html = '';
-  currentQuestions.forEach((q, i) => {
-    const ua = answers[i], ca = q.correct;
-    let opts = '';
-    (q.options||[]).forEach((o, idx) => {
-      let c2 = 'opt', tag = '';
-      if (idx === ca) { c2 += ' correct-ans'; tag = '<span class="review-tag tag-c">✅ Correct</span>'; }
-      else if (idx === ua && ua !== ca) { c2 += ' wrong-ans'; tag = '<span class="review-tag tag-w">❌ Your Answer</span>'; }
-      opts += `<div class="${c2}" style="cursor:default;"><span class="opt-label">${L[idx]}.</span><span>${esc(o)}</span>${tag}</div>`;
-    });
-    const st = ua === -1 ? '<span class="review-tag tag-s">⏭ Skipped</span>' : ua === ca ? '<span class="review-tag tag-c">✅ Correct</span>' : '<span class="review-tag tag-w">❌ Wrong</span>';
-    html += `<div class="qbox"><b>Q${i+1}. ${esc(q.question)} ${st}</b><div>${opts}</div></div>`;
-  });
-  document.getElementById('reviewArea').innerHTML = html;
-  document.getElementById('reviewBox').style.display = 'block';
-  document.getElementById('reviewBox').scrollIntoView({ behavior: 'smooth' });
-}
-
-/* ── CLEAR LEADERBOARD (Admin only) ── */
-function clearLeaderboard(){
-  const sel=g("lbCourseSel"); const course=sel?sel.value:"";
-  if(!course){alert("Select a course first to clear its leaderboard.");return;}
-  if(!confirm("Delete ALL leaderboard scores for: "+course+"?\nThis cannot be undone!"))return;
-  db.collection("leaderboard").where("course","==",course).get().then(snap=>{
-    if(snap.empty){toast("No scores to delete.");return;}
-    const batch=db.batch();
-    snap.forEach(doc=>batch.delete(doc.ref));
-    return batch.commit();
-  }).then(()=>{toast("🗑️ Leaderboard cleared for: "+course);loadLeaderboard();}).catch(e=>alert(e.message));
-}
-
-/* ── POPULATE LEADERBOARD COURSE SELECT ── */
-function refreshLbPick(){
-  const sel=g("lbCourseSel"); if(!sel) return;
-  const cur=sel.value;
-  sel.innerHTML='<option value="">— Select Course —</option>';
-  db.collection("courses").get().then(snap=>{
-    snap.forEach(doc=>{
-      const o=document.createElement("option");
-      o.value=doc.id; o.textContent=doc.id;
-      if(doc.id===cur) o.selected=true;
-      sel.appendChild(o);
-    });
-  }).catch(()=>{});
-}
-
-/* ══ CLASS FILTER & SEARCH ══ */
-let activeClass = 'all';
-let allCourseDocs = [];
-
-function setClass(cls, btn){
-  activeClass = cls;
-  document.querySelectorAll('.class-chip').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  renderFilteredCourses();
-}
-
-function filterCourses(){ renderFilteredCourses(); }
-
-function renderFilteredCourses(){
-  const div = g('courseList');
-  const search = (g('courseSearch')?.value||'').toLowerCase();
-  let filtered = allCourseDocs.filter(doc=>{
-    const name = doc.id.toLowerCase();
-    const matchClass = activeClass==='all' || name.includes(activeClass.toLowerCase());
-    const matchSearch = !search || name.includes(search);
-    return matchClass && matchSearch;
-  });
-  if(!filtered.length){
-    div.innerHTML='<div class="empty"><div class="empty-icon">🔍</div>No courses found.</div>';return;
-  }
-  const emojisL=["📘","📗","📙","📕","🔬","🧮","🌍","🎨","🏛️","⚗️"];
-  let html2="";
-  filtered.forEach((doc,i)=>{
-    const name=doc.id, paid=!!doc.data().paid, em=emojisL[i%emojisL.length];
-    html2+=`<div class="course-card">
-      <div class="course-icon" style="background:linear-gradient(135deg,${['#4f46e5,#7c3aed','#10b981,#059669','#f59e0b,#ef4444','#0ea5e9,#6366f1'][i%4]})">${em}</div>
-      <div class="course-info" style="flex:1"><b>${esc(name)}</b><span>${paid?"🔒 Premium Course":"✅ Free Course"}</span></div>
-      <div>${paid?'<span class="lock-tag">🔒 Locked</span>':`<button class="btn-start" onclick="startTest('${escQ(name)}')">Start ▶</button>`}</div>
-    </div>`;
-  });
-  div.innerHTML=html2;
-}
-
-/* Override loadCourses to cache docs */
-function loadCourses(){
-  const div=g("courseList");div.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
-  db.collection("courses").get().then(snap=>{
-    if(snap.empty){div.innerHTML='<div class="empty"><div class="empty-icon">📭</div>No courses yet.</div>';return;}
-    allCourseDocs=[];snap.forEach(doc=>allCourseDocs.push(doc));
-    renderFilteredCourses();
-  }).catch(e=>{div.innerHTML=`<div class="empty">❌ ${esc(e.message)}</div>`;});
-}
-
-/* ══ QUESTION-BY-QUESTION NAVIGATION ══ */
-let currentQIndex = 0;
-let qAnswers = [];  // -1 = not visited, -2 = skipped, 0-3 = answered
-let qStatus = [];   // 'notvisited','skipped','attempted'
+let currentQIndex=0,qAnswers=[],qStatus=[];
 
 function startTest(course){
   currentCourse=course;
   g("testTitle").textContent="📝 "+course;
   g("testBox").style.display="block";
-  g("questionArea").innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading questions...</div>';
+  g("questionArea").innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
   g("qCountInfo").textContent="";
   stopTimer();
   db.collection("courses").doc(course).collection("questions").get().then(snap=>{
@@ -895,38 +527,24 @@ function startTest(course){
     qStatus=new Array(currentQuestions.length).fill('notvisited');
     g("qCountInfo").textContent=currentQuestions.length+" questions";
     g("qnavPanel").style.display="block";
-    renderSingleQ(currentQIndex);
-    buildNavGrid();
+    renderSingleQ(0);buildNavGrid();
     startTimer((currentQuestions[0].time||5)*60);
     g("testBox").scrollIntoView({behavior:"smooth"});
   }).catch(e=>alert(e.message));
 }
 
 function renderSingleQ(idx){
-  const q = currentQuestions[idx];
-  const labels=["A","B","C","D"];
-  if(qStatus[idx]==='notvisited') qStatus[idx]='notvisited'; // stays until saved
+  const q=currentQuestions[idx],labels=["A","B","C","D"];
   let opts="";
   (q.options||[]).forEach((o,oi)=>{
-    const sel = qAnswers[idx]===oi;
-    opts+=`<label class="opt${sel?' selected':''}" onclick="selectOpt(${oi},this,${idx})">
-      <input type="radio" name="cq" value="${oi}" ${sel?'checked':''}>
-      <span style="font-weight:700;color:#4f46e5;min-width:20px;">${labels[oi]}.</span>
-      <span>${esc(o)}</span>
-    </label>`;
+    const sel=qAnswers[idx]===oi;
+    opts+=`<label class="opt${sel?' selected':''}" onclick="selectOpt(${oi},this,${idx})"><input type="radio" name="cq" value="${oi}"${sel?' checked':''}><span style="font-weight:700;color:#4f46e5;min-width:20px;">${labels[oi]}.</span><span>${esc(o)}</span></label>`;
   });
-  g("questionArea").innerHTML=`<div class="qbox fade-in">
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-      <b style="font-size:13px;color:#6b7280;">Question ${idx+1} of ${currentQuestions.length}</b>
-    </div>
-    <b>Q${idx+1}. ${esc(q.question)}</b>
-    <div>${opts}</div>
-  </div>`;
-  updateNavGrid();
-  updateNavStats();
+  g("questionArea").innerHTML=`<div class="qbox fade-in"><b style="font-size:13px;color:#6b7280;display:block;margin-bottom:6px;">Question ${idx+1} of ${currentQuestions.length}</b><b>Q${idx+1}. ${esc(q.question)}</b><div>${opts}</div></div>`;
+  buildNavGrid();updateNavStats();
 }
 
-function selectOpt(val, lbl, idx){
+function selectOpt(val,lbl,idx){
   qAnswers[idx]=val;
   document.querySelectorAll('.opt').forEach(o=>o.classList.remove('selected'));
   lbl.classList.add('selected');
@@ -934,85 +552,152 @@ function selectOpt(val, lbl, idx){
 
 function saveAndNext(){
   const sel=document.querySelector('input[name="cq"]:checked');
-  if(sel) qAnswers[currentQIndex]=parseInt(sel.value);
-  if(qAnswers[currentQIndex]>=0) qStatus[currentQIndex]='attempted';
-  if(currentQIndex<currentQuestions.length-1){
-    currentQIndex++;
-    renderSingleQ(currentQIndex);
-  } else {
-    toast("✅ All questions done! Click Submit to finish.");
-  }
+  if(sel)qAnswers[currentQIndex]=parseInt(sel.value);
+  if(qAnswers[currentQIndex]>=0)qStatus[currentQIndex]='attempted';
+  if(currentQIndex<currentQuestions.length-1){currentQIndex++;renderSingleQ(currentQIndex);}
+  else{toast("✅ All done! Click Submit.");}
   buildNavGrid();
 }
 
 function skipQuestion(){
   qStatus[currentQIndex]='skipped';
-  if(qAnswers[currentQIndex]===-1) qAnswers[currentQIndex]=-2;
-  if(currentQIndex<currentQuestions.length-1){
-    currentQIndex++;
-    renderSingleQ(currentQIndex);
-  }
+  if(qAnswers[currentQIndex]===-1)qAnswers[currentQIndex]=-2;
+  if(currentQIndex<currentQuestions.length-1){currentQIndex++;renderSingleQ(currentQIndex);}
   buildNavGrid();
 }
 
 function buildNavGrid(){
-  const grid=g("qnavGrid"); if(!grid) return;
+  const grid=g("qnavGrid");if(!grid)return;
   let html="";
   qStatus.forEach((st,i)=>{
     const cls=i===currentQIndex?'current '+(st==='attempted'?'attempted':st==='skipped'?'skipped':''):st;
     html+=`<button class="qnav-btn ${cls}" onclick="goToQ(${i})">${i+1}</button>`;
   });
-  grid.innerHTML=html;
-  updateNavStats();
+  grid.innerHTML=html;updateNavStats();
 }
-
-function updateNavGrid(){ buildNavGrid(); }
 
 function updateNavStats(){
   const att=qStatus.filter(s=>s==='attempted').length;
   const sk=qStatus.filter(s=>s==='skipped').length;
   const nv=qStatus.filter(s=>s==='notvisited').length;
   const ea=g("navAttempted"),es=g("navSkipped"),en=g("navNotVisited");
-  if(ea) ea.textContent=att;
-  if(es) es.textContent=sk;
-  if(en) en.textContent=nv;
+  if(ea)ea.textContent=att;if(es)es.textContent=sk;if(en)en.textContent=nv;
 }
 
-function goToQ(idx){
-  currentQIndex=idx;
-  renderSingleQ(idx);
+function goToQ(idx){currentQIndex=idx;renderSingleQ(idx);}
+
+function startTimer(s){stopTimer();timeLeft=s;updateTimer();timerInt=setInterval(()=>{timeLeft--;updateTimer();if(timeLeft<=0){stopTimer();submitTest();}},1000);}
+function stopTimer(){if(timerInt){clearInterval(timerInt);timerInt=null;}}
+function updateTimer(){
+  const m=Math.floor(timeLeft/60),s=timeLeft%60;
+  g("timerDisplay").textContent=(m<10?"0":"")+m+":"+(s<10?"0":"")+s;
+  g("timerDisplay").style.background=timeLeft<=30?"linear-gradient(135deg,#ef4444,#dc2626)":"linear-gradient(135deg,#10b981,#059669)";
 }
 
-/* Override submitTest to use qAnswers */
 function submitTest(){
-  stopTimer();
-  if(!currentQuestions.length){alert("No questions.");return;}
+  stopTimer();if(!currentQuestions.length){alert("No questions.");return;}
   let score=0;
-  currentQuestions.forEach((q,i)=>{
-    if(qAnswers[i]===q.correct) score++;
-  });
+  currentQuestions.forEach((q,i)=>{if(qAnswers[i]===q.correct)score++;});
   const pct=Math.round((score/currentQuestions.length)*100);
   const u=auth.currentUser;
-  db.collection("leaderboard").add({user:u.displayName||u.email||"Student",email:u.email||"",score,total:currentQuestions.length,pct,course:currentCourse,at:firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{
-    const lbSel=g("lbCourseSel");if(lbSel)lbSel.value=currentCourse;
-    loadLeaderboard();loadPastScores();updateRankBadge();
-  });
-  showReview(score,pct,qAnswers);
-  closeTest();
+  db.collection("leaderboard").add({user:u.displayName||u.email||"Student",email:u.email||"",score,total:currentQuestions.length,pct,course:currentCourse,at:firebase.firestore.FieldValue.serverTimestamp()})
+    .then(()=>{const lbSel=g("lbCourseSel");if(lbSel)lbSel.value=currentCourse;loadLeaderboard();loadPastScores();updateRankBadge();});
+  showReview(score,pct,qAnswers);closeTest();
 }
 
 function closeTest(){
-  stopTimer();
-  g("testBox").style.display="none";
-  g("qnavPanel") && (g("qnavPanel").style.display="none");
-  currentQIndex=0; qAnswers=[]; qStatus=[];
+  stopTimer();g("testBox").style.display="none";
+  if(g("qnavPanel"))g("qnavPanel").style.display="none";
+  currentQIndex=0;qAnswers=[];qStatus=[];
 }
 
-/* ══ RANK BADGE ══ */
+function showReview(score,pct,answers){
+  const total=currentQuestions.length;
+  const cls=pct>=80?'great':pct>=60?'good':pct>=40?'ok':'bad';
+  const msg=pct>=80?'🎉 Excellent!':pct>=60?'👍 Good Job!':pct>=40?'📚 Keep Practising!':'💪 Don\'t Give Up!';
+  g('resultBanner').innerHTML=`<div class="result-banner ${cls}"><div class="result-score">${score}/${total}</div><div class="result-msg">${msg} — ${pct}%</div></div>`;
+  g('reviewSub').textContent=currentCourse+' • '+score+' correct of '+total;
+  const L=['A','B','C','D'];let html='';
+  currentQuestions.forEach((q,i)=>{
+    const ua=answers[i],ca=q.correct;let opts='';
+    (q.options||[]).forEach((o,idx)=>{
+      let c2='opt',tag='';
+      if(idx===ca){c2+=' correct-ans';tag='<span class="review-tag tag-c">✅ Correct</span>';}
+      else if(idx===ua&&ua!==ca){c2+=' wrong-ans';tag='<span class="review-tag tag-w">❌ Your Answer</span>';}
+      opts+=`<div class="${c2}" style="cursor:default;"><span style="font-weight:700;color:#4f46e5;min-width:20px;">${L[idx]}.</span><span>${esc(o)}</span>${tag}</div>`;
+    });
+    const st=ua===-1||ua===-2?'<span class="review-tag tag-s">⏭ Skipped</span>':ua===ca?'<span class="review-tag tag-c">✅ Correct</span>':'<span class="review-tag tag-w">❌ Wrong</span>';
+    html+=`<div class="qbox"><b>Q${i+1}. ${esc(q.question)} ${st}</b><div>${opts}</div></div>`;
+  });
+  g('reviewArea').innerHTML=html;
+  g('reviewBox').style.display='block';
+  g('reviewBox').scrollIntoView({behavior:'smooth'});
+}
+
+function loadLeaderboard(){
+  const div=g("leaderboard");if(!div)return;
+  const sel=g("lbCourseSel"),course=sel?sel.value:"";
+  const label=g("lbCourseLabel");
+  if(label)label.textContent=course?"Top 10 for: "+course:"Select a course to view scores";
+  if(!course){div.innerHTML='<div class="empty"><div class="empty-icon">📋</div>Select a course above</div>';return;}
+  div.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
+  db.collection("leaderboard").where("course","==",course).orderBy("pct","desc").orderBy("score","desc").limit(10).get().then(snap=>{
+    if(snap.empty){div.innerHTML='<div class="empty"><div class="empty-icon">🏅</div>No scores yet!</div>';return;}
+    let html="",i=1;
+    const rc=["r1","r2","r3"],med=["🥇","🥈","🥉"];
+    snap.forEach(doc=>{
+      const d=doc.data(),r=i<=3?rc[i-1]:"rn",m=i<=3?med[i-1]:i;
+      html+=`<div class="lb-row"><div class="lb-rank ${r}">${m}</div><div class="lb-name">${esc(d.user||"Student")}</div><div class="lb-score">${d.score}/${d.total} (${d.pct}%)</div></div>`;
+      i++;
+    });
+    div.innerHTML=html;
+  }).catch(e=>{div.innerHTML=`<div class="empty">${esc(e.message)}</div>`;});
+}
+
+function loadPastScores(){
+  const u=auth.currentUser;if(!u)return;
+  const email=u.email||'';
+  ['sideScoreList','mobScoreList'].forEach(divId=>{
+    const div=document.getElementById(divId);if(!div)return;
+    div.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
+    db.collection('leaderboard').where('email','==',email).orderBy('at','desc').limit(20).get().then(snap=>{
+      if(snap.empty){div.innerHTML='<div class="empty"><div class="empty-icon">📭</div>No attempts yet.</div>';return;}
+      let html='';
+      snap.forEach(doc=>{
+        const d=doc.data(),pct=d.pct||0;
+        const cls=pct>=80?'pg':pct>=60?'pb':pct>=40?'po':'pr';
+        const icon=pct>=80?'🌟':pct>=60?'👍':pct>=40?'📚':'💪';
+        const date=d.at?.toDate?d.at.toDate().toLocaleDateString('en-IN',{day:'numeric',month:'short'}):'-';
+        html+=`<div class="ps-row"><div style="font-size:20px;">${icon}</div><div class="ps-info"><b>${esc(d.course||'Unknown')}</b><span>${date} • ${d.score}/${d.total} correct</span></div><span class="pct-chip ${cls}">${pct}%</span></div>`;
+      });
+      div.innerHTML=html;
+    }).catch(()=>{div.innerHTML='<div class="empty">⚠️ Could not load.</div>';});
+  });
+}
+
+function clearLeaderboard(){
+  const sel=g("lbCourseSel"),course=sel?sel.value:"";
+  if(!course){alert("Select a course first.");return;}
+  if(!confirm("Delete ALL scores for: "+course+"?\nCannot be undone!"))return;
+  db.collection("leaderboard").where("course","==",course).get().then(snap=>{
+    if(snap.empty){toast("No scores to delete.");return;}
+    const batch=db.batch();snap.forEach(doc=>batch.delete(doc.ref));return batch.commit();
+  }).then(()=>{toast("🗑️ Cleared!");loadLeaderboard();}).catch(e=>alert(e.message));
+}
+
+function refreshLbPick(){
+  const sel=g("lbCourseSel");if(!sel)return;
+  const cur=sel.value;
+  sel.innerHTML='<option value="">— Select Course —</option>';
+  db.collection("courses").get().then(snap=>{
+    snap.forEach(doc=>{const o=document.createElement("option");o.value=doc.id;o.textContent=doc.id;if(doc.id===cur)o.selected=true;sel.appendChild(o);});
+  });
+}
+
 function updateRankBadge(){
-  const u=auth.currentUser; if(!u) return;
+  const u=auth.currentUser;if(!u)return;
   db.collection('leaderboard').where('email','==',u.email||'').get().then(snap=>{
-    if(snap.empty) return;
+    if(snap.empty)return;
     let total=0,count=0;
     snap.forEach(doc=>{const d=doc.data();if(d.pct!==undefined){total+=d.pct;count++;}});
     const avg=count?Math.round(total/count):0;
@@ -1022,21 +707,16 @@ function updateRankBadge(){
   }).catch(()=>{});
 }
 
-/* ══ CHATBOT ══ */
 function toggleChat(){
-  const box=g('chatBox');
-  box.classList.toggle('open');
-  if(box.classList.contains('open')) g('chatInput').focus();
+  const box=g('chatBox');box.classList.toggle('open');
+  if(box.classList.contains('open'))g('chatInput').focus();
 }
 
-let chatHistory = [];
-// Gemini API - free tier, works from browser
-// AI Tutor - uses free AI, no API key needed
+let chatHistory=[];
 
 function sendChat(){
   const inp=g('chatInput');
-  const msg=(inp.value||'').trim();
-  if(!msg) return;
+  const msg=(inp.value||'').trim();if(!msg)return;
   inp.value='';
   const msgs=g('chatMsgs');
   msgs.innerHTML+=`<div class="chat-msg user">${esc(msg)}</div>`;
@@ -1044,6 +724,8 @@ function sendChat(){
   msgs.innerHTML+=`<div class="chat-msg bot" id="${typingId}">🦉 Thinking...</div>`;
   msgs.scrollTop=msgs.scrollHeight;
   chatHistory.push({role:"user",content:msg});
+  const key=localStorage.getItem("tn_gemini_key")||"";
+  const m=msg.toLowerCase();
 
   function showReplyInChat(reply){
     chatHistory.push({role:"assistant",content:reply});
@@ -1053,150 +735,78 @@ function sendChat(){
     g('chatMsgs').scrollTop=g('chatMsgs').scrollHeight;
   }
 
-  // Build conversation for API
-  const messages = chatHistory.slice(-10).map(h=>({role:h.role==='assistant'?'assistant':'user', content:h.content}));
-  if(messages.length===0||messages[messages.length-1].role!=='user'){
-    messages.push({role:'user',content:msg});
-  }
-
-  // Try Anthropic Claude API (built-in, no key needed)
-  fetch("https://api.anthropic.com/v1/messages",{
-    method:"POST",
-    headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({
-      model:"claude-sonnet-4-20250514",
-      max_tokens:300,
-      system:"You are TestNest AI Tutor, a friendly and encouraging tutor for Indian school students (Class 1-8). Answer ANY question clearly in 2-4 sentences with relevant emojis. For maths, show the calculation. For science/history/geography, give a simple explanation with one example. Always end with encouragement. Keep answers short and easy to understand. Do not mention Claude or Anthropic.",
-      messages:messages
-    })
-  })
-  .then(r=>r.json())
-  .then(data=>{
-    const reply=data.content?.[0]?.text;
-    if(reply && reply.length>5){
-      showReplyInChat(reply);
+  if(key){
+    const contents=[];
+    contents.push({role:"user",parts:[{text:"You are TestNest AI Tutor for Indian school students. Answer in 2-4 simple sentences with emojis. Give one example. Encourage the student."}]});
+    contents.push({role:"model",parts:[{text:"I am TestNest AI Tutor ready to help!"}]});
+    chatHistory.slice(-8).forEach(h=>{contents.push({role:h.role==='user'?'user':'model',parts:[{text:h.content}]});});
+    fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,{
+      method:"POST",headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({contents,generationConfig:{maxOutputTokens:250,temperature:0.7}})
+    }).then(r=>r.json()).then(data=>{
+      const reply=data.candidates?.[0]?.content?.parts?.[0]?.text;
+      showReplyInChat(reply||smartReply(msg));
+    }).catch(()=>showReplyInChat(smartReply(msg)));
+  } else {
+    const isFactual=/what is|what are|who is|who was|where is|when did|how does|why does|define|explain|tell me about|capital of|full form|meaning of/.test(m);
+    if(isFactual){
+      let searchTerm=msg.replace(/what is|what are|who is|who was|where is|when did|how does|why does|define|explain|tell me about|the|a |an |meaning of|full form of/gi,'').trim().replace(/[?!.]/g,'').trim();
+      fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(searchTerm)}`)
+      .then(r=>r.json()).then(data=>{
+        if(data.extract&&data.extract.length>30){
+          const sentences=data.extract.split('. ');
+          const summary=sentences.slice(0,2).join('. ')+'.';
+          showReplyInChat(`🦉 **${data.title}**\n\n${summary}\n\n📚 Keep learning! 💪`);
+        } else {showReplyInChat(smartReply(msg));}
+      }).catch(()=>showReplyInChat(smartReply(msg)));
     } else {
-      // Fallback to Gemini if available
-      const key=localStorage.getItem("tn_gemini_key")||"";
-      if(key){useGemini(key,msg,showReplyInChat);}
-      else{showReplyInChat(smartReply(msg));}
+      setTimeout(()=>showReplyInChat(smartReply(msg)),500);
     }
-  })
-  .catch(()=>{
-    // Fallback to Gemini
-    const key=localStorage.getItem("tn_gemini_key")||"";
-    if(key){useGemini(key,msg,showReplyInChat);}
-    else{showReplyInChat(smartReply(msg));}
-  });
+  }
 }
-
-function useGemini(key,msg,showReplyInChat){
-  const contents=[];
-  contents.push({role:"user",parts:[{text:"You are TestNest AI Tutor for Indian school students. Answer in 2-4 simple sentences with emojis. Give one example. Encourage the student."}]});
-  contents.push({role:"model",parts:[{text:"I am TestNest AI Tutor ready to help!"}]});
-  chatHistory.slice(-8).forEach(h=>{contents.push({role:h.role==='user'?'user':'model',parts:[{text:h.content}]});});
-  fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${key}`,{
-    method:"POST",headers:{"Content-Type":"application/json"},
-    body:JSON.stringify({contents,generationConfig:{maxOutputTokens:250,temperature:0.7}})
-  }).then(r=>r.json()).then(data=>{
-    const reply=data.candidates?.[0]?.content?.parts?.[0]?.text;
-    showReplyInChat(reply||smartReply(msg));
-  }).catch(()=>showReplyInChat(smartReply(msg)));
-}
-
 
 function smartReply(msg){
   const m=msg.toLowerCase();
-  // Greetings
-  if(/^(hi|hello|hey|namaste|hii|helo)/.test(m)) return "Hello! 👋 I am TestNest AI Tutor! What subject would you like help with today? I can help with Maths, Science, English, Hindi, Social Studies and more! 📚";
-  if(/thank/.test(m)) return "You're welcome! 😊 Keep studying hard and you'll do great! 🌟 Is there anything else you'd like to know?";
-  if(/how are you|how r u/.test(m)) return "I'm doing great and ready to help you learn! 🦉💪 What topic would you like to study today?";
-  if(/your name|who are you/.test(m)) return "I am TestNest AI Tutor 🦉! I am here to help students like you learn better. Ask me anything about your subjects! 📖";
-  // Maths
-  if(/\d+\s*[\+\-\*\/]\s*\d+/.test(m) || /\d+\s*x\s*\d+/.test(m)){
-    try{let expr=m.match(/\d+\s*[\+\-\*\/x]\s*\d+/)[0].replace(/x/gi,'*');const ans=eval(expr);if(ans!==undefined && !isNaN(ans))return `${m.replace(/[^\d\+\-\*\/x\s\.]/gi,'').trim()} = ${ans} 🧮 Great job! Keep practising! 💪`;}catch(e){}
-  }
-  if(/multipli|times table|table of/.test(m)){
-    const n=m.match(/\d+/);
-    if(n){const num=parseInt(n[0]);let t=`Here is the ${num} times table! 🧮
-`;for(let i=1;i<=10;i++)t+=`${num} × ${i} = ${num*i}
-`;return t+"Practice daily and you'll remember it! 💪";}
-  }
-  if(/maths|math|addition|subtract|multiply|divide|fraction|decimal|percent|algebra|geometry|triangle|circle|square|number/.test(m)) return "Great Maths question! 🧮 Maths is all about practice. For example, to add fractions like 1/2 + 1/3, find the common denominator: 3/6 + 2/6 = 5/6. Try solving 5 problems daily and you'll improve fast! 💪";
-  // Science  
-  if(/photosynthesis/.test(m)) return "Photosynthesis is how plants make food! 🌱 Plants use sunlight, water (H₂O) and carbon dioxide (CO₂) to make glucose and oxygen. Formula: 6CO₂ + 6H₂O + sunlight → C₆H₁₂O₆ + 6O₂. That's why plants are so important! 🌞";
-  if(/pm of india|prime minister/.test(m)) return "The Prime Minister of India is Narendra Modi! 🇮🇳 He has been PM since 2014. The PM is the head of the government of India. 🏛️";
-  if(/president of india/.test(m)) return "The President of India is Droupadi Murmu! 🇮🇳 She became President in 2022. The President is the constitutional head of India. 🏛️";
-  if(/capital of india/.test(m)) return "The capital of India is New Delhi! 🇮🇳 It is located in the northern part of India and is the seat of the Indian government. 🏛️";
+  if(/^(hi|hello|hey|namaste|hii|helo)/.test(m))return"Hello! 👋 I am TestNest AI Tutor! What subject would you like help with today? 📚";
+  if(/thank/.test(m))return"You're welcome! 😊 Keep studying hard! 🌟";
+  if(/how are you/.test(m))return"I'm great and ready to help you learn! 🦉💪";
+  if(/your name|who are you/.test(m))return"I am TestNest AI Tutor 🦉! Ask me anything about your subjects! 📖";
+  if(/what is \d+\s*[\+\-\*x\/]\s*\d+/.test(m)){try{const expr=m.match(/[\d\s\+\-\*x\/\.]+/)[0].replace(/x/g,'*');return`The answer is ${eval(expr)}! 🧮 Keep solving! 💪`;}catch(e){}}
+  if(/multipli|times table|table of/.test(m)){const n=m.match(/\d+/);if(n){const num=parseInt(n[0]);let t=`Here is the ${num} times table! 🧮\n`;for(let i=1;i<=10;i++)t+=`${num} × ${i} = ${num*i}\n`;return t+"Practice daily! 💪";}}
+  if(/photosynthesis/.test(m))return"Photosynthesis is how plants make food! 🌱 Plants use sunlight, water (H₂O) and CO₂ to make glucose and oxygen. Formula: 6CO₂ + 6H₂O + sunlight → C₆H₁₂O₆ + 6O₂. Plants are amazing! 🌞";
+  if(/pm of india|prime minister of india/.test(m))return"The Prime Minister of India is Narendra Modi! 🇮🇳 He has been PM since 2014. The PM is the head of the government. 🏛️";
+  if(/president of india/.test(m))return"The President of India is Droupadi Murmu! 🇮🇳 She became President in 2022. 🏛️";
+  if(/capital of india/.test(m))return"The capital of India is New Delhi! 🇮🇳 It is the seat of the Indian government. 🏛️";
   if(/capital of/.test(m)){
-    const caps={maharashtra:"Mumbai",delhi:"New Delhi",gujarat:"Gandhinagar",rajasthan:"Jaipur",kerala:"Thiruvananthapuram",karnataka:"Bengaluru","tamil nadu":"Chennai",punjab:"Chandigarh",goa:"Panaji",bihar:"Patna",up:"Lucknow","uttar pradesh":"Lucknow",mp:"Bhopal","madhya pradesh":"Bhopal"};
-    for(const[state,cap] of Object.entries(caps)){if(m.includes(state))return `The capital of ${state.charAt(0).toUpperCase()+state.slice(1)} is ${cap}! 🏙️ Great geography question! 🗺️`;}
+    const caps={maharashtra:"Mumbai",gujarat:"Gandhinagar",rajasthan:"Jaipur",kerala:"Thiruvananthapuram",karnataka:"Bengaluru","tamil nadu":"Chennai",punjab:"Chandigarh",goa:"Panaji",bihar:"Patna","uttar pradesh":"Lucknow",up:"Lucknow","madhya pradesh":"Bhopal",mp:"Bhopal"};
+    for(const[state,cap]of Object.entries(caps)){if(m.includes(state))return`The capital of ${state.charAt(0).toUpperCase()+state.slice(1)} is ${cap}! 🏙️ Great geography! 🗺️`;}
   }
-  if(/science|physics|chemistry|biology|cell|atom|force|gravity|magnet|electric|plant|animal|human body|digestive|heart|lung|brain/.test(m)) return "Great Science question! 🔬 Science helps us understand the world around us. For example, gravity is the force that pulls objects toward Earth — that's why things fall down! Always observe, question and experiment. 🌍💡";
-  // English
-  if(/noun|verb|adjective|adverb|pronoun|grammar|tense|sentence|essay|paragraph|poem|story/.test(m)) return "Great English question! 📖 Remember: A noun is a name of a person, place, or thing. A verb shows action. For example: 'The cat (noun) runs (verb) fast (adverb).' Practice writing 5 sentences daily! ✏️";
-  if(/english|spelling|meaning|synonym|antonym|vocabulary/.test(m)) return "English is a wonderful language! 📚 To improve vocabulary, read one new word daily. For example: 'Benevolent' means kind and generous. Use new words in sentences to remember them! ✨";
-  // Hindi
-  if(/hindi|हिंदी|devanagari/.test(m)) return "हिंदी हमारी राष्ट्रभाषा है! 🇮🇳 Hindi is our national language. Practice reading Hindi text daily to improve. Write 5 Hindi sentences every day — you'll improve quickly! 📝";
-  // History/Social Studies
-  if(/independence day|15 august|august 15/.test(m)) return "India's Independence Day is on 15th August! 🇮🇳 India got independence from British rule on 15th August 1947. Jawaharlal Nehru became the first Prime Minister. We celebrate it with pride every year! 🎉";
-  if(/republic day|26 january/.test(m)) return "India's Republic Day is on 26th January! 🇮🇳 The Constitution of India came into effect on 26th January 1950. Dr. B.R. Ambedkar was the chief architect of our Constitution. 📜🎉";
-  if(/history|social|civics|geography|map|river|mountain|climate|weather/.test(m)) return "Great Social Studies question! 🌍 India is a land of diversity with 28 states and 8 union territories. The Himalayas are the highest mountains and the Ganga is our most sacred river. Keep exploring our amazing country! 🗺️";
-  // Computers
-  if(/computer|software|hardware|internet|programming|code|python|html/.test(m)) return "Computers are amazing! 💻 A computer has hardware (physical parts like keyboard, mouse) and software (programs like Word, Chrome). The CPU is the brain of the computer. Programming helps computers understand our instructions! 🖥️";
-  // Study tips
-  if(/how to study|study tips|score more|improve marks|exam tips/.test(m)) return "Here are my top study tips! 📚
-1. Study daily — even 30 minutes helps! ⏰
-2. Make short notes 📝
-3. Practice previous year papers 📄
-4. Take breaks every 45 mins 😴
-5. Revise before sleeping 🌙
-You've got this! 💪";
-  // Default smart response
-  // Try to give subject-specific help based on keywords
-  if(/solar system|planet|sun|moon|star|space|earth/.test(m)) return "Great Space question! 🌍 Our solar system has 8 planets: Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune. Earth is the 3rd planet from the Sun. The Sun is a star — it gives us light and heat! ☀️";
-  if(/water cycle|evaporation|rainfall|cloud|rain/.test(m)) return "The Water Cycle has 4 steps! 💧
-1. Evaporation — water heats up and becomes vapor ☀️
-2. Condensation — vapor cools and forms clouds ☁️
-3. Precipitation — water falls as rain or snow 🌧️
-4. Collection — water collects in rivers and oceans 🌊
-This cycle never stops! Amazing, right? 🌍";
-  if(/food chain|ecosystem|herbivore|carnivore|omnivore/.test(m)) return "Food chain shows who eats whom! 🌿 Example: Grass → Grasshopper → Frog → Snake → Eagle. Plants are producers, animals are consumers. Herbivores eat plants 🐰, Carnivores eat animals 🦁, Omnivores eat both 🐻. Nature is balanced! 🌍";
-  if(/fraction|decimal|percentage|ratio/.test(m)) return "Fractions, decimals and percentages are all related! 🧮
-1/2 = 0.5 = 50%
-1/4 = 0.25 = 25%
-3/4 = 0.75 = 75%
-To convert fraction to %: divide top by bottom × 100. Example: 3/4 = 3÷4 × 100 = 75%! 💡";
-  if(/area|perimeter|volume/.test(m)) return "Great Geometry question! 📐
-Rectangle Area = Length × Width
-Rectangle Perimeter = 2 × (L + W)
-Circle Area = π × r²
-Cube Volume = side³
-Always include the unit (cm², m³ etc.)! 📏";
-  if(/digestive|stomach|intestine|digestion/.test(m)) return "The Digestive System breaks down food! 🍎
-Mouth → Oesophagus → Stomach → Small Intestine → Large Intestine → Rectum
-The small intestine absorbs nutrients. Digestion takes 24-72 hours! Chew your food well 😊";
-  if(/heart|blood|circulation|pulse/.test(m)) return "The Heart pumps blood to your whole body! ❤️ It beats about 70 times per minute. Blood carries oxygen and nutrients. The heart has 4 chambers: 2 Atria and 2 Ventricles. Exercise keeps your heart strong! 🏃";
-  if(/constitution|fundamental rights|democracy|government/.test(m)) return "India is the world's largest democracy! 🇮🇳 Our Constitution gives us Fundamental Rights like Right to Equality, Right to Freedom, and Right to Education. Dr. B.R. Ambedkar wrote our Constitution. We are proud citizens of India! 🏛️";
-  if(/mughal|akbar|ashoka|british|freedom fighter|gandhi|nehru|bhagat/.test(m)) return "India has a rich history! 🏛️ Great rulers like Ashoka spread Buddhism and peace. The Mughal Empire was led by Akbar the Great. British ruled India for 200 years. Our freedom fighters like Gandhi, Nehru, Bhagat Singh sacrificed everything for our independence! 🇮🇳";
+  if(/solar system|planet|space/.test(m))return"Our solar system has 8 planets! 🌍 Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune. Earth is 3rd from the Sun ☀️ which gives us light and heat!";
+  if(/water cycle|evaporation|rain/.test(m))return"The Water Cycle has 4 steps! 💧\n1. Evaporation ☀️\n2. Condensation ☁️\n3. Precipitation 🌧️\n4. Collection 🌊\nThis cycle never stops!";
+  if(/photosynthesis|food chain|ecosystem/.test(m))return"Great Science question! 🔬 Food chain: Grass → Grasshopper → Frog → Snake → Eagle. Plants are producers, animals are consumers! 🌿";
+  if(/maths|math|fraction|decimal|percent|algebra|geometry/.test(m))return"Great Maths question! 🧮 To add fractions: 1/2 + 1/3 = 3/6 + 2/6 = 5/6. Find common denominator first! Practice 5 problems daily! 💪";
+  if(/science|physics|chemistry|biology|gravity|atom|cell/.test(m))return"Great Science question! 🔬 Gravity pulls objects toward Earth — that's why things fall down! Always observe, question and experiment! 🌍";
+  if(/noun|verb|adjective|grammar|tense|sentence/.test(m))return"Great English question! 📖 A noun names a person/place/thing. A verb shows action. Example: 'The cat (noun) runs (verb) fast (adverb).' Practice daily! ✏️";
+  if(/hindi|हिंदी/.test(m))return"हिंदी हमारी राष्ट्रभाषा है! 🇮🇳 Hindi is our national language. Write 5 Hindi sentences daily to improve! 📝";
+  if(/independence day|15 august/.test(m))return"India's Independence Day is 15th August! 🇮🇳 India got independence from British rule on 15th August 1947. Nehru became first PM! 🎉";
+  if(/republic day|26 january/.test(m))return"India's Republic Day is 26th January! 🇮🇳 Constitution came into effect on 26th January 1950. Dr. B.R. Ambedkar was chief architect! 📜";
+  if(/computer|software|hardware|programming/.test(m))return"Computers are amazing! 💻 Hardware = physical parts (keyboard, mouse). Software = programs (Word, Chrome). CPU is the brain of computer! 🖥️";
+  if(/study tips|how to study|improve marks|exam/.test(m))return"Top study tips! 📚\n1. Study daily 30 mins ⏰\n2. Make short notes 📝\n3. Practice papers 📄\n4. Take breaks 😴\n5. Revise before sleep 🌙\nYou've got this! 💪";
+  if(/heart|blood|circulation/.test(m))return"The Heart pumps blood to your whole body! ❤️ It beats ~70 times per minute. Has 4 chambers: 2 Atria and 2 Ventricles. Exercise keeps it strong! 🏃";
+  if(/digestive|stomach|digestion/.test(m))return"Digestive System: Mouth → Oesophagus → Stomach → Small Intestine → Large Intestine → Rectum! 🍎 Small intestine absorbs nutrients. Chew well! 😊";
+  if(/gandhi|nehru|bhagat|freedom fighter|mughal|ashoka/.test(m))return"India has rich history! 🏛️ Freedom fighters like Gandhi, Nehru, Bhagat Singh gave their lives for independence. Ashoka spread peace and Buddhism. We are proud! 🇮🇳";
+  if(/constitution|democracy|government|rights/.test(m))return"India is the world's largest democracy! 🇮🇳 Our Constitution gives Fundamental Rights — Equality, Freedom, Education. Dr. Ambedkar wrote it. Proud citizens! 🏛️";
   const topics=["Maths 🧮","Science 🔬","English 📖","Hindi 🇮🇳","Social Studies 🌍","Computers 💻","GK 🌐"];
-  return `That's an interesting question! 🦉 I'm your TestNest AI Tutor. I can help with: ${topics.join(", ")}. Try asking something like: "What is photosynthesis?" or "How do I calculate area?" or "Who was Mahatma Gandhi?" 💪 Keep learning!`;
+  return`That's interesting! 🦉 I can help with: ${topics.join(", ")}. Try: "What is photosynthesis?" or "What is 12×15?" or "Capital of Maharashtra?" 💪`;
 }
 
-/* ── SET GEMINI KEY (Admin) ── */
 function setGeminiKey(){
-  const cur = localStorage.getItem("tn_gemini_key")||"";
-  const k = prompt("Paste your FREE Gemini API Key here:\n(Get it free at: https://aistudio.google.com/app/apikey)\n\nCurrent status: "+(cur?"✅ Key is set":"❌ No key set"));
-  if(k===null) return;
-  if(k&&k.trim()){
-    localStorage.setItem("tn_gemini_key", k.trim());
-    toast("✅ AI Key saved! Chatbot upgraded to real AI! 🦉");
-  } else if(k===""){
-    localStorage.removeItem("tn_gemini_key");
-    toast("🗑️ AI Key removed. Using smart offline mode.");
-  }
+  const cur=localStorage.getItem("tn_gemini_key")||"";
+  const k=prompt("Paste your FREE Gemini API Key:\n(Get free at: https://aistudio.google.com/app/apikey)\n\nStatus: "+(cur?"✅ Set":"❌ Not set"));
+  if(k===null)return;
+  if(k&&k.trim()){localStorage.setItem("tn_gemini_key",k.trim());toast("✅ AI Key saved! 🦉");}
+  else if(k===""){localStorage.removeItem("tn_gemini_key");toast("🗑️ Key removed.");}
 }
-
 </script>
 </body>
 </html>
