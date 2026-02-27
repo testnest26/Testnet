@@ -189,7 +189,7 @@
         <span class="feat">⏱️ Timer Tests</span>
         <span class="feat">🏆 Leaderboard</span>
         <span class="feat">📊 Auto Result</span>
-        <span class="feat">🔒 Premium Courses</span>
+        <span class="feat">🔒 Premium Tests</span>
         <span class="feat">✏️ Admin Panel</span>
       </div>
     </div>
@@ -213,11 +213,11 @@
       <div>
         <div class="card fade-in">
           <div class="sec-header">
-            <div><div class="card-title">📚 Courses</div><div class="card-sub">Pick a course and start your test</div></div>
+            <div><div class="card-title">📝 Tests</div><div class="card-sub">Pick a test and start now</div></div>
           </div>
           <div class="search-wrap">
             <span class="si">🔍</span>
-            <input type="text" id="courseSearch" placeholder="Search courses..." oninput="filterCourses()"/>
+            <input type="text" id="courseSearch" placeholder="Search tests..." oninput="filterCourses()"/>
           </div>
           <div class="class-scroll" id="classFilter">
             <button class="class-chip active" onclick="setClass('all',this)">All</button>
@@ -231,7 +231,7 @@
             <button class="class-chip" onclick="setClass('Class 7',this)">Class 7</button>
             <button class="class-chip" onclick="setClass('Class 8',this)">Class 8</button>
           </div>
-          <div id="courseList"><div class="empty"><div class="empty-icon">📭</div>Loading courses...</div></div>
+          <div id="courseList"><div class="empty"><div class="empty-icon">📭</div>Loading tests...</div></div>
         </div>
 
         <div id="testBox" style="display:none;" class="card fade-in">
@@ -267,10 +267,10 @@
 
         <div id="manageBox" class="card fade-in" style="display:none;margin-top:16px;">
           <div class="sec-header">
-            <div><div class="card-title">🗂️ Manage Questions</div><div class="card-sub">View and delete questions from courses</div></div>
+            <div><div class="card-title">🗂️ Manage Questions</div><div class="card-sub">View and delete questions from tests</div></div>
           </div>
-          <label class="form-label">Select Course to Manage</label>
-          <select class="form-input" id="manageCoursePick" onchange="loadManageQuestions()"><option value="">Select course</option></select>
+          <label class="form-label">Select Test to Manage</label>
+          <select class="form-input" id="manageCoursePick" onchange="loadManageQuestions()"><option value="">Select test</option></select>
           <div id="manageQList" style="margin-top:14px;"></div>
         </div>
       </div>
@@ -293,15 +293,15 @@
             <div class="admin-title">⚙️ Admin Panel</div>
             <button onclick="setGeminiKey()" style="background:#fef3c7;border:1.5px solid #fcd34d;color:#92400e;border-radius:10px;padding:6px 12px;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;cursor:pointer;">🔑 Set AI Key</button>
           </div>
-          <div class="card-sub" style="margin-bottom:12px;">Create courses & add questions</div>
+          <div class="card-sub" style="margin-bottom:12px;">Create & add questions</div>
           <div class="divider"></div>
-          <label class="form-label">Course Name</label>
+          <label class="form-label">Test Name</label>
           <input type="text" class="form-input" id="courseName" placeholder="e.g., Class 6 Maths / NEET / JEE"/>
-          <div class="check-row"><input type="checkbox" id="paidCourse"> <label for="paidCourse">🔒 Paid Course (Locked)</label></div>
-          <button class="btn-save" onclick="addCourse()">💾 Save Course</button>
+          <div class="check-row"><input type="checkbox" id="paidCourse"> <label for="paidCourse">🔒 Paid Test (Locked)</label></div>
+          <button class="btn-save" onclick="addCourse()">💾 Save Test</button>
           <div class="divider"></div>
-          <label class="form-label">Add Question to Course</label>
-          <select class="form-input" id="coursePick"><option value="">Select course</option></select>
+          <label class="form-label">Add Question to Test</label>
+          <select class="form-input" id="coursePick"><option value="">Select test</option></select>
           <label class="form-label">Question</label>
           <textarea class="form-input" id="questionText" placeholder="Type your question here..."></textarea>
           <div class="form-row">
@@ -324,13 +324,13 @@
 
         <div class="card fade-in">
           <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;">
-            <div><div class="card-title">🏆 Leaderboard</div><div class="card-sub" id="lbCourseLabel">Select a course to view scores</div></div>
+            <div><div class="card-title">🏆 Leaderboard</div><div class="card-sub" id="lbCourseLabel">Select a test to view scores</div></div>
             <div style="display:flex;gap:6px;align-items:center;">
               <select style="padding:6px 10px;border-radius:10px;border:2px solid #e2e8f0;background:#f8fafc;font-family:'Nunito',sans-serif;font-size:12px;font-weight:700;color:#1a1f36;outline:none;" id="lbCourseSel" onchange="loadLeaderboard()"><option value="">— Select Course —</option></select>
               <button id="lbClearBtn" style="display:none;background:#fef2f2;border:1.5px solid #fecaca;color:#dc2626;border-radius:10px;padding:6px 10px;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;cursor:pointer;" onclick="clearLeaderboard()">🗑️ Clear</button>
             </div>
           </div>
-          <div id="leaderboard"><div class="empty"><div class="empty-icon">📋</div>Select a course above to see its leaderboard</div></div>
+          <div id="leaderboard"><div class="empty"><div class="empty-icon">📋</div>Select a test above to see its leaderboard</div></div>
         </div>
       </div>
     </div>
@@ -475,14 +475,14 @@ function renderFilteredCourses(){
     const name=doc.id.toLowerCase();
     return(activeClass==='all'||name.includes(activeClass.toLowerCase()))&&(!search||name.includes(search));
   });
-  if(!filtered.length){div.innerHTML='<div class="empty"><div class="empty-icon">🔍</div>No courses found.</div>';return;}
+  if(!filtered.length){div.innerHTML='<div class="empty"><div class="empty-icon">🔍</div>No tests found.</div>';return;}
   const emojisL=["📘","📗","📙","📕","🔬","🧮","🌍","🎨","🏛️","⚗️"];
   let html="";
   filtered.forEach((doc,i)=>{
     const name=doc.id,paid=!!doc.data().paid;
     html+=`<div class="course-card">
       <div class="course-icon" style="background:linear-gradient(135deg,${['#4f46e5,#7c3aed','#10b981,#059669','#f59e0b,#ef4444','#0ea5e9,#6366f1'][i%4]})">${emojisL[i%emojisL.length]}</div>
-      <div class="course-info" style="flex:1"><b>${esc(name)}</b><span>${paid?"🔒 Premium Course":"✅ Free Course"}</span></div>
+      <div class="course-info" style="flex:1"><b>${esc(name)}</b><span>${paid?"🔒 Premium Test":"✅ Free Test"}</span></div>
       <div>${paid?'<span class="lock-tag">🔒 Locked</span>':`<button class="btn-start" onclick="startTest('${escQ(name)}')">Start ▶</button>`}</div>
     </div>`;
   });
@@ -491,7 +491,7 @@ function renderFilteredCourses(){
 function loadCourses(){
   const div=g("courseList");div.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
   db.collection("courses").get().then(snap=>{
-    if(snap.empty){div.innerHTML='<div class="empty"><div class="empty-icon">📭</div>No courses yet.</div>';return;}
+    if(snap.empty){div.innerHTML='<div class="empty"><div class="empty-icon">📭</div>No tests yet.</div>';return;}
     allCourseDocs=[];snap.forEach(doc=>allCourseDocs.push(doc));renderFilteredCourses();
   }).catch(e=>{div.innerHTML=`<div class="empty">❌ ${esc(e.message)}</div>`;});
 }
@@ -499,16 +499,16 @@ function addCourse(){
   const name=g("courseName").value.trim(),paid=g("paidCourse").checked;
   if(!name)return alert("Enter course name");
   db.collection("courses").doc(name).set({paid,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:auth.currentUser.email||""},{merge:true})
-    .then(()=>{toast("✅ Course saved!");loadCourses();refreshCoursePick();refreshManagePick();g("courseName").value="";g("paidCourse").checked=false;}).catch(e=>alert(e.message));
+    .then(()=>{toast("✅ Test saved!");loadCourses();refreshCoursePick();refreshManagePick();g("courseName").value="";g("paidCourse").checked=false;}).catch(e=>alert(e.message));
 }
 function refreshCoursePick(){
   const sel=g("coursePick");if(!sel)return;
-  sel.innerHTML='<option value="">Select course</option>';
+  sel.innerHTML='<option value="">Select test</option>';
   db.collection("courses").get().then(snap=>{snap.forEach(doc=>{const o=document.createElement("option");o.value=doc.id;o.textContent=doc.id;sel.appendChild(o);});}).catch(()=>{});
 }
 function refreshManagePick(){
   const sel=g("manageCoursePick");if(!sel)return;
-  sel.innerHTML='<option value="">Select course</option>';
+  sel.innerHTML='<option value="">Select test</option>';
   db.collection("courses").get().then(snap=>{snap.forEach(doc=>{const o=document.createElement("option");o.value=doc.id;o.textContent=doc.id;sel.appendChild(o);});}).catch(()=>{});
 }
 function clearQuestionForm(){["questionText","opt1","opt2","opt3","opt4","correct"].forEach(id=>g(id).value="");}
@@ -636,8 +636,8 @@ function showReview(score,pct,answers){
 function loadLeaderboard(){
   const div=g("leaderboard");if(!div)return;
   const sel=g("lbCourseSel"),course=sel?sel.value:"";
-  const label=g("lbCourseLabel");if(label)label.textContent=course?"Top 10 for: "+course:"Select a course to view scores";
-  if(!course){div.innerHTML='<div class="empty"><div class="empty-icon">📋</div>Select a course above to see its leaderboard</div>';return;}
+  const label=g("lbCourseLabel");if(label)label.textContent=course?"Top 10 for: "+course:"Select a test to view scores";
+  if(!course){div.innerHTML='<div class="empty"><div class="empty-icon">📋</div>Select a test above to see its leaderboard</div>';return;}
   div.innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
   db.collection("leaderboard").where("course","==",course).orderBy("pct","desc").orderBy("score","desc").limit(10).get().then(snap=>{
     if(snap.empty){div.innerHTML='<div class="empty"><div class="empty-icon">🏅</div>No scores yet for this course!</div>';return;}
@@ -648,7 +648,7 @@ function loadLeaderboard(){
 }
 function clearLeaderboard(){
   const sel=g("lbCourseSel"),course=sel?sel.value:"";
-  if(!course){alert("Select a course first.");return;}
+  if(!course){alert("Select a test first.");return;}
   if(!confirm("Delete ALL scores for: "+course+"?"))return;
   db.collection("leaderboard").where("course","==",course).get().then(snap=>{
     if(snap.empty){toast("No scores to delete.");return;}
