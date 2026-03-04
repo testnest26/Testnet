@@ -235,6 +235,24 @@
     .pct-chip{font-size:12px;font-weight:800;border-radius:999px;padding:3px 10px;white-space:nowrap;}
     .pg{background:#d1fae5;color:#065f46;}.pb{background:#dbeafe;color:#1e40af;}.po{background:#fef3c7;color:#92400e;}.pr{background:#fee2e2;color:#991b1b;}
 
+
+    /* COURSE MANAGE CARD */
+    .course-manage-row{border-radius:14px;border:2px solid #e0e7ff;background:linear-gradient(135deg,#f5f3ff,#faf5ff);padding:12px 14px;display:flex;align-items:center;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+    .course-manage-row .cm-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+    .course-manage-row .cm-name{flex:1;font-size:14px;font-weight:800;min-width:80px;}
+    .course-manage-row .cm-actions{display:flex;gap:6px;flex-wrap:wrap;}
+    .btn-rename{background:#eef2ff;border:1.5px solid #c7d2fe;color:#4f46e5;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;}
+    .btn-delete-course{background:#fef2f2;border:1.5px solid #fecaca;color:#dc2626;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;}
+    .btn-add-inside{background:#d1fae5;border:1.5px solid #6ee7b7;color:#065f46;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;}
+    /* ADD-INSIDE PANEL */
+    .add-inside-panel{background:#f0fdf4;border:2px solid #6ee7b7;border-radius:14px;padding:14px;margin-top:8px;display:none;}
+    .add-inside-panel.open{display:block;}
+    /* CHAPTER BADGE */
+    .chapter-chip{background:#fef3c7;color:#92400e;border:1.5px solid #fcd34d;border-radius:8px;padding:2px 9px;font-size:11px;font-weight:800;margin-right:4px;}
+    /* MANAGE COURSES SECTION in admin */
+    .manage-courses-card{background:white;border-radius:var(--radius);box-shadow:var(--shadow);padding:20px;margin-bottom:16px;}
+    .manage-courses-title{font-family:'Baloo 2',cursive;font-size:17px;color:#4f46e5;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+
     /* CHATBOT */
     .chat-fab{position:fixed;bottom:24px;right:24px;width:54px;height:54px;border-radius:50%;background:linear-gradient(135deg,#4f46e5,#7c3aed);border:none;color:white;font-size:24px;cursor:pointer;box-shadow:0 6px 20px rgba(79,70,229,0.4);z-index:999;transition:transform .2s;}
     .chat-fab:hover{transform:scale(1.1);}
@@ -271,6 +289,25 @@
       .test-btn-row>div{justify-content:stretch;}
       .test-btn-row>div button{flex:1;text-align:center;}
     }
+
+    /* MANAGE COURSE ROWS (admin) */
+    .manage-courses-title{font-size:13px;font-weight:800;color:#374151;margin-bottom:8px;}
+    .mc-row{background:#f8fafc;border:1.5px solid #e2e8f0;border-radius:12px;padding:10px 12px;margin-bottom:8px;display:flex;align-items:center;gap:8px;flex-wrap:wrap;}
+    .mc-name{flex:1;font-size:13px;font-weight:800;min-width:0;word-break:break-word;}
+    .mc-actions{display:flex;gap:5px;flex-shrink:0;flex-wrap:wrap;}
+    .btn-rename{background:#eef2ff;border:1.5px solid #c7d2fe;color:#4f46e5;border-radius:8px;padding:5px 9px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;}
+    .btn-del-course{background:#fef2f2;border:1.5px solid #fecaca;color:#dc2626;border-radius:8px;padding:5px 9px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;}
+    .btn-add-inside{background:#d1fae5;border:1.5px solid #6ee7b7;color:#065f46;border-radius:8px;padding:5px 9px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;}
+    /* RENAME MODAL */
+    .rename-modal{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:700;display:none;align-items:center;justify-content:center;padding:16px;}
+    .rename-modal.open{display:flex;}
+    .rename-box{background:white;border-radius:20px;padding:24px;width:100%;max-width:400px;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
+    .rename-box h3{font-family:'Baloo 2',cursive;font-size:18px;margin-bottom:14px;}
+    /* ADD-INSIDE MODAL */
+    .add-inside-modal{position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:700;display:none;align-items:center;justify-content:center;padding:16px;}
+    .add-inside-modal.open{display:flex;}
+    .add-inside-box{background:white;border-radius:20px;padding:24px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
+    .add-inside-box h3{font-family:'Baloo 2',cursive;font-size:18px;margin-bottom:14px;}
   </style>
 </head>
 <body>
@@ -424,6 +461,12 @@
           <input type="text" class="form-input" id="courseName" placeholder="e.g., Class 6 Maths / NEET / JEE"/>
           <div class="check-row"><input type="checkbox" id="paidCourse"><label for="paidCourse">🔒 Paid Test (Locked)</label></div>
           <button class="btn-save" onclick="addCourse()">💾 Save Test</button>
+
+          <!-- MANAGE EXISTING TESTS: rename / delete / add inside -->
+          <div class="divider"></div>
+          <div class="manage-courses-title">📋 Manage Existing Tests</div>
+          <div id="adminCourseList"><div style="font-size:12px;color:#9ca3af;text-align:center;padding:10px;">Loading tests...</div></div>
+
           <div class="divider"></div>
 
           <!-- ADMIN TABS: Manual Question / Upload PDF-Word -->
@@ -436,6 +479,8 @@
           <div id="panelManual">
             <label class="form-label">Add Question to Test</label>
             <select class="form-input" id="coursePick"><option value="">Select test</option></select>
+            <label class="form-label">Chapter / Topic Name <span style="color:#9ca3af;font-weight:600;">(optional)</span></label>
+            <input type="text" class="form-input" id="chapterName" placeholder="e.g., Chapter 3 – Fractions, Photosynthesis, Algebra..."/>
             <label class="form-label">Question</label>
             <textarea class="form-input" id="questionText" placeholder="Type your question here..."></textarea>
             <div class="form-row">
@@ -535,6 +580,8 @@
   <div class="modal-box">
     <h3>✏️ Edit Question</h3>
     <input type="hidden" id="editQId"/><input type="hidden" id="editCourse"/>
+    <label class="form-label">Chapter / Topic Name <span style="color:#9ca3af;font-weight:600;">(optional)</span></label>
+    <input type="text" class="form-input" id="editChapter" placeholder="e.g., Chapter 3 – Fractions"/>
     <label class="form-label">Question</label>
     <textarea class="form-input" id="editQText" style="min-height:70px;"></textarea>
     <div class="form-row" style="margin-top:8px;">
@@ -556,6 +603,48 @@
     <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
       <button class="btn-save" onclick="saveEdit()">💾 Save Changes</button>
       <button class="btn-clear" onclick="g('editModal').classList.remove('open')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- RENAME TEST MODAL -->
+<div class="rename-modal" id="renameModal">
+  <div class="rename-box">
+    <h3>✏️ Rename Test</h3>
+    <input type="hidden" id="renameOldName"/>
+    <label style="font-size:12px;font-weight:700;color:#6b7280;display:block;margin-bottom:6px;">New Test Name</label>
+    <input type="text" class="form-input" id="renameNewName" placeholder="Enter new name..."/>
+    <div style="display:flex;gap:8px;margin-top:14px;">
+      <button class="btn-save" onclick="doRename()">💾 Save</button>
+      <button class="btn-clear" onclick="g('renameModal').classList.remove('open')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADD INSIDE TEST MODAL (quick-add question to specific test) -->
+<div class="add-inside-modal" id="addInsideModal">
+  <div class="add-inside-box">
+    <h3>➕ Add to: <span id="addInsideCourseName" style="color:#4f46e5;"></span></h3>
+    <input type="hidden" id="addInsideCourse"/>
+    <label style="font-size:12px;font-weight:700;color:#6b7280;display:block;margin:0 0 5px;">Chapter / Topic Name <span style="color:#9ca3af;font-weight:600;">(optional)</span></label>
+    <input type="text" class="form-input" id="aiChapterName" placeholder="e.g., Chapter 3 – Fractions"/>
+    <label style="font-size:12px;font-weight:700;color:#6b7280;display:block;margin:10px 0 5px;">Question</label>
+    <textarea class="form-input" id="aiQuestion" placeholder="Type your question here..." style="min-height:70px;"></textarea>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;">
+      <div><label style="font-size:12px;font-weight:700;color:#6b7280;display:block;margin-bottom:4px;">Option A</label><input type="text" class="form-input" id="aiOpt0" placeholder="Option A"/></div>
+      <div><label style="font-size:12px;font-weight:700;color:#6b7280;display:block;margin-bottom:4px;">Option B</label><input type="text" class="form-input" id="aiOpt1" placeholder="Option B"/></div>
+      <div><label style="font-size:12px;font-weight:700;color:#6b7280;display:block;margin-bottom:4px;">Option C</label><input type="text" class="form-input" id="aiOpt2" placeholder="Option C"/></div>
+      <div><label style="font-size:12px;font-weight:700;color:#6b7280;display:block;margin-bottom:4px;">Option D</label><input type="text" class="form-input" id="aiOpt3" placeholder="Option D"/></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;">
+      <div><label style="font-size:12px;font-weight:700;color:#6b7280;display:block;margin-bottom:4px;">Correct (0=A,1=B,2=C,3=D)</label><input type="number" class="form-input" id="aiCorrect" placeholder="0" min="0" max="3"/></div>
+      <div><label style="font-size:12px;font-weight:700;color:#6b7280;display:block;margin-bottom:4px;">Time (minutes)</label><input type="number" class="form-input" id="aiTime" placeholder="5" min="1"/></div>
+    </div>
+    <div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap;">
+      <button class="btn-save" onclick="saveAddInside()">➕ Add Question</button>
+      <button class="btn-clear" onclick="clearAddInside()">🔄 Clear</button>
+      <button style="background:#f1f5f9;color:#475569;border:none;border-radius:12px;padding:11px 16px;font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;cursor:pointer;margin-top:6px;" onclick="g('addInsideModal').classList.remove('open')">✖ Close</button>
     </div>
   </div>
 </div>
@@ -645,10 +734,11 @@ auth.onAuthStateChanged(user=>{
   g("userRole").textContent="Role: "+role.toUpperCase();
   g("topName").textContent=name+" • "+role.toUpperCase();
   g("topAvatar").textContent=initials(name);g("profileAvatar").textContent=initials(name);
+  currentUserRole=role;
   g("adminCard").style.display=role==="admin"?"block":"none";
   g("manageBox").style.display=role==="admin"?"block":"none";
   loadCourses();loadLeaderboard();loadPastScores();refreshLbPick();updateRankBadge();
-  if(role==="admin"){refreshCoursePick();refreshManagePick();const b=g("lbClearBtn");if(b)b.style.display="block";}
+  if(role==="admin"){refreshCoursePick();refreshManagePick();refreshUploadCoursePick();loadAdminCourseList();const b=g("lbClearBtn");if(b)b.style.display="block";}
 });
 
 // ── ADMIN TABS ──
@@ -657,6 +747,8 @@ function switchAdminTab(tab){
   g("tabUpload").classList.toggle("active",tab==="upload");
   g("panelManual").style.display=tab==="manual"?"block":"none";
   g("panelUpload").style.display=tab==="upload"?"block":"none";
+  if(tab==="upload") refreshUploadCoursePick();
+  if(tab==="manual") refreshCoursePick();
 }
 
 // ── PDF/WORD UPLOAD & AI CONVERSION ──
@@ -743,6 +835,7 @@ function setClass(cls,btn){activeClass=cls;document.querySelectorAll('.class-chi
 function filterCourses(){renderFilteredCourses();}
 function renderFilteredCourses(){
   const div=g('courseList'),search=(g('courseSearch')?.value||'').toLowerCase();
+  const isAdm=currentUserRole==='admin';
   let filtered=allCourseDocs.filter(doc=>{
     const name=doc.id.toLowerCase();
     return(activeClass==='all'||name.includes(activeClass.toLowerCase()))&&(!search||name.includes(search));
@@ -752,10 +845,16 @@ function renderFilteredCourses(){
   let html="";
   filtered.forEach((doc,i)=>{
     const name=doc.id,paid=!!doc.data().paid;
-    html+=`<div class="course-card">
+    const adminBtns=isAdm?`<div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:6px;width:100%;">
+      <button class="btn-rename" onclick="openRename('${escQ(name)}')">✏️ Rename</button>
+      <button class="btn-add-inside" onclick="openAddInside('${escQ(name)}')">➕ Add Q</button>
+      <button class="btn-del-course" onclick="confirmDeleteCourse('${escQ(name)}')">🗑️ Delete</button>
+    </div>`:'';
+    html+=`<div class="course-card" style="flex-wrap:wrap;">
       <div class="course-icon" style="background:linear-gradient(135deg,${['#4f46e5,#7c3aed','#10b981,#059669','#f59e0b,#ef4444','#0ea5e9,#6366f1'][i%4]})">${emojisL[i%emojisL.length]}</div>
       <div class="course-info" style="flex:1"><b>${esc(name)}</b><span>${paid?"🔒 Premium Test":"✅ Free Test"}</span></div>
       <div>${paid?'<span class="lock-tag">🔒 Locked</span>':`<button class="btn-go" onclick="openFolder('${escQ(name)}')">GO</button>`}</div>
+      ${adminBtns}
     </div>`;
   });
   div.innerHTML=html;
@@ -771,24 +870,39 @@ function addCourse(){
   const name=g("courseName").value.trim(),paid=g("paidCourse").checked;
   if(!name)return alert("Enter test name");
   db.collection("courses").doc(name).set({paid,updatedAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:auth.currentUser.email||""},{merge:true})
-    .then(()=>{toast("✅ Test saved!");loadCourses();refreshCoursePick();refreshManagePick();refreshUploadCoursePick();g("courseName").value="";g("paidCourse").checked=false;}).catch(e=>alert(e.message));
+    .then(()=>{toast("✅ Test saved!");loadCourses();refreshCoursePick();refreshManagePick();refreshUploadCoursePick();loadAdminCourseList();refreshLbPick();g("courseName").value="";g("paidCourse").checked=false;}).catch(e=>alert(e.message));
 }
 function refreshCoursePick(){const sel=g("coursePick");if(!sel)return;sel.innerHTML='<option value="">Select test</option>';db.collection("courses").get().then(snap=>{snap.forEach(doc=>{const o=document.createElement("option");o.value=doc.id;o.textContent=doc.id;sel.appendChild(o);});}).catch(()=>{});}
 function refreshManagePick(){const sel=g("manageCoursePick");if(!sel)return;sel.innerHTML='<option value="">Select test</option>';db.collection("courses").get().then(snap=>{snap.forEach(doc=>{const o=document.createElement("option");o.value=doc.id;o.textContent=doc.id;sel.appendChild(o);});}).catch(()=>{});}
-function refreshUploadCoursePick(){const sel=g("uploadCoursePick");if(!sel)return;sel.innerHTML='<option value="">Select test</option>';db.collection("courses").get().then(snap=>{snap.forEach(doc=>{const o=document.createElement("option");o.value=doc.id;o.textContent=doc.id;sel.appendChild(o);});}).catch(()=>{});}
-function clearQuestionForm(){["questionText","opt1","opt2","opt3","opt4","correct"].forEach(id=>g(id).value="");}
+function refreshUploadCoursePick(){
+  const sel=g("uploadCoursePick");if(!sel)return;
+  sel.innerHTML='<option value="">⏳ Loading tests...</option>';
+  db.collection("courses").get().then(snap=>{
+    sel.innerHTML='<option value="">— Select test —</option>';
+    if(snap.empty){sel.innerHTML='<option value="">No tests found — create one first</option>';return;}
+    snap.forEach(doc=>{
+      const o=document.createElement("option");
+      o.value=doc.id;o.textContent=doc.id;
+      sel.appendChild(o);
+    });
+  }).catch(err=>{sel.innerHTML='<option value="">Error loading — try again</option>';console.error(err);});
+}
+function clearQuestionForm(){["questionText","opt1","opt2","opt3","opt4","correct","chapterName"].forEach(id=>{const el=g(id);if(el)el.value="";});}
 function addQuestion(){
   const course=(g("coursePick").value||"").trim();if(!course)return alert("Select a test first");
   const q=g("questionText").value.trim(),o1=g("opt1").value.trim(),o2=g("opt2").value.trim(),o3=g("opt3").value.trim(),o4=g("opt4").value.trim();
   const correct=parseInt(g("correct").value,10),time=parseInt(g("timeLimit").value,10);
+  const chapter=(g("chapterName")?.value||"").trim();
   if(!q||!o1||!o2||!o3||!o4)return alert("Fill question + all 4 options");
   if(isNaN(correct)||correct<0||correct>3)return alert("Correct must be 0-3");
   if(isNaN(time)||time<=0)return alert("Time must be > 0");
-  db.collection("courses").doc(course).collection("questions").add({question:q,options:[o1,o2,o3,o4],correct,time,createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:auth.currentUser.email||""})
+  const qData={question:q,options:[o1,o2,o3,o4],correct,time,createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:auth.currentUser.email||""};
+  if(chapter) qData.topic=chapter;
+  db.collection("courses").doc(course).collection("questions").add(qData)
     .then(()=>{toast("✅ Question saved!");clearQuestionForm();loadManageQuestions();}).catch(e=>alert(e.message));
 }
 
-// ── MANAGE QUESTIONS WITH EDIT ──
+// ── MANAGE QUESTIONS WITH EDIT & CHAPTER ──
 function loadManageQuestions(){
   const course=g("manageCoursePick").value,div=g("manageQList");
   if(!course){div.innerHTML='';return;}
@@ -799,9 +913,9 @@ function loadManageQuestions(){
     snap.forEach(doc=>{
       const d=doc.data(),id=doc.id;
       const opts=(d.options||[]).map((o,i)=>`<span class="q-opt-chip${i===d.correct?' correct':''}">${["A","B","C","D"][i]}: ${esc(o)}</span>`).join("");
-      const dJson=JSON.stringify({question:d.question,options:d.options,correct:d.correct,time:d.time}).replace(/'/g,"&#39;").replace(/"/g,"&quot;");
+      const chapterBadge=d.topic?`<span class="chapter-chip">📂 ${esc(d.topic)}</span>`:"";
       html+=`<div class="q-manage"><div class="q-manage-top">
-        <span class="q-text">${esc(d.question)}</span>
+        <span class="q-text">${chapterBadge}${esc(d.question)}</span>
         <div class="q-actions">
           <button class="btn-edit-q" onclick='openEditModal("${escQ(course)}","${id}",${JSON.stringify(d).replace(/\\/g,"\\\\").replace(/'/g,"&#39;")})'>✏️ Edit</button>
           <button class="btn-del" onclick="deleteQuestion('${escQ(course)}','${id}')">🗑️ Del</button>
@@ -821,6 +935,7 @@ function deleteQuestion(course,qid){
 function openEditModal(course,qid,data){
   g("editQId").value=qid;g("editCourse").value=course;
   g("editQText").value=data.question||"";
+  g("editChapter").value=data.topic||"";
   (data.options||[]).forEach((o,i)=>{const el=g("eOpt"+i);if(el)el.value=o;});
   g("editCorrect").value=data.correct??0;
   pickCorrect(data.correct??0,true);
@@ -835,9 +950,12 @@ function saveEdit(){
   const q=g("editQText").value.trim();
   const opts=[0,1,2,3].map(i=>g("eOpt"+i).value.trim());
   const correct=parseInt(g("editCorrect").value,10);
+  const chapter=(g("editChapter")?.value||"").trim();
   if(!q||opts.some(o=>!o))return alert("Fill all fields");
   if(isNaN(correct)||correct<0||correct>3)return alert("Select correct answer");
-  db.collection("courses").doc(course).collection("questions").doc(qid).update({question:q,options:opts,correct})
+  const updateData={question:q,options:opts,correct};
+  if(chapter) updateData.topic=chapter; else updateData.topic=firebase.firestore.FieldValue.delete();
+  db.collection("courses").doc(course).collection("questions").doc(qid).update(updateData)
     .then(()=>{toast("✅ Question updated!");g("editModal").classList.remove("open");loadManageQuestions();}).catch(e=>alert(e.message));
 }
 
@@ -943,6 +1061,7 @@ function renderFolderTests(sub,topic){
 
 // ── TEST ENGINE ──
 let currentCourse="",currentQuestions=[],timeLeft=0,timerInt=null;
+let currentUserRole='student';
 let currentQIndex=0,qAnswers=[],qStatus=[];
 function startTest(course){
   currentCourse=course;g("testTitle").textContent="📝 "+course;
@@ -1165,12 +1284,286 @@ function smartReply(msg){
   if(/independence day|15 august/.test(m))return"India got independence on 15 August 1947! 🇮🇳🎉";
   return"Great question! 🦉 I help with Maths 🧮, Science 🔬, English 📖, Hindi 🇮🇳, GK 🌐. Ask away! 💪";
 }
+// ── ADMIN COURSE LIST (rename / delete / add inside) ──
+function loadAdminCourseList(){
+  const div=g("adminCourseList");if(!div)return;
+  div.innerHTML='<div style="font-size:12px;color:#9ca3af;text-align:center;padding:8px;">Loading...</div>';
+  const emojisL=["📘","📗","📙","📕","🔬","🧮","🌍","🎨","🏛️","⚗️"];
+  const gradients=['#4f46e5,#7c3aed','#10b981,#059669','#f59e0b,#ef4444','#0ea5e9,#6366f1'];
+  db.collection("courses").get().then(snap=>{
+    if(snap.empty){div.innerHTML='<div style="font-size:12px;color:#9ca3af;text-align:center;padding:10px;">No tests yet. Create one above!</div>';return;}
+    let html="";
+    let i=0;
+    snap.forEach(doc=>{
+      const name=doc.id,paid=!!doc.data().paid;
+      const em=emojisL[i%emojisL.length],gr=gradients[i%gradients.length];
+      html+=`<div class="course-manage-row" id="cmr_${i}">
+        <div class="cm-icon" style="background:linear-gradient(135deg,${gr})">${em}</div>
+        <div class="cm-name">${esc(name)}<br/><span style="font-size:10px;font-weight:600;color:#9ca3af;">${paid?"🔒 Paid":"✅ Free"}</span></div>
+        <div class="cm-actions">
+          <button class="btn-add-inside" onclick="toggleAddInside('${escQ(name)}',${i})">➕ Add</button>
+          <button class="btn-rename" onclick="renameCourse('${escQ(name)}')">✏️ Rename</button>
+          <button class="btn-delete-course" onclick="deleteCourse('${escQ(name)}')">🗑️ Delete</button>
+        </div>
+      </div>
+      <div class="add-inside-panel" id="aip_${i}">
+        <div style="font-size:13px;font-weight:800;color:#065f46;margin-bottom:10px;">➕ Add Question inside: <b>${esc(name)}</b></div>
+        <label class="form-label">Chapter / Topic Name <span style="color:#9ca3af;font-weight:600;">(optional)</span></label>
+        <input type="text" class="form-input" id="aip_chapter_${i}" placeholder="e.g., Chapter 3 – Fractions"/>
+        <label class="form-label">Question</label>
+        <textarea class="form-input" id="aip_q_${i}" placeholder="Type your question..." style="min-height:60px;"></textarea>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:6px;">
+          <div><label class="form-label">Option A</label><input type="text" class="form-input" id="aip_a_${i}" placeholder="Option A"/></div>
+          <div><label class="form-label">Option B</label><input type="text" class="form-input" id="aip_b_${i}" placeholder="Option B"/></div>
+          <div><label class="form-label">Option C</label><input type="text" class="form-input" id="aip_c_${i}" placeholder="Option C"/></div>
+          <div><label class="form-label">Option D</label><input type="text" class="form-input" id="aip_d_${i}" placeholder="Option D"/></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:4px;">
+          <div><label class="form-label">Correct (0=A,1=B,2=C,3=D)</label><input type="number" class="form-input" id="aip_correct_${i}" placeholder="0" min="0" max="3"/></div>
+          <div><label class="form-label">Time (minutes)</label><input type="number" class="form-input" id="aip_time_${i}" placeholder="5" min="1"/></div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;">
+          <button class="btn-save" onclick="addInsideQuestion('${escQ(name)}',${i})">➕ Save Question</button>
+          <button class="btn-clear" onclick="clearAddInside(${i})">🔄 Clear</button>
+          <button onclick="toggleAddInside('${escQ(name)}',${i})" style="background:#f1f5f9;color:#475569;border:none;border-radius:10px;padding:8px 14px;font-family:'Nunito',sans-serif;font-weight:700;font-size:13px;cursor:pointer;">✕ Close</button>
+        </div>
+      </div>`;
+      i++;
+    });
+    div.innerHTML=html;
+  }).catch(e=>{div.innerHTML=`<div style="font-size:12px;color:#dc2626;padding:8px;">Error: ${esc(e.message)}</div>`;});
+}
+
+function toggleAddInside(course,idx){
+  const panel=g("aip_"+idx);
+  if(!panel)return;
+  const isOpen=panel.classList.contains("open");
+  // Close all other panels first
+  document.querySelectorAll('.add-inside-panel').forEach(p=>p.classList.remove('open'));
+  if(!isOpen) panel.classList.add("open");
+}
+
+function clearAddInside(idx){
+  ["aip_chapter_","aip_q_","aip_a_","aip_b_","aip_c_","aip_d_","aip_correct_","aip_time_"].forEach(pre=>{
+    const el=g(pre+idx);if(el)el.value="";
+  });
+}
+
+function addInsideQuestion(course,idx){
+  const q=(g("aip_q_"+idx)?.value||"").trim();
+  const o1=(g("aip_a_"+idx)?.value||"").trim();
+  const o2=(g("aip_b_"+idx)?.value||"").trim();
+  const o3=(g("aip_c_"+idx)?.value||"").trim();
+  const o4=(g("aip_d_"+idx)?.value||"").trim();
+  const correct=parseInt(g("aip_correct_"+idx)?.value||"0",10);
+  const time=parseInt(g("aip_time_"+idx)?.value||"5",10);
+  const chapter=(g("aip_chapter_"+idx)?.value||"").trim();
+  if(!q||!o1||!o2||!o3||!o4)return alert("Fill question + all 4 options");
+  if(isNaN(correct)||correct<0||correct>3)return alert("Correct must be 0, 1, 2, or 3");
+  if(isNaN(time)||time<=0)return alert("Time must be > 0");
+  const qData={question:q,options:[o1,o2,o3,o4],correct,time,createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:auth.currentUser.email||""};
+  if(chapter) qData.topic=chapter;
+  db.collection("courses").doc(course).collection("questions").add(qData)
+    .then(()=>{
+      toast("✅ Question added to "+course+"!");
+      clearAddInside(idx);
+      // Refresh manage questions if this course is selected
+      const sel=g("manageCoursePick");
+      if(sel&&sel.value===course)loadManageQuestions();
+    }).catch(e=>alert(e.message));
+}
+
+function renameCourse(oldName){
+  const newName=prompt(`Rename test:\n"${oldName}"\n\nEnter new name:`,oldName);
+  if(!newName||newName.trim()===oldName||!newName.trim())return;
+  const nName=newName.trim();
+  // In Firestore, document IDs can't be renamed directly — we copy then delete
+  if(!confirm(`Rename "${oldName}" → "${nName}"?\n\nAll questions and data will be moved.`))return;
+  toast("⏳ Renaming... please wait");
+  // 1. Get old course data
+  db.collection("courses").doc(oldName).get().then(snap=>{
+    const data=snap.data()||{};
+    // 2. Create new course
+    return db.collection("courses").doc(nName).set({...data,updatedAt:firebase.firestore.FieldValue.serverTimestamp()}).then(()=>{
+      // 3. Copy all questions
+      return db.collection("courses").doc(oldName).collection("questions").get();
+    }).then(qSnap=>{
+      const batch=db.batch();
+      qSnap.forEach(doc=>{
+        const newRef=db.collection("courses").doc(nName).collection("questions").doc();
+        batch.set(newRef,doc.data());
+      });
+      return batch.commit();
+    }).then(()=>{
+      // 4. Delete old course questions
+      return db.collection("courses").doc(oldName).collection("questions").get();
+    }).then(qSnap=>{
+      const batch=db.batch();
+      qSnap.forEach(doc=>batch.delete(doc.ref));
+      batch.delete(db.collection("courses").doc(oldName));
+      return batch.commit();
+    });
+  }).then(()=>{
+    toast("✅ Renamed to: "+nName);
+    loadCourses();refreshCoursePick();refreshManagePick();refreshUploadCoursePick();refreshLbPick();loadAdminCourseList();
+  }).catch(e=>alert("Rename error: "+e.message));
+}
+
+function deleteCourse(name){
+  if(!confirm(`⚠️ DELETE test: "${name}"?\n\nThis will permanently delete the test AND all its questions!\nThis cannot be undone!`))return;
+  toast("⏳ Deleting...");
+  // Delete all questions first, then the course doc
+  db.collection("courses").doc(name).collection("questions").get().then(snap=>{
+    const batch=db.batch();
+    snap.forEach(doc=>batch.delete(doc.ref));
+    batch.delete(db.collection("courses").doc(name));
+    return batch.commit();
+  }).then(()=>{
+    toast("🗑️ Test deleted: "+name);
+    loadCourses();refreshCoursePick();refreshManagePick();refreshUploadCoursePick();refreshLbPick();loadAdminCourseList();
+  }).catch(e=>alert("Delete error: "+e.message));
+}
+
 function setGeminiKey(){
   const k=prompt("Gemini API Key (optional):\nGet free at: https://aistudio.google.com/app/apikey");
   if(k===null)return;
   if(k&&k.trim()){localStorage.setItem("tn_gemini_key",k.trim());toast("✅ Key saved!");}
   else if(k===""){localStorage.removeItem("tn_gemini_key");toast("🗑️ Key removed.");}
 }
+
+
+// ── LOAD ADMIN COURSE LIST (in admin panel) ──
+function loadAdminCourseList(){
+  const div=g('adminCourseList');if(!div)return;
+  div.innerHTML='<div style="font-size:12px;color:#9ca3af;text-align:center;padding:8px;">Loading...</div>';
+  db.collection('courses').get().then(snap=>{
+    if(snap.empty){div.innerHTML='<div style="font-size:12px;color:#9ca3af;text-align:center;padding:8px;">No tests yet.</div>';return;}
+    let html='';
+    snap.forEach(doc=>{
+      const name=doc.id,paid=!!doc.data().paid;
+      html+=`<div class="mc-row">
+        <span class="mc-name">${paid?'🔒 ':''}<b>${esc(name)}</b></span>
+        <div class="mc-actions">
+          <button class="btn-rename" onclick="openRename('${escQ(name)}')">✏️ Rename</button>
+          <button class="btn-add-inside" onclick="openAddInside('${escQ(name)}')">➕ Add Q</button>
+          <button class="btn-del-course" onclick="confirmDeleteCourse('${escQ(name)}')">🗑️ Delete</button>
+        </div>
+      </div>`;
+    });
+    div.innerHTML=html;
+  }).catch(e=>{div.innerHTML=`<div style="font-size:12px;color:#dc2626;padding:8px;">${esc(e.message)}</div>`;});
+}
+
+// ── RENAME COURSE ──
+function openRename(name){
+  g('renameOldName').value=name;
+  g('renameNewName').value=name;
+  g('renameModal').classList.add('open');
+  setTimeout(()=>{g('renameNewName').focus();g('renameNewName').select();},100);
+}
+async function doRename(){
+  const oldName=g('renameOldName').value.trim();
+  const newName=g('renameNewName').value.trim();
+  if(!newName)return alert('Enter a new name');
+  if(newName===oldName){g('renameModal').classList.remove('open');return;}
+  if(!confirm(`Rename "${oldName}" → "${newName}"?
+
+This will move all questions to the new name.`))return;
+
+  try{
+    // 1. Get old course data
+    const oldDoc=await db.collection('courses').doc(oldName).get();
+    if(!oldDoc.exists){alert('Test not found!');return;}
+    const courseData=oldDoc.data();
+
+    // 2. Create new course doc
+    await db.collection('courses').doc(newName).set({...courseData,updatedAt:firebase.firestore.FieldValue.serverTimestamp()});
+
+    // 3. Copy all questions to new course
+    const qSnap=await db.collection('courses').doc(oldName).collection('questions').get();
+    if(!qSnap.empty){
+      const batch=db.batch();
+      qSnap.forEach(doc=>{
+        const newRef=db.collection('courses').doc(newName).collection('questions').doc();
+        batch.set(newRef,doc.data());
+      });
+      await batch.commit();
+    }
+
+    // 4. Update leaderboard entries
+    const lbSnap=await db.collection('leaderboard').where('course','==',oldName).get();
+    if(!lbSnap.empty){
+      const batch2=db.batch();
+      lbSnap.forEach(doc=>batch2.update(doc.ref,{course:newName}));
+      await batch2.commit();
+    }
+
+    // 5. Delete old course + its questions
+    const batch3=db.batch();
+    qSnap.forEach(doc=>batch3.delete(db.collection('courses').doc(oldName).collection('questions').doc(doc.id)));
+    batch3.delete(db.collection('courses').doc(oldName));
+    await batch3.commit();
+
+    g('renameModal').classList.remove('open');
+    toast('✅ Renamed to "'+newName+'"!');
+    loadCourses();loadAdminCourseList();refreshCoursePick();refreshManagePick();refreshUploadCoursePick();refreshLbPick();
+  }catch(e){alert('Error renaming: '+e.message);}
+}
+
+// ── DELETE COURSE ──
+async function confirmDeleteCourse(name){
+  if(!confirm('⚠️ DELETE "'+name+'"?
+
+This will permanently delete the test AND all its questions.
+This cannot be undone!'))return;
+  if(!confirm('Are you SURE? This deletes ALL questions in "'+name+'"!'))return;
+  try{
+    // Delete all questions first
+    const qSnap=await db.collection('courses').doc(name).collection('questions').get();
+    if(!qSnap.empty){
+      const batch=db.batch();
+      qSnap.forEach(doc=>batch.delete(doc.ref));
+      await batch.commit();
+    }
+    // Delete course doc
+    await db.collection('courses').doc(name).delete();
+    toast('🗑️ "'+name+'" deleted!');
+    loadCourses();loadAdminCourseList();refreshCoursePick();refreshManagePick();refreshUploadCoursePick();refreshLbPick();
+  }catch(e){alert('Error deleting: '+e.message);}
+}
+
+// ── ADD QUESTION INSIDE SPECIFIC COURSE (from course card) ──
+function openAddInside(course){
+  g('addInsideCourse').value=course;
+  g('addInsideCourseName').textContent=course;
+  clearAddInside();
+  g('addInsideModal').classList.add('open');
+}
+function clearAddInside(){
+  ['aiChapterName','aiQuestion','aiOpt0','aiOpt1','aiOpt2','aiOpt3','aiCorrect','aiTime'].forEach(id=>{const el=g(id);if(el)el.value='';});
+  g('aiCorrect').value='0';g('aiTime').value='5';
+}
+function saveAddInside(){
+  const course=g('addInsideCourse').value.trim();if(!course)return;
+  const chapter=g('aiChapterName').value.trim();
+  const q=g('aiQuestion').value.trim();
+  const opts=[g('aiOpt0'),g('aiOpt1'),g('aiOpt2'),g('aiOpt3')].map(el=>el.value.trim());
+  const correct=parseInt(g('aiCorrect').value,10);
+  const time=parseInt(g('aiTime').value,10)||5;
+  if(!q||opts.some(o=>!o))return alert('Fill question + all 4 options');
+  if(isNaN(correct)||correct<0||correct>3)return alert('Correct must be 0-3');
+  const data={question:q,options:opts,correct,time,createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:auth.currentUser.email||''};
+  if(chapter)data.topic=chapter;
+  db.collection('courses').doc(course).collection('questions').add(data)
+    .then(()=>{
+      toast('✅ Question added to "'+course+'"!');
+      clearAddInside();
+      // Keep modal open so admin can add more questions
+      loadManageQuestions();
+    }).catch(e=>alert(e.message));
+}
+
+
 </script>
 </body>
 </html>
