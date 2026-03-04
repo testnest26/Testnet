@@ -762,11 +762,6 @@ function switchAdminTab(tab){
 function handleFileUpload(input, type){
   const course=(g("uploadCoursePick").value||"").trim();
   if(!course){alert("Please select a test first!");input.value="";return;}
-  const apiKey=getKey();
-  if(!apiKey){
-    alert("⚠️ Anthropic API Key not set!\n\nClick \'🔑 Set Anthropic API Key\' in the Admin Panel first.\n\nGet a free key at: https://console.anthropic.com");
-    input.value="";return;
-  }
   const file=input.files[0];if(!file)return;
 
   const prog=g("uploadProgress"),fill=g("uploadFill"),status=g("uploadStatus"),result=g("uploadResult");
@@ -837,11 +832,6 @@ function sendTextToAI(text,course,input,prog,fill,status,result){
     showUploadError(result,prog,"Could not extract text from file. Make sure the file has readable text (not scanned images).");
     input.value="";return;
   }
-  const apiKey=getKey();
-  if(!apiKey){
-    showUploadError(result,prog,"No API key set! Click the 🔑 Set Anthropic API Key button above and enter your key from console.anthropic.com");
-    input.value="";return;
-  }
   // Truncate if too long
   const maxLen=12000;
   const truncated=text.length>maxLen?text.slice(0,maxLen)+"...(truncated)":text;
@@ -862,22 +852,10 @@ TEXT TO EXTRACT FROM:
 ${truncated}
 ---`;
 
-  fetch("https://corsproxy.io/?https://api.anthropic.com/v1/messages",{
-    method:"POST",
-    headers:{
-      "Content-Type":"application/json",
-      "anthropic-version":"2023-06-01",
-      "x-api-key":apiKey,
-      "anthropic-dangerous-request-allowed":"true"
-    },
-    body:JSON.stringify({
-      model:"claude-haiku-4-5-20251001",
-      max_tokens:4096,
-      messages:[{role:"user",content:prompt.replace('${truncated}',truncated)}]
-    })
-  }).then(r=>{
-    if(!r.ok){return r.json().then(e=>{throw new Error(e.error?.message||r.statusText);});}
-    return r.json();
+  callClaude({
+    model:"claude-haiku-4-5-20251001",
+    max_tokens:4096,
+    messages:[{role:"user",content:prompt.replace('${truncated}',truncated)}]
   }).then(data=>{
     fill.style.width="85%";status.textContent="💾 Saving questions...";
     const txt=data.content?.[0]?.text||"[]";
@@ -1286,12 +1264,9 @@ In 2-3 simple sentences, explain WHY this answer is correct. Write in easy Engli
 
   const explainKey=getKey();
   if(!explainKey){box.innerHTML=`<b style="color:#be185d;">💡 Answer:</b> The correct answer is <b>"${esc(correctOpt)}"</b>. <span style="font-size:11px;color:#9ca3af;">(Set Anthropic API key for detailed explanations)</span>`;return;}
-  fetch("https://corsproxy.io/?https://api.anthropic.com/v1/messages",{
-    method:"POST",
-    headers:{"Content-Type":"application/json","anthropic-version":"2023-06-01","x-api-key":explainKey,"anthropic-dangerous-request-allowed":"true"},
-    body:JSON.stringify({model:"claude-haiku-4-5-20251001",max_tokens:200,
-      messages:[{role:"user",content:prompt}]})
-  }).then(r=>r.json()).then(data=>{
+  callClaude({model:"claude-haiku-4-5-20251001",max_tokens:200,
+    messages:[{role:"user",content:prompt}]
+  }).then(data=>{
     const text=data.content?.[0]?.text||"";
     if(text.length>5){
       box.innerHTML=`<b style="color:#be185d;">💡 Explanation:</b><br/>${text.replace(/\n/g,'<br>')}`;
@@ -1377,13 +1352,10 @@ function sendChat(){
   const messages=chatHistory.slice(-10).map(h=>({role:h.role==='assistant'?'assistant':'user',content:h.content}));
   const chatKey=getKey();
   if(!chatKey){showReplyInChat(smartReply(msg));return;}
-  fetch("https://corsproxy.io/?https://api.anthropic.com/v1/messages",{
-    method:"POST",
-    headers:{"Content-Type":"application/json","anthropic-version":"2023-06-01","x-api-key":chatKey,"anthropic-dangerous-request-allowed":"true"},
-    body:JSON.stringify({model:"claude-haiku-4-5-20251001",max_tokens:300,
-      system:"You are TestNest AI Tutor for Indian school students. Answer in 2-4 sentences with emojis. Show maths steps. Keep it simple and encouraging.",
-      messages:messages})
-  }).then(r=>r.json()).then(data=>{
+  callClaude({model:"claude-haiku-4-5-20251001",max_tokens:300,
+    system:"You are TestNest AI Tutor for Indian school students. Answer in 2-4 sentences with emojis. Show maths steps. Keep it simple and encouraging.",
+    messages:messages
+  }).then(data=>{
     const reply=data.content?.[0]?.text;
     if(reply&&reply.length>5){showReplyInChat(reply);}else{showReplyInChat(smartReply(msg));}
   }).catch(()=>showReplyInChat(smartReply(msg)));
@@ -1538,6 +1510,49 @@ function deleteCourse(name){
 }
 
 function getKey(){return localStorage.getItem("tn_claude_key")||"";}
+
+// Universal Claude API caller with multiple CORS proxy fallbacks
+async function callClaude(payload){
+  const key=getKey();
+  if(!key) throw new Error("NO_KEY");
+  
+  const endpoints=[
+    "https://api.anthropic.com/v1/messages",
+    "https://corsproxy.io/?https://api.anthropic.com/v1/messages",
+    "https://api.allorigins.win/raw?url="+encodeURIComponent("https://api.anthropic.com/v1/messages"),
+    "https://thingproxy.freeboard.io/fetch/https://api.anthropic.com/v1/messages"
+  ];
+  
+  const headers={
+    "Content-Type":"application/json",
+    "anthropic-version":"2023-06-01",
+    "x-api-key":key,
+    "anthropic-dangerous-request-allowed":"true"
+  };
+  
+  let lastErr="";
+  for(const url of endpoints){
+    try{
+      const r=await fetch(url,{method:"POST",headers,body:JSON.stringify(payload)});
+      if(r.ok){
+        const d=await r.json();
+        if(d.content) return d; // success
+        if(d.error) throw new Error(d.error.message||"API error");
+      } else {
+        const e=await r.json().catch(()=>({error:{message:r.statusText}}));
+        throw new Error(e.error?.message||r.statusText);
+      }
+    }catch(e){
+      lastErr=e.message;
+      if(e.message.includes("401")||e.message.includes("invalid_api_key")||e.message.includes("authentication")){
+        throw new Error("Invalid API key. Please reset your key using the 🔑 button.");
+      }
+      // Try next proxy
+      continue;
+    }
+  }
+  throw new Error("All proxies failed: "+lastErr);
+}
 function checkApiKeyWarning(){
   const w=document.getElementById("apiKeyWarning");
   const b=document.getElementById("apiKeyBtn");
