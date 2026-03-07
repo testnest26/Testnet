@@ -31,13 +31,13 @@
 
     /* HERO */
     .hero{background:linear-gradient(135deg,#4f46e5 0%,#7c3aed 50%,#ec4899 100%);border-radius:24px;padding:40px;color:white;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;overflow:hidden;position:relative;}
-    .hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;background:rgba(255,255,255,0.08);border-radius:50%;}
-    .hero::after{content:'';position:absolute;bottom:-40px;left:30%;width:160px;height:160px;background:rgba(255,255,255,0.06);border-radius:50%;}
+    .hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;background:rgba(255,255,255,0.08);border-radius:50%;pointer-events:none;}
+    .hero::after{content:'';position:absolute;bottom:-40px;left:30%;width:160px;height:160px;background:rgba(255,255,255,0.06);border-radius:50%;pointer-events:none;}
     .hero-left h1{font-family:'Baloo 2',cursive;font-size:36px;font-weight:800;line-height:1.2;margin-bottom:8px;}
     .hero-left p{font-size:14px;opacity:0.85;max-width:42ch;line-height:1.6;margin-bottom:16px;}
     .features{display:flex;flex-wrap:wrap;gap:8px;}
     .feat{background:rgba(255,255,255,0.18);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.25);border-radius:999px;padding:5px 13px;font-size:12px;font-weight:700;}
-    .login-box{background:white;border-radius:20px;padding:24px;min-width:270px;max-width:320px;box-shadow:0 8px 32px rgba(0,0,0,0.15);}
+    .login-box{background:white;border-radius:20px;padding:24px;min-width:270px;max-width:320px;box-shadow:0 8px 32px rgba(0,0,0,0.15);position:relative;z-index:10;}
     .login-box h3{font-family:'Baloo 2',cursive;font-size:20px;color:var(--text);margin-bottom:4px;}
     .login-box p{font-size:12px;color:var(--muted);margin-bottom:16px;}
     .btn-google{width:100%;padding:13px;border:none;border-radius:14px;font-family:'Nunito',sans-serif;font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:transform .1s,box-shadow .1s;margin-bottom:10px;}
@@ -785,15 +785,31 @@ function chCol(cls,sub){return subCol(cls).doc(sub).collection('chapters');}
 
 // ── CLASS LIST: load from Firestore ──
 let allClassNames=[];
+const DEFAULT_CLASSES=['Balvatika','Class 1','Class 2','Class 3','Class 4','Class 5','Class 6','Class 7','Class 8'];
+
 async function loadAllClasses(){
   try{
     const snap=await classCol().orderBy('order','asc').get();
     allClassNames=[];
     snap.forEach(doc=>allClassNames.push(doc.id));
+    // If no classes in Firestore yet, seed with defaults
+    if(allClassNames.length===0){
+      allClassNames=[...DEFAULT_CLASSES];
+      // Auto-save defaults to Firestore
+      const b=db.batch();
+      DEFAULT_CLASSES.forEach((cls,i)=>b.set(classCol().doc(cls),{order:i,createdAt:firebase.firestore.FieldValue.serverTimestamp()}));
+      b.commit().catch(()=>{});
+    }
     renderClassChips();
     populateClassSelects();
     loadClassList();
-  }catch(e){console.log('loadAllClasses error:',e);}
+  }catch(e){
+    // On error, still show default classes
+    allClassNames=[...DEFAULT_CLASSES];
+    renderClassChips();
+    populateClassSelects();
+    console.log('loadAllClasses error:',e);
+  }
 }
 function renderClassChips(){
   const div=g('classFilter');
