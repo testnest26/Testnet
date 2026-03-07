@@ -393,15 +393,6 @@
           </div>
           <div class="class-scroll" id="classFilter">
             <button class="class-chip active" onclick="setClass('all',this)">All</button>
-            <button class="class-chip" onclick="setClass('Balvatika',this)">Balvatika</button>
-            <button class="class-chip" onclick="setClass('Class 1',this)">Class 1</button>
-            <button class="class-chip" onclick="setClass('Class 2',this)">Class 2</button>
-            <button class="class-chip" onclick="setClass('Class 3',this)">Class 3</button>
-            <button class="class-chip" onclick="setClass('Class 4',this)">Class 4</button>
-            <button class="class-chip" onclick="setClass('Class 5',this)">Class 5</button>
-            <button class="class-chip" onclick="setClass('Class 6',this)">Class 6</button>
-            <button class="class-chip" onclick="setClass('Class 7',this)">Class 7</button>
-            <button class="class-chip" onclick="setClass('Class 8',this)">Class 8</button>
           </div>
           <div id="courseList"><div class="empty"><div class="empty-icon">📭</div>Loading tests...</div></div>
         </div>
@@ -441,11 +432,26 @@
         <!-- ADMIN: MANAGE QUESTIONS -->
         <div id="manageBox" class="card fade-in" style="display:none;margin-top:16px;">
           <div class="sec-header">
-            <div><div class="card-title">🗂️ Manage Questions</div><div class="card-sub">View and edit questions from tests</div></div>
+            <div><div class="card-title">🗂️ Manage Tests &amp; Questions</div><div class="card-sub">Rename, delete, or edit questions in any test</div></div>
           </div>
-          <label class="form-label">Select Test to Manage or Edit questions</label>
-          <select class="form-input" id="manageCoursePick" onchange="loadManageQuestions()"><option value="">Select test</option></select>
-          <div id="manageQList" style="margin-top:14px;"></div>
+
+          <!-- Course list with actions -->
+          <div class="admin-tabs" style="margin-bottom:12px;">
+            <button class="admin-tab active" id="mTabCourses" onclick="switchManageTab('courses')">📋 All Tests</button>
+            <button class="admin-tab" id="mTabQuestions" onclick="switchManageTab('questions')">❓ Edit Questions</button>
+          </div>
+
+          <!-- Panel: All Tests -->
+          <div id="mPanelCourses">
+            <div id="adminCourseList"><div style="font-size:12px;color:#9ca3af;text-align:center;padding:10px;">Loading...</div></div>
+          </div>
+
+          <!-- Panel: Edit Questions -->
+          <div id="mPanelQuestions" style="display:none;">
+            <label class="form-label">Select Test to edit questions</label>
+            <select class="form-input" id="manageCoursePick" onchange="loadManageQuestions()"><option value="">Select test</option></select>
+            <div id="manageQList" style="margin-top:14px;"></div>
+          </div>
         </div>
       </div>
 
@@ -484,17 +490,24 @@
             <button class="admin-tab active" id="tabHier" onclick="switchAdminTab('hier')">🏫 Manage Structure</button>
             <button class="admin-tab" id="tabManual" onclick="switchAdminTab('manual')">✏️ Add Question</button>
             <button class="admin-tab" id="tabUpload" onclick="switchAdminTab('upload')">📄 Upload PDF/Word</button>
+            <button class="admin-tab" id="tabAdmins" onclick="switchAdminTab('admins')">👥 Admins</button>
           </div>
 
           <!-- TAB 1: HIERARCHY MANAGER -->
           <div id="panelHier">
+            <!-- CLASS MANAGER -->
+            <div class="hier-section" style="margin-bottom:12px;">
+              <div class="hier-section-title">🏫 Classes</div>
+              <div id="hierClassList"><div style="font-size:12px;color:#9ca3af;padding:6px;">Loading...</div></div>
+              <div class="hier-add-row" style="margin-top:8px;">
+                <input type="text" id="newClassName" placeholder="Add class e.g. English Literature"/>
+                <button onclick="addClassEntry()">➕ Add</button>
+              </div>
+            </div>
             <!-- Class selector -->
-            <label class="form-label">Select Class to manage</label>
+            <label class="form-label">Select Class to manage subjects</label>
             <select class="hier-class-select" id="hierClassSel" onchange="loadHierClass()">
               <option value="">— Select Class —</option>
-              <option>Balvatika</option><option>Class 1</option><option>Class 2</option>
-              <option>Class 3</option><option>Class 4</option><option>Class 5</option>
-              <option>Class 6</option><option>Class 7</option><option>Class 8</option>
             </select>
 
             <div id="hierSubjectBox" style="display:none;">
@@ -526,9 +539,6 @@
             <label class="form-label">Class</label>
             <select class="form-input" id="qClass" onchange="loadQSubjects()">
               <option value="">— Select Class —</option>
-              <option>Balvatika</option><option>Class 1</option><option>Class 2</option>
-              <option>Class 3</option><option>Class 4</option><option>Class 5</option>
-              <option>Class 6</option><option>Class 7</option><option>Class 8</option>
             </select>
             <label class="form-label">Subject</label>
             <select class="form-input" id="qSubject" onchange="loadQChapters()"><option value="">— Select Subject —</option></select>
@@ -563,9 +573,6 @@
             <label class="form-label">Class</label>
             <select class="form-input" id="upClass" onchange="loadUpSubjects()">
               <option value="">— Select Class —</option>
-              <option>Balvatika</option><option>Class 1</option><option>Class 2</option>
-              <option>Class 3</option><option>Class 4</option><option>Class 5</option>
-              <option>Class 6</option><option>Class 7</option><option>Class 8</option>
             </select>
             <label class="form-label">Subject</label>
             <select class="form-input" id="upSubject" onchange="loadUpChapters()"><option value="">— Select Subject —</option></select>
@@ -594,6 +601,21 @@
               <b>Format:</b> 1. Question? &nbsp; A) ... B) ... C) ... D) ... &nbsp; Answer: A
             </div>
           </div>
+
+          <!-- TAB 4: ADMIN USERS -->
+          <div id="panelAdmins" style="display:none;">
+            <div class="hier-section">
+              <div class="hier-section-title">👥 Admin Users</div>
+              <div style="font-size:12px;color:#6b7280;margin-bottom:10px;">These emails have full admin access. Super-admins cannot be removed.</div>
+              <div id="adminUsersList"><div style="font-size:12px;color:#9ca3af;padding:6px;">Loading...</div></div>
+              <div class="hier-add-row" style="margin-top:10px;">
+                <input type="email" id="newAdminEmail" placeholder="Enter Gmail e.g. teacher@gmail.com"/>
+                <button onclick="addAdminUser()">➕ Add</button>
+              </div>
+              <div style="font-size:11px;color:#9ca3af;margin-top:6px;">⚠️ New admin must click Admin Login button with their Google account.</div>
+            </div>
+          </div>
+
         </div>
 
         <!-- LEADERBOARD -->
@@ -732,27 +754,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
-  <script>
-    const SUBJECT_ICONS = {
-  "Mathematics": "🧮",
-  "Maths": "🧮",
-  "Science": "🔬",
-  "English": "📖",
-  "Hindi": "🗣️",
-  "EVS": "🌿",
-  "Social Science": "🌍",
-  "Social Studies": "🌍",
-  "Computer": "💻",
-  "GK": "🧠",
-  "General Knowledge": "🧠",
-  "Art": "🎨",
-  "History": "🏛️",
-  "Geography": "🗺️",
-  "Civics": "⚖️",
-  "Physics": "⚡",
-  "Chemistry": "⚗️",
-  "Biology": "🦋",
-};
+<script>
 firebase.initializeApp({
   apiKey:"AIzaSyAPML8zK9qgRQbUyv7lMVOtt0c5Osjyw_A",
   authDomain:"testnest-education.firebaseapp.com",
@@ -762,12 +764,119 @@ firebase.initializeApp({
   appId:"1:1000142199756:web:afab8eaa0f6bc638969b69"
 });
 const auth=firebase.auth(), db=firebase.firestore();
-const ADMINS=["dnyanrui90@gmail.com","pawarjai999@gmail.com"];
+// Admin emails loaded from Firestore (collection: adminUsers)
+// Hardcoded super-admins always have access
+const SUPER_ADMINS=["dnyanrui90@gmail.com","pawarjai999@gmail.com"];
+let dynamicAdmins=[...SUPER_ADMINS];
+async function loadAdminEmails(){
+  try{
+    const snap=await db.collection("adminUsers").get();
+    dynamicAdmins=[...SUPER_ADMINS];
+    snap.forEach(doc=>{ if(!dynamicAdmins.includes(doc.id)) dynamicAdmins.push(doc.id); });
+  }catch(e){ dynamicAdmins=[...SUPER_ADMINS]; }
+}
+function isAdminEmail(email){ return dynamicAdmins.includes((email||"").toLowerCase()); }
 
-// ── HIERARCHY HELPERS (Firestore: hierarchy/{class}/subjects/{sub}/chapters/{ch}) ──
+// ── HIERARCHY HELPERS ──
+function classCol(){return db.collection('classes');}
 function hierPath(cls){return db.collection('hierarchy').doc(cls);}
 function subCol(cls){return hierPath(cls).collection('subjects');}
 function chCol(cls,sub){return subCol(cls).doc(sub).collection('chapters');}
+
+// ── CLASS LIST: load from Firestore ──
+let allClassNames=[];
+async function loadAllClasses(){
+  try{
+    const snap=await classCol().orderBy('order','asc').get();
+    allClassNames=[];
+    snap.forEach(doc=>allClassNames.push(doc.id));
+    renderClassChips();
+    populateClassSelects();
+    loadClassList();
+  }catch(e){console.log('loadAllClasses error:',e);}
+}
+function renderClassChips(){
+  const div=g('classFilter');
+  if(!div)return;
+  let html='<button class="class-chip active" onclick="setClass('all',this)">All</button>';
+  allClassNames.forEach(cls=>{
+    html+=`<button class="class-chip" onclick="setClass('${escQ(cls)}',this)">${esc(cls)}</button>`;
+  });
+  div.innerHTML=html;
+}
+function populateClassSelects(){
+  ['hierClassSel','qClass','upClass'].forEach(id=>{
+    const sel=g(id);if(!sel)return;
+    const cur=sel.value;
+    sel.innerHTML='<option value="">— Select Class —</option>';
+    allClassNames.forEach(cls=>{
+      const o=document.createElement('option');
+      o.value=cls;o.textContent=cls;
+      sel.appendChild(o);
+    });
+    if(cur&&allClassNames.includes(cur))sel.value=cur;
+  });
+}
+function loadClassList(){
+  const div=g('hierClassList');if(!div)return;
+  if(!allClassNames.length){div.innerHTML='<div style="font-size:12px;color:#9ca3af;padding:6px;">No classes yet. Add one below.</div>';return;}
+  let html='';
+  allClassNames.forEach(cls=>{
+    html+=`<div class="hier-row">
+      <span class="hier-row-name">🏫 ${esc(cls)}</span>
+      <div class="hier-row-actions">
+        <button class="btn-hier-edit" onclick="editClassEntry('${escQ(cls)}')">✏️</button>
+        <button class="btn-hier-del" onclick="deleteClassEntry('${escQ(cls)}')">🗑️</button>
+      </div>
+    </div>`;
+  });
+  div.innerHTML=html;
+}
+async function addClassEntry(){
+  const name=(g('newClassName').value||'').trim();
+  if(!name)return alert('Enter class name');
+  if(allClassNames.includes(name))return alert('Class already exists!');
+  await classCol().doc(name).set({order:allClassNames.length,createdAt:firebase.firestore.FieldValue.serverTimestamp()});
+  g('newClassName').value='';
+  toast('✅ Class added!');
+  await loadAllClasses();
+}
+async function editClassEntry(oldName){
+  const newName=prompt('Rename class:',oldName);
+  if(!newName||newName.trim()===oldName)return;
+  const nn=newName.trim();
+  // Copy hierarchy data
+  const subSnap=await subCol(oldName).get();
+  const b=db.batch();
+  // Move all subjects & chapters
+  for(const subDoc of subSnap.docs){
+    const chSnap=await chCol(oldName,subDoc.id).get();
+    b.set(subCol(nn).doc(subDoc.id),subDoc.data());
+    chSnap.forEach(chDoc=>b.set(chCol(nn,subDoc.id).doc(chDoc.id),chDoc.data()));
+    chSnap.forEach(chDoc=>b.delete(chCol(oldName,subDoc.id).doc(chDoc.id)));
+    b.delete(subCol(oldName).doc(subDoc.id));
+  }
+  const oldData=(await classCol().doc(oldName).get()).data()||{};
+  b.set(classCol().doc(nn),oldData);
+  b.delete(classCol().doc(oldName));
+  await b.commit();
+  toast('✅ Class renamed!');
+  await loadAllClasses();
+}
+async function deleteClassEntry(name){
+  if(!confirm('Delete class "'+name+'" and ALL its subjects/chapters?'))return;
+  const subSnap=await subCol(name).get();
+  const b=db.batch();
+  for(const subDoc of subSnap.docs){
+    const chSnap=await chCol(name,subDoc.id).get();
+    chSnap.forEach(ch=>b.delete(ch.ref));
+    b.delete(subDoc.ref);
+  }
+  b.delete(classCol().doc(name));
+  await b.commit();
+  toast('🗑️ Class deleted!');
+  await loadAllClasses();
+}
 
 // ── ADMIN HIERARCHY MANAGER ──
 let hierCurrentClass='',hierCurrentSubject='';
@@ -917,6 +1026,8 @@ function loadQChapters(){const cls=g('qClass')?.value,sub=g('qSubject')?.value;i
 function loadUpSubjects(){const cls=g('upClass')?.value;if(cls)loadSubjectsForClass(cls,'upSubject');g('upChapter').innerHTML='<option value="">— Select Chapter —</option>';}
 function loadUpChapters(){const cls=g('upClass')?.value,sub=g('upSubject')?.value;if(cls&&sub)loadChaptersForSubject(cls,sub,'upChapter');}
 
+const SUBJECT_ICONS={"English":"📖","Hindi":"🇮🇳","Mathematics":"🧮","Maths":"🧮","Science":"🔬","Social Studies":"🌍","Computer":"💻","EVS":"🌿","Sanskrit":"📜","General Knowledge":"🌐"};
+
 function g(id){return document.getElementById(id);}
 function toast(m,ok=true){const e=g("toast");e.textContent=m;e.style.background=ok?"#1a1f36":"#dc2626";e.style.display="block";setTimeout(()=>e.style.display="none",2800);}
 function showMsg(m,t="info"){const e=g("loginMsg");e.textContent=m;e.className="login-msg "+t;e.style.display="block";}
@@ -946,9 +1057,10 @@ function logout(){
 }
 auth.getRedirectResult().then(r=>{if(r&&r.user){hideMsg();setBtns(false);}}).catch(err=>{if(err.code&&err.code!=="auth/no-current-user"&&!err.message.includes("initial state")){showMsg("Login error: "+err.message,"error");setBtns(false);}});
 
-auth.onAuthStateChanged(user=>{
+auth.onAuthStateChanged(async user=>{
   if(!user){g("loginCard").style.display="flex";g("app").style.display="none";return;}
-  const role=(localStorage.getItem("tn_role")==="admin"&&ADMINS.includes((user.email||"").toLowerCase()))?"admin":"student";
+  await loadAdminEmails();
+  const role=(localStorage.getItem("tn_role")==="admin"&&isAdminEmail((user.email||"").toLowerCase()))?"admin":"student";
   g("loginCard").style.display="none";g("app").style.display="block";hideMsg();setBtns(false);
   const name=user.displayName||"Student";
   g("userName").textContent=name;g("userEmail").textContent=user.email||"";
@@ -958,19 +1070,79 @@ auth.onAuthStateChanged(user=>{
   currentUserRole=role;
   g("adminCard").style.display=role==="admin"?"block":"none";
   g("manageBox").style.display=role==="admin"?"block":"none";
-  loadCourses();loadLeaderboard();loadPastScores();refreshLbPick();updateRankBadge();
+  loadCourses();loadLeaderboard();loadPastScores();refreshLbPick();updateRankBadge();loadAllClasses();
   if(role==="admin"){refreshCoursePick();refreshManagePick();refreshUploadCoursePick();loadAdminCourseList();setTimeout(checkApiKeyWarning,500);const b=g("lbClearBtn");if(b)b.style.display="block";}
 });
 
 // ── ADMIN TABS ──
+function switchManageTab(tab){
+  ['Courses','Questions'].forEach(t=>{
+    const btn=g('mTab'+t),panel=g('mPanel'+t);
+    if(btn)btn.classList.toggle('active',t.toLowerCase()===tab);
+    if(panel)panel.style.display=t.toLowerCase()===tab?'block':'none';
+  });
+  if(tab==='courses') loadAdminCourseList();
+  if(tab==='questions') refreshManagePick();
+}
+
 function switchAdminTab(tab){
-  const tabs=['Hier','Manual','Upload'];
+  const tabs=['Hier','Manual','Upload','Admins'];
   tabs.forEach(t=>{
     const btn=g('tab'+t);const panel=g('panel'+t);
     if(btn)btn.classList.toggle('active',t.toLowerCase()===tab);
     if(panel)panel.style.display=t.toLowerCase()===tab?'block':'none';
   });
-  if(tab==='upload'){checkApiKeyWarning();}
+  if(tab==='upload') checkApiKeyWarning();
+  if(tab==='admins') loadAdminUsersList();
+}
+
+// ── ADMIN USER MANAGEMENT ──
+async function loadAdminUsersList(){
+  const div=g('adminUsersList');if(!div)return;
+  div.innerHTML='<div style="font-size:12px;color:#9ca3af;padding:6px;">Loading...</div>';
+  try{
+    const snap=await db.collection('adminUsers').get();
+    let html='';
+    // Show super admins first (read-only)
+    SUPER_ADMINS.forEach(email=>{
+      html+=`<div class="hier-row">
+        <span class="hier-row-name">⭐ ${esc(email)}</span>
+        <span style="font-size:11px;color:#9ca3af;padding:2px 8px;background:#f1f5f9;border-radius:6px;">Super Admin</span>
+      </div>`;
+    });
+    // Show dynamic admins
+    snap.forEach(doc=>{
+      if(SUPER_ADMINS.includes(doc.id))return;
+      html+=`<div class="hier-row">
+        <span class="hier-row-name">👤 ${esc(doc.id)}</span>
+        <div class="hier-row-actions">
+          <button class="btn-hier-del" onclick="removeAdminUser('${escQ(doc.id)}')">🗑️ Remove</button>
+        </div>
+      </div>`;
+    });
+    if(!snap.size&&!SUPER_ADMINS.length) html='<div style="font-size:12px;color:#9ca3af;padding:6px;">No extra admins added yet.</div>';
+    div.innerHTML=html||'<div style="font-size:12px;color:#9ca3af;padding:6px;">Only super-admins currently.</div>';
+  }catch(e){div.innerHTML='<div style="font-size:12px;color:#dc2626;">'+esc(e.message)+'</div>';}
+}
+async function addAdminUser(){
+  const email=(g('newAdminEmail').value||'').trim().toLowerCase();
+  if(!email||!email.includes('@'))return alert('Enter a valid email address');
+  if(SUPER_ADMINS.includes(email))return alert('This is already a super-admin!');
+  await db.collection('adminUsers').doc(email).set({
+    addedBy:auth.currentUser.email||'',
+    addedAt:firebase.firestore.FieldValue.serverTimestamp()
+  });
+  g('newAdminEmail').value='';
+  toast('✅ '+email+' added as admin!');
+  loadAdminUsersList();
+  await loadAdminEmails(); // refresh cache
+}
+async function removeAdminUser(email){
+  if(!confirm('Remove admin access for '+email+'?'))return;
+  await db.collection('adminUsers').doc(email).delete();
+  toast('🗑️ Admin removed: '+email);
+  loadAdminUsersList();
+  await loadAdminEmails();
 }
 
 // ── PDF/WORD UPLOAD & AI CONVERSION ──
@@ -1141,7 +1313,7 @@ ${truncated}
   });
 }
 
-// ── COURSES ──// ── COURSES ──
+// ── COURSES ──
 let activeClass='all',allCourseDocs=[];
 function setClass(cls,btn){activeClass=cls;document.querySelectorAll('.class-chip').forEach(b=>b.classList.remove('active'));btn.classList.add('active');renderFilteredCourses();}
 function filterCourses(){renderFilteredCourses();}
@@ -1158,7 +1330,7 @@ function renderFilteredCourses(){
   });
   let classes=Object.values(classMap).filter(c=>{
     const n=c.name.toLowerCase();
-    return(activeClass==='all'||n.includes(activeClass.toLowerCase()))&&(!search||n.includes(search));
+    return(activeClass==='all'||c.name===activeClass)&&(!search||n.includes(search));
   });
   if(!classes.length){div.innerHTML='<div class="empty"><div class="empty-icon">🔍</div>No classes found.</div>';return;}
   const emojisL=["📘","📗","📙","📕","📓","📔","📒","📃","🔬","🧮"];
@@ -1292,11 +1464,16 @@ function saveEdit(){
 let folderState={cls:"",subject:"",chapter:"",history:[]};
 
 function openFolder(course){
-  // course may be old-style name or new Class__Sub__Ch key — handle both
-  // We now open the top-level class browser
-  folderState={cls:"",subject:"",chapter:"",history:[]};
+  // course is a class name (e.g. "Class 6") — go straight to subjects for that class
+  folderState={cls:course,subject:"",chapter:"",history:[]};
   g("folderModal").classList.add("open");
-  renderFolderClasses();
+  // If it looks like a class name, go to subjects; else show all classes
+  if(course&&(allClassNames.includes(course)||course)){
+    folderState.history.push({level:"classes"});
+    renderFolderSubjects(course);
+  } else {
+    renderFolderClasses();
+  }
 }
 function closeFolder(){g("folderModal").classList.remove("open");}
 function folderGoBack(){
@@ -1310,12 +1487,12 @@ function folderGoBack(){
 function renderFolderClasses(){
   g("folderTitle").textContent="🏫 Select Class";
   g("folderBack").style.display="none";
-  const classes=["Balvatika","Class 1","Class 2","Class 3","Class 4","Class 5","Class 6","Class 7","Class 8"];
-  const icons=["🌱","1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣"];
+  const icons=["🌱","1️⃣","2️⃣","3️⃣","4️⃣","5️⃣","6️⃣","7️⃣","8️⃣","🔟","📚","🎓","🏫","📘"];
   let html="";
-  classes.forEach((cls,i)=>{
-    html+=`<button class="subject-btn" onclick="folderPickClass('${escQ(cls)}')">${icons[i]} ${esc(cls)}</button>`;
+  allClassNames.forEach((cls,i)=>{
+    html+=`<button class="subject-btn" onclick="folderPickClass('${escQ(cls)}')">${icons[i]||"📚"} ${esc(cls)}</button>`;
   });
+  if(!allClassNames.length) html='<div style="padding:16px;color:#9ca3af;text-align:center;">No classes yet. Admin needs to add classes.</div>';
   g("folderContent").innerHTML=html;
 }
 
