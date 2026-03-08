@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=0.85, minimum-scale=0.5, maximum-scale=3.0, user-scalable=yes"/>
   <title>TESTNEST – Learn • Practice • Test</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet"/>
   <link rel="manifest" href="manifest.json"/>
@@ -302,22 +302,28 @@
     @media(max-width:900px){
       /* Layout */
       .app-grid{grid-template-columns:1fr;}
-      .wrap{padding:10px 10px 90px;overflow-x:hidden;}
+      .wrap{padding:8px 8px 80px;overflow-x:hidden;}
       .card{padding:12px;overflow:hidden;}
       
       /* Hero / Login */
-      .hero{padding:18px 14px;flex-direction:column;gap:14px;}
-      .hero h1{font-size:22px;}
-      .hero-left p{font-size:13px;}
-      .features{gap:6px;}
-      .feat{font-size:11px;padding:4px 10px;}
-      .login-box{width:100%;max-width:100%;padding:16px;min-width:unset;}
+      .hero{padding:14px 12px;flex-direction:column;gap:10px;}
+      .hero h1{font-size:19px;margin-bottom:4px;}
+      .hero-left p{font-size:12px;margin-bottom:8px;}
+      .features{gap:5px;}
+      .feat{font-size:10px;padding:3px 8px;}
+      .login-box{width:100%;max-width:100%;padding:14px;min-width:unset;}
+      .login-box h3{font-size:16px;}
+      .login-box p{font-size:11px;margin-bottom:10px;}
+      .btn-google{padding:11px;font-size:13px;margin-bottom:7px;}
       
       /* Topbar */
-      .topbar-inner{padding:8px 10px;}
-      .logo-text{font-size:18px;}
-      .user-pill{padding:5px 10px 5px 7px;font-size:11px;}
-      .user-pill span:last-child{max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+      .topbar-inner{padding:6px 8px;}
+      .logo-text{font-size:16px;}
+      .logo-tag{font-size:9px;padding:1px 5px;}
+      .logo-wrap img{width:32px!important;height:32px!important;}
+      .user-pill{padding:4px 8px 4px 6px;font-size:10px;gap:5px;}
+      .user-pill span:last-child{max-width:110px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+      .avatar{width:22px;height:22px;font-size:10px;}
       
       /* Course cards */
       .course-card{padding:10px 12px;gap:8px;}
