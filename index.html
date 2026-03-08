@@ -5,8 +5,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>TESTNEST – Learn • Practice • Test</title>
   <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@700;800&display=swap" rel="stylesheet"/>
+  <link rel="manifest" href="manifest.json"/>
+  <meta name="theme-color" content="#4f46e5"/>
+  <meta name="mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-capable" content="yes"/>
+  <meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+  <meta name="apple-mobile-web-app-title" content="TestNest"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mammoth/1.6.0/mammoth.browser.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
   <style>
     :root{
       --bg:#f0f4ff;--white:#fff;--text:#1a1f36;--muted:#6b7280;
@@ -15,6 +22,7 @@
       --shadow:0 4px 24px rgba(79,70,229,0.10);--radius:16px;
     }
     *{box-sizing:border-box;margin:0;padding:0}
+    html,body{overflow-x:hidden;max-width:100%;}
     body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;}
 
     /* TOPBAR */
@@ -476,6 +484,31 @@
           <button class="btn-logout" onclick="logout()">🚪 Logout</button>
         </div>
 
+        <!-- STUDENT ANALYTICS -->
+        <div class="card fade-in" id="analyticsCard" style="margin-top:16px;display:none;">
+          <div class="sec-header">
+            <div><div class="card-title">📊 My Performance</div><div class="card-sub">Your test history & progress</div></div>
+            <button onclick="loadAnalytics()" style="background:#eef2ff;border:1.5px solid #c7d2fe;color:#4f46e5;border-radius:10px;padding:6px 12px;font-family:'Nunito',sans-serif;font-weight:800;font-size:12px;cursor:pointer;">🔄 Refresh</button>
+          </div>
+          <!-- Stats row -->
+          <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:14px;" id="analyticsStats">
+            <div style="background:#f0f4ff;border-radius:12px;padding:10px;text-align:center;">
+              <div style="font-size:22px;font-weight:900;color:#4f46e5;" id="statTests">—</div>
+              <div style="font-size:11px;color:#6b7280;font-weight:700;">Tests Taken</div>
+            </div>
+            <div style="background:#f0fdf4;border-radius:12px;padding:10px;text-align:center;">
+              <div style="font-size:22px;font-weight:900;color:#10b981;" id="statAvg">—</div>
+              <div style="font-size:11px;color:#6b7280;font-weight:700;">Avg Score</div>
+            </div>
+            <div style="background:#fff7ed;border-radius:12px;padding:10px;text-align:center;">
+              <div style="font-size:22px;font-weight:900;color:#f59e0b;" id="statBest">—</div>
+              <div style="font-size:11px;color:#6b7280;font-weight:700;">Best Score</div>
+            </div>
+          </div>
+          <!-- Test history list -->
+          <div id="analyticsHistory" style="max-height:280px;overflow-y:auto;"></div>
+        </div>
+
         <!-- ADMIN PANEL -->
         <div class="admin-card" id="adminCard" style="display:none;">
           <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;">
@@ -486,11 +519,42 @@
           <div class="divider"></div>
 
           <!-- ADMIN TABS -->
-          <div class="admin-tabs">
-            <button class="admin-tab active" id="tabHier" onclick="switchAdminTab('hier')">🏫 Manage Structure</button>
-            <button class="admin-tab" id="tabManual" onclick="switchAdminTab('manual')">✏️ Add Question</button>
-            <button class="admin-tab" id="tabUpload" onclick="switchAdminTab('upload')">📄 Upload PDF/Word</button>
+          <div class="admin-tabs" style="flex-wrap:wrap;">
+            <button class="admin-tab" id="tabDash" onclick="switchAdminTab('dash')">📈 Dashboard</button>
+            <button class="admin-tab active" id="tabHier" onclick="switchAdminTab('hier')">🏫 Structure</button>
+            <button class="admin-tab" id="tabManual" onclick="switchAdminTab('manual')">✏️ Add Q</button>
+            <button class="admin-tab" id="tabUpload" onclick="switchAdminTab('upload')">📄 Upload</button>
             <button class="admin-tab" id="tabAdmins" onclick="switchAdminTab('admins')">👥 Admins</button>
+          </div>
+
+          <!-- TAB 0: ADMIN DASHBOARD -->
+          <div id="panelDash" style="display:none;">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
+              <div style="background:linear-gradient(135deg,#4f46e5,#7c3aed);border-radius:14px;padding:14px;color:white;text-align:center;">
+                <div style="font-size:28px;font-weight:900;" id="dashStudents">—</div>
+                <div style="font-size:12px;opacity:0.85;">Total Students</div>
+              </div>
+              <div style="background:linear-gradient(135deg,#10b981,#059669);border-radius:14px;padding:14px;color:white;text-align:center;">
+                <div style="font-size:28px;font-weight:900;" id="dashTests">—</div>
+                <div style="font-size:12px;opacity:0.85;">Total Tests</div>
+              </div>
+              <div style="background:linear-gradient(135deg,#f59e0b,#ef4444);border-radius:14px;padding:14px;color:white;text-align:center;">
+                <div style="font-size:28px;font-weight:900;" id="dashQuestions">—</div>
+                <div style="font-size:12px;opacity:0.85;">Total Questions</div>
+              </div>
+              <div style="background:linear-gradient(135deg,#0ea5e9,#6366f1);border-radius:14px;padding:14px;color:white;text-align:center;">
+                <div style="font-size:28px;font-weight:900;" id="dashAttempts">—</div>
+                <div style="font-size:12px;opacity:0.85;">Test Attempts</div>
+              </div>
+            </div>
+            <div class="hier-section">
+              <div class="hier-section-title">👥 Registered Students</div>
+              <div id="dashStudentList"><div style="font-size:12px;color:#9ca3af;padding:6px;">Loading...</div></div>
+            </div>
+            <div class="hier-section" style="margin-top:10px;">
+              <div class="hier-section-title">🔥 Popular Tests</div>
+              <div id="dashPopularTests"><div style="font-size:12px;color:#9ca3af;padding:6px;">Loading...</div></div>
+            </div>
           </div>
 
           <!-- TAB 1: HIERARCHY MANAGER -->
@@ -600,6 +664,18 @@
             <div style="margin-top:10px;padding:10px 12px;background:#fef3c7;border-radius:10px;border:1.5px solid #fcd34d;font-size:11px;color:#78350f;">
               <b>Format:</b> 1. Question? &nbsp; A) ... B) ... C) ... D) ... &nbsp; Answer: A
             </div>
+            <!-- Excel/CSV Upload -->
+            <div style="margin-top:14px;border-top:2px dashed #e2e8f0;padding-top:14px;">
+              <div style="font-size:13px;font-weight:800;color:#374151;margin-bottom:8px;">📊 Upload Excel / CSV</div>
+              <div style="font-size:11px;color:#6b7280;margin-bottom:10px;">Columns: <b>question, option_a, option_b, option_c, option_d, correct (A/B/C/D), time</b></div>
+              <div class="upload-zone" onclick="g('csvFileInput').click()" style="padding:16px;">
+                <input type="file" id="csvFileInput" accept=".csv,.xlsx,.xls" onchange="handleCSVUpload(this)"/>
+                <div class="upload-zone-icon">📊</div>
+                <div class="upload-zone-title">Upload Excel / CSV</div>
+                <div class="upload-zone-sub">Click to choose file</div>
+              </div>
+              <div id="csvResult" style="display:none;margin-top:8px;padding:10px;border-radius:10px;font-size:13px;font-weight:700;"></div>
+            </div>
           </div>
 
           <!-- TAB 4: ADMIN USERS -->
@@ -630,6 +706,25 @@
           <div id="leaderboard"><div class="empty"><div class="empty-icon">📋</div>Select a test above to see its leaderboard</div></div>
         </div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- SET TIME MODAL -->
+<div id="setTimeModal" style="position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:800;display:none;align-items:center;justify-content:center;padding:16px;">
+  <div style="background:white;border-radius:20px;padding:24px;width:100%;max-width:360px;box-shadow:0 20px 60px rgba(0,0,0,0.2);">
+    <div style="font-family:'Baloo 2',cursive;font-size:18px;font-weight:800;color:#1a1f36;margin-bottom:4px;">⏱️ Set Test Time Limit</div>
+    <div style="font-size:13px;color:#6b7280;margin-bottom:16px;" id="setTimeCourseLabel">—</div>
+    <input type="hidden" id="setTimeCourse"/>
+    <label style="font-size:13px;font-weight:700;color:#374151;display:block;margin-bottom:6px;">Total Time for Entire Test (minutes)</label>
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:8px;">
+      <input type="number" id="setTimeInput" min="1" max="300" placeholder="e.g. 30" style="flex:1;padding:10px 14px;border:2px solid #e2e8f0;border-radius:12px;font-family:'Nunito',sans-serif;font-size:15px;font-weight:800;outline:none;"/>
+      <span style="font-size:13px;color:#6b7280;font-weight:700;">min</span>
+    </div>
+    <div style="font-size:11px;color:#9ca3af;margin-bottom:16px;">Set 0 or leave blank to use per-question time instead.</div>
+    <div style="display:flex;gap:8px;">
+      <button onclick="saveTestTime()" style="flex:1;background:linear-gradient(135deg,#10b981,#059669);color:white;border:none;border-radius:12px;padding:11px;font-family:'Nunito',sans-serif;font-weight:800;font-size:14px;cursor:pointer;">✅ Save</button>
+      <button onclick="g('setTimeModal').style.display='none'" style="flex:1;background:#f1f5f9;color:#475569;border:none;border-radius:12px;padding:11px;font-family:'Nunito',sans-serif;font-weight:700;font-size:14px;cursor:pointer;">✕ Cancel</button>
     </div>
   </div>
 </div>
@@ -1102,7 +1197,7 @@ function switchManageTab(tab){
 }
 
 function switchAdminTab(tab){
-  const tabs=['Hier','Manual','Upload','Admins'];
+  const tabs=['Dash','Hier','Manual','Upload','Admins'];
   tabs.forEach(t=>{
     const btn=g('tab'+t);const panel=g('panel'+t);
     if(btn)btn.classList.toggle('active',t.toLowerCase()===tab);
@@ -1110,6 +1205,195 @@ function switchAdminTab(tab){
   });
   if(tab==='upload') checkApiKeyWarning();
   if(tab==='admins') loadAdminUsersList();
+  if(tab==='dash') loadAdminDashboard();
+}
+
+// ── PWA SERVICE WORKER ──
+if('serviceWorker' in navigator){
+  window.addEventListener('load',()=>{
+    navigator.serviceWorker.register('sw.js').catch(()=>{});
+  });
+}
+
+// ── STUDENT ANALYTICS ──
+async function loadAnalytics(){
+  const u=auth.currentUser;if(!u)return;
+  const card=g('analyticsCard');if(!card)return;
+  const histDiv=g('analyticsHistory');
+  histDiv.innerHTML='<div style="font-size:12px;color:#9ca3af;padding:6px;">Loading...</div>';
+  try{
+    const snap=await db.collection('leaderboard').where('email','==',u.email||'').orderBy('at','desc').limit(20).get();
+    if(snap.empty){
+      histDiv.innerHTML='<div style="font-size:12px;color:#9ca3af;padding:10px;text-align:center;">No tests taken yet. Start a test!</div>';
+      g('statTests').textContent='0';g('statAvg').textContent='0%';g('statBest').textContent='0%';
+      return;
+    }
+    let total=0,sumPct=0,bestPct=0;
+    let html='';
+    snap.forEach(doc=>{
+      const d=doc.data();
+      total++;
+      const pct=Math.round(d.pct||0);
+      sumPct+=pct;
+      if(pct>bestPct)bestPct=pct;
+      const date=d.at?.toDate?d.at.toDate().toLocaleDateString('en-IN',{day:'numeric',month:'short'}):'-';
+      const color=pct>=80?'#10b981':pct>=50?'#f59e0b':'#ef4444';
+      const cname=fmtCourse(d.course||'');
+      html+=`<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f1f5f9;">
+        <div style="width:40px;height:40px;border-radius:10px;background:${color}22;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:900;color:${color};">${pct}%</div>
+        <div style="flex:1;min-width:0;">
+          <div style="font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${esc(cname||d.course||'')}</div>
+          <div style="font-size:11px;color:#6b7280;">${d.score||0}/${d.total||0} correct · ${date}</div>
+        </div>
+      </div>`;
+    });
+    g('statTests').textContent=total;
+    g('statAvg').textContent=Math.round(sumPct/total)+'%';
+    g('statBest').textContent=bestPct+'%';
+    histDiv.innerHTML=html;
+  }catch(e){histDiv.innerHTML='<div style="font-size:12px;color:#dc2626;">'+esc(e.message)+'</div>';}
+}
+
+// ── ADMIN DASHBOARD ──
+async function loadAdminDashboard(){
+  try{
+    // Count students (unique emails in leaderboard)
+    const lbSnap=await db.collection('leaderboard').get();
+    const emails=new Set();
+    const testCounts={};
+    lbSnap.forEach(doc=>{
+      const d=doc.data();
+      if(d.email)emails.add(d.email);
+      if(d.course)testCounts[d.course]=(testCounts[d.course]||0)+1;
+    });
+    g('dashStudents').textContent=emails.size;
+    g('dashAttempts').textContent=lbSnap.size;
+
+    // Count tests
+    const testSnap=await db.collection('courses').get();
+    g('dashTests').textContent=testSnap.size;
+
+    // Count questions (collectionGroup)
+    let qTotal=0;
+    const qSnap=await db.collectionGroup('questions').get();
+    g('dashQuestions').textContent=qSnap.size;
+
+    // Student list
+    const studentDiv=g('dashStudentList');
+    if(emails.size===0){
+      studentDiv.innerHTML='<div style="font-size:12px;color:#9ca3af;padding:6px;">No students yet.</div>';
+    } else {
+      let sHtml='';
+      [...emails].slice(0,20).forEach((email,i)=>{
+        sHtml+=`<div class="hier-row"><span style="font-size:13px;">👤 ${esc(email)}</span></div>`;
+      });
+      if(emails.size>20)sHtml+=`<div style="font-size:11px;color:#9ca3af;padding:6px;">...and ${emails.size-20} more</div>`;
+      studentDiv.innerHTML=sHtml;
+    }
+
+    // Popular tests
+    const popDiv=g('dashPopularTests');
+    const sorted=Object.entries(testCounts).sort((a,b)=>b[1]-a[1]).slice(0,5);
+    if(!sorted.length){
+      popDiv.innerHTML='<div style="font-size:12px;color:#9ca3af;padding:6px;">No attempts yet.</div>';
+    } else {
+      const maxCount=sorted[0][1];
+      let pHtml='';
+      sorted.forEach(([course,count],i)=>{
+        const pct=Math.round(count/maxCount*100);
+        const colors=['#4f46e5','#10b981','#f59e0b','#0ea5e9','#ec4899'];
+        pHtml+=`<div style="margin-bottom:10px;">
+          <div style="display:flex;justify-content:space-between;margin-bottom:4px;">
+            <span style="font-size:12px;font-weight:700;">${esc(fmtCourse(course))}</span>
+            <span style="font-size:12px;color:#6b7280;">${count} attempt${count>1?'s':''}</span>
+          </div>
+          <div style="background:#f1f5f9;border-radius:999px;height:8px;">
+            <div style="background:${colors[i%5]};border-radius:999px;height:8px;width:${pct}%;transition:width .5s;"></div>
+          </div>
+        </div>`;
+      });
+      popDiv.innerHTML=pHtml;
+    }
+  }catch(e){console.log('Dashboard error:',e);}
+}
+
+// ── EXCEL / CSV UPLOAD ──
+async function handleCSVUpload(input){
+  const cls=(g('upClass')?.value||'').trim();
+  const subject=(g('upSubject')?.value||'').trim();
+  const chapter=(g('upChapter')?.value||'').trim();
+  if(!cls||!subject||!chapter){alert('Select Class, Subject and Chapter first!');input.value='';return;}
+  const course=cls+'__'+subject+'__'+chapter;
+  const file=input.files[0];if(!file)return;
+  const result=g('csvResult');
+  result.style.display='block';
+  result.style.background='#eff6ff';result.style.border='1.5px solid #bfdbfe';result.style.color='#1d4ed8';
+  result.textContent='⏳ Reading file...';
+
+  const reader=new FileReader();
+  reader.onload=async function(e){
+    try{
+      let questions=[];
+      const name=file.name.toLowerCase();
+      if(name.endsWith('.csv')){
+        // Parse CSV
+        const text=e.target.result;
+        const lines=text.split(/\r?\n/).filter(l=>l.trim());
+        const header=lines[0].split(',').map(h=>h.trim().toLowerCase().replace(/"/g,''));
+        for(let i=1;i<lines.length;i++){
+          const cols=lines[i].split(',').map(c=>c.trim().replace(/^"|"$/g,''));
+          const row={};
+          header.forEach((h,j)=>row[h]=cols[j]||'');
+          const correctMap={'a':0,'b':1,'c':2,'d':3};
+          const correct=correctMap[(row.correct||'a').toLowerCase()]||0;
+          if(row.question&&row.option_a&&row.option_b&&row.option_c&&row.option_d){
+            questions.push({question:row.question,options:[row.option_a,row.option_b,row.option_c,row.option_d],correct,time:parseInt(row.time)||5});
+          }
+        }
+      } else {
+        // Excel - use SheetJS
+        const data=new Uint8Array(e.target.result);
+        const workbook=XLSX.read(data,{type:'array'});
+        const sheet=workbook.Sheets[workbook.SheetNames[0]];
+        const rows=XLSX.utils.sheet_to_json(sheet);
+        const correctMap={'a':0,'b':1,'c':2,'d':3};
+        rows.forEach(row=>{
+          const keys=Object.keys(row).map(k=>k.toLowerCase());
+          const get=k=>row[Object.keys(row).find(r=>r.toLowerCase()===k)||'']||'';
+          const correct=correctMap[(get('correct')||'a').toString().toLowerCase()]||0;
+          if(get('question')&&get('option_a')){
+            questions.push({question:get('question').toString(),options:[get('option_a').toString(),get('option_b').toString(),get('option_c').toString(),get('option_d').toString()],correct,time:parseInt(get('time'))||5});
+          }
+        });
+      }
+
+      if(!questions.length){
+        result.style.background='#fef2f2';result.style.borderColor='#fecaca';result.style.color='#dc2626';
+        result.textContent='❌ No valid questions found. Check column names: question, option_a, option_b, option_c, option_d, correct, time';
+        input.value='';return;
+      }
+
+      result.textContent='💾 Saving '+questions.length+' questions...';
+      const batch=db.batch();
+      questions.forEach(q=>{
+        const ref=db.collection('courses').doc(course).collection('questions').doc();
+        batch.set(ref,{...q,class:cls,subject,chapter,createdAt:firebase.firestore.FieldValue.serverTimestamp(),createdBy:auth.currentUser.email||'',source:'excel'});
+      });
+      // Ensure course doc
+      batch.set(db.collection('courses').doc(course),{class:cls,subject,chapter,paid:false,label:cls+' › '+subject+' › '+chapter,updatedAt:firebase.firestore.FieldValue.serverTimestamp()},{merge:true});
+      await batch.commit();
+      result.style.background='#d1fae5';result.style.borderColor='#6ee7b7';result.style.color='#065f46';
+      result.innerHTML='✅ <b>'+questions.length+' questions</b> imported from Excel/CSV!';
+      toast('✅ '+questions.length+' questions imported!');
+      input.value='';
+    }catch(err){
+      result.style.background='#fef2f2';result.style.borderColor='#fecaca';result.style.color='#dc2626';
+      result.textContent='❌ Error: '+err.message;
+      input.value='';
+    }
+  };
+  if(file.name.toLowerCase().endsWith('.csv')) reader.readAsText(file);
+  else reader.readAsArrayBuffer(file);
 }
 
 // ── ADMIN USER MANAGEMENT ──
@@ -1588,7 +1872,7 @@ async function renderFolderTests(cls,sub,ch){
     } else {
       html+=`<button class="test-folder-btn" onclick="closeFolder();startTest('${escQ(courseKey)}')">
         <span class="tf-icon">📝</span>
-        <div style="flex:1;text-align:left;"><b>${esc(ch)}</b><div style="font-size:11px;color:#6b7280;">${esc(sub)} · ${esc(cls)}</div></div>
+        <div style="flex:1;text-align:left;"><b>${esc(ch)}</b><div style="font-size:11px;color:#6b7280;">${esc(cls)} › ${esc(sub)}</div></div>
         <span class="tf-go">Start ▶</span>
       </button>`;
     }
@@ -1599,20 +1883,47 @@ async function renderFolderTests(cls,sub,ch){
 function folderPickSubjectOld(sub){folderState.history.push({level:"classes"});folderState.subject=sub;}
 
 // ── TEST ENGINE ──
-let currentCourse="",currentQuestions=[],timeLeft=0,timerInt=null;
+let currentCourse="",currentCourseData={},currentQuestions=[],timeLeft=0,timerInt=null;
 let currentUserRole='student';
 let currentQIndex=0,qAnswers=[],qStatus=[];
+function fmtCourse(course){
+  // "Class__Subject__Chapter" → show just Chapter nicely
+  const pts=course.split("__");
+  if(pts.length>=3) return pts.slice(2).join(" – ");
+  return course;
+}
+function fmtCourseSub(course){
+  const pts=course.split("__");
+  if(pts.length>=2) return pts[0]+" › "+pts[1];
+  return "";
+}
 function startTest(course){
-  currentCourse=course;g("testTitle").textContent="📝 "+course;
+  currentCourse=course;
+  g("testTitle").textContent="📝 "+fmtCourse(course);
   g("testBox").style.display="block";
   g("questionArea").innerHTML='<div class="empty"><div class="empty-icon">⏳</div>Loading...</div>';
-  g("qCountInfo").textContent="";stopTimer();
-  db.collection("courses").doc(course).collection("questions").get().then(snap=>{
+  g("qCountInfo").textContent=fmtCourseSub(course);stopTimer();
+  // First fetch course doc for settings (totalTimeMin etc), then questions
+  db.collection("courses").doc(course).get().then(courseDoc=>{
+    currentCourseData=courseDoc.exists?courseDoc.data():{};
+    return db.collection("courses").doc(course).collection("questions").get();
+  }).then(snap=>{
     currentQuestions=[];snap.forEach(doc=>currentQuestions.push(doc.data()));
     if(!currentQuestions.length){g("questionArea").innerHTML='<div class="empty"><div class="empty-icon">📭</div>No questions yet.</div>';return;}
     currentQIndex=0;qAnswers=new Array(currentQuestions.length).fill(-1);qStatus=new Array(currentQuestions.length).fill('notvisited');
-    g("qCountInfo").textContent=currentQuestions.length+" questions";g("qnavPanel").style.display="block";
-    renderSingleQ(0);buildNavGrid();startTimer((currentQuestions[0].time||5)*60);
+    g("qnavPanel").style.display="block";
+    renderSingleQ(0);buildNavGrid();
+    // Use totalTimeMin if set, else sum of per-question times
+    const totalSec = currentCourseData.totalTimeMin
+      ? currentCourseData.totalTimeMin * 60
+      : currentQuestions.reduce((sum,q)=>sum+(q.time||5)*60, 0);
+    startTimer(totalSec);
+    // Show time mode label
+    if(currentCourseData.totalTimeMin){
+      g("qCountInfo").textContent=currentQuestions.length+' questions · ⏱️ '+currentCourseData.totalTimeMin+' min total';
+    } else {
+      g("qCountInfo").textContent=currentQuestions.length+' questions';
+    }
     g("testBox").scrollIntoView({behavior:"smooth"});
   }).catch(e=>alert(e.message));
 }
@@ -1652,6 +1963,27 @@ function updateNavStats(){
 function goToQ(idx){currentQIndex=idx;renderSingleQ(idx);}
 function startTimer(s){stopTimer();timeLeft=s;updateTimer();timerInt=setInterval(()=>{timeLeft--;updateTimer();if(timeLeft<=0){stopTimer();submitTest();}},1000);}
 function stopTimer(){if(timerInt){clearInterval(timerInt);timerInt=null;}}
+
+// ── SET TEST TIME LIMIT ──
+function openSetTime(course, currentMin){
+  g('setTimeCourse').value=course;
+  g('setTimeCourseLabel').textContent=fmtCourse(course)+' › '+fmtCourseSub(course);
+  g('setTimeInput').value=currentMin||'';
+  g('setTimeModal').style.display='flex';
+  setTimeout(()=>g('setTimeInput').focus(),100);
+}
+function saveTestTime(){
+  const course=g('setTimeCourse').value;
+  const mins=parseInt(g('setTimeInput').value)||0;
+  if(!course)return;
+  db.collection('courses').doc(course).update({totalTimeMin:mins})
+    .then(()=>{
+      g('setTimeModal').style.display='none';
+      toast(mins>0?'⏱️ Time limit set to '+mins+' min!':'⏱️ Time limit removed (per-question mode)');
+      loadAdminCourseList();
+    })
+    .catch(e=>alert('Error: '+e.message));
+}
 function updateTimer(){
   const m=Math.floor(timeLeft/60),s=timeLeft%60;g("timerDisplay").textContent=(m<10?"0":"")+m+":"+(s<10?"0":"")+s;
   g("timerDisplay").style.background=timeLeft<=30?"linear-gradient(135deg,#ef4444,#dc2626)":"linear-gradient(135deg,#10b981,#059669)";
@@ -1673,7 +2005,7 @@ function showReview(score,pct,answers){
   const cls=pct>=80?'great':pct>=60?'good':pct>=40?'ok':'bad';
   const msg=pct>=80?'🎉 Excellent!':pct>=60?'👍 Good Job!':pct>=40?'📚 Keep Practising!':'💪 Don\'t Give Up!';
   g('resultBanner').innerHTML=`<div class="result-banner ${cls}"><div class="result-score">${score}/${total}</div><div class="result-msg">${msg} — ${pct}%</div></div>`;
-  g('reviewSub').textContent=currentCourse+' • '+score+' correct of '+total;
+  g('reviewSub').textContent=fmtCourse(currentCourse)+' • '+score+' correct of '+total;
   const L=['A','B','C','D'];let html='';
   currentQuestions.forEach((q,i)=>{
     const ua=answers[i],ca=q.correct;let opts='';
@@ -1838,10 +2170,11 @@ function loadAdminCourseList(){
       const em=emojisL[i%emojisL.length],gr=gradients[i%gradients.length];
       html+=`<div class="course-manage-row" id="cmr_${i}">
         <div class="cm-icon" style="background:linear-gradient(135deg,${gr})">${em}</div>
-        <div class="cm-name">${esc(name)}<br/><span style="font-size:10px;font-weight:600;color:#9ca3af;">${paid?"🔒 Paid":"✅ Free"}</span></div>
+        <div class="cm-name">${esc(fmtCourse(name))}<br/><span style="font-size:10px;font-weight:600;color:#6b7280;">${fmtCourseSub(name)}</span><br/><span style="font-size:10px;font-weight:600;color:#9ca3af;">${paid?"🔒 Paid":"✅ Free"} ${doc.data().totalTimeMin?"· ⏱️ "+doc.data().totalTimeMin+" min":""}</span></div>
         <div class="cm-actions">
           <button class="btn-add-inside" onclick="toggleAddInside('${escQ(name)}',${i})">➕ Add</button>
           <button class="btn-rename" onclick="renameCourse('${escQ(name)}')">✏️ Rename</button>
+          <button style="background:#f0fdf4;border:1.5px solid #6ee7b7;color:#065f46;border-radius:8px;padding:5px 10px;font-size:11px;font-weight:800;cursor:pointer;white-space:nowrap;" onclick="openSetTime('${escQ(name)}',${doc.data().totalTimeMin||0})">⏱️ Time</button>
           <button class="btn-delete-course" onclick="deleteCourse('${escQ(name)}')">🗑️ Delete</button>
         </div>
       </div>
